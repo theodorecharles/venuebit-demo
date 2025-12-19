@@ -21,12 +21,11 @@ The same user ID receives identical feature flag decisions across all platforms.
 ## Project Structure
 
 ```
-demo-events-app/
-├── VenueBitApp/          # iOS Xcode project (Swift/SwiftUI)
+venuebit-demo/
+├── VenueBitApp/           # iOS Xcode project (Swift/SwiftUI)
 ├── webapp/                # React web application (Vite + Tailwind)
 ├── backend/               # Express.js API server
-├── docker-compose.yml     # Docker orchestration
-└── spec.md               # Full specification
+└── docker-compose.yml     # Docker orchestration
 ```
 
 ## Quick Start
