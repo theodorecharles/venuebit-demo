@@ -1,22 +1,44 @@
 import SwiftUI
 
 struct DebugBadge: View {
+    @EnvironmentObject var userManager: UserIdentityManager
     @EnvironmentObject var optimizelyManager: OptimizelyManager
+    @State private var showingAlert = false
+    @State private var previousVariation: String = ""
+    @State private var newVariation: String = ""
 
     var body: some View {
-        HStack(spacing: 6) {
-            Circle()
-                .fill(optimizelyManager.currentDecision.isEnhanced ? Color.green : Color.blue)
-                .frame(width: 8, height: 8)
+        Button(action: generateNewUser) {
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(optimizelyManager.currentDecision.isEnhanced ? Color.green : Color.blue)
+                    .frame(width: 8, height: 8)
 
-            Text(optimizelyManager.currentDecision.variationKey)
-                .font(.caption2.bold())
-                .foregroundColor(.white)
+                Text(optimizelyManager.currentDecision.variationKey)
+                    .font(.caption2.bold())
+                    .foregroundColor(.white)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Color.slate700.opacity(0.9))
+            .cornerRadius(12)
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(Color.slate700.opacity(0.9))
-        .cornerRadius(12)
+        .alert("New User Generated", isPresented: $showingAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("User ID: \(userManager.userId)\n\nVariation: \(previousVariation) → \(newVariation)")
+        }
+    }
+
+    private func generateNewUser() {
+        previousVariation = optimizelyManager.currentDecision.variationKey
+        userManager.generateNewUserId()
+
+        // Small delay to let Optimizely re-evaluate
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            newVariation = optimizelyManager.currentDecision.variationKey
+            showingAlert = true
+        }
     }
 }
 

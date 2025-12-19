@@ -13,6 +13,10 @@ export const useUserId = () => {
     if (urlUserId && urlUserId !== userId) {
       // Update store if URL param is different
       setUserId(urlUserId);
+    } else if (!userId) {
+      // Auto-generate a userId if none exists
+      const newUserId = generateNewUserId();
+      setUserId(newUserId);
     }
   }, [searchParams, userId, setUserId]);
 

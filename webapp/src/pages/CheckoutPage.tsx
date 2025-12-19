@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { cartApi } from '../api/cart';
-import { eventsApi } from '../api/events';
 import { checkoutApi } from '../api/checkout';
 import { Cart } from '../types/cart';
-import { Event } from '../types/event';
 import { useUserId } from '../hooks/useUserId';
 import { useFeatureFlag } from '../hooks/useFeatureFlag';
 import { useTracking } from '../hooks/useTracking';
@@ -24,7 +22,6 @@ export const CheckoutPage: React.FC = () => {
   const cartId = searchParams.get('cartId');
 
   const [cart, setCart] = useState<Cart | null>(null);
-  const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
 
@@ -43,10 +40,6 @@ export const CheckoutPage: React.FC = () => {
       const cartData = await cartApi.getCart(cartId);
       setCart(cartData);
 
-      // Load event details
-      const eventData = await eventsApi.getEvent(cartData.event_id);
-      setEvent(eventData);
-
       // Track checkout view
       const total = calculateTotal(cartData);
       trackCheckout(cartId, total);
@@ -60,7 +53,7 @@ export const CheckoutPage: React.FC = () => {
   };
 
   const calculateSubtotal = (cart: Cart): number => {
-    return cart.items.reduce((sum, item) => sum + item.price, 0);
+    return cart.items.reduce((sum, item) => sum + item.subtotal, 0);
   };
 
   const calculateServiceFee = (subtotal: number): number => {
@@ -79,12 +72,17 @@ export const CheckoutPage: React.FC = () => {
     try {
       setProcessing(true);
 
+      // Extract last 4 digits from card number
+      const cardLast4 = paymentData.cardNumber.replace(/\s/g, '').slice(-4);
+
       // Process checkout
       const order = await checkoutApi.checkout({
-        cart_id: cartId,
-        user_id: userId,
-        payment_method: 'card',
-        cardholder_name: paymentData.cardholderName,
+        cartId: cartId,
+        userId: userId,
+        payment: {
+          cardLast4,
+          cardholderName: paymentData.cardholderName,
+        },
       });
 
       // Track purchase
@@ -111,7 +109,7 @@ export const CheckoutPage: React.FC = () => {
     );
   }
 
-  if (!cart || !event) {
+  if (!cart || cart.items.length === 0) {
     return (
       <div>
         <DebugBanner />
@@ -123,6 +121,7 @@ export const CheckoutPage: React.FC = () => {
     );
   }
 
+  const cartItem = cart.items[0];
   const subtotal = calculateSubtotal(cart);
   const serviceFee = calculateServiceFee(subtotal);
   const total = subtotal + serviceFee;
@@ -162,9 +161,9 @@ export const CheckoutPage: React.FC = () => {
           <div className="lg:col-span-2 space-y-6">
             <OrderSummary
               cart={cart}
-              eventArtist={event.artist}
-              eventVenue={event.venue}
-              eventDate={event.date}
+              eventArtist={cartItem.eventTitle}
+              eventVenue={cartItem.venueName}
+              eventDate={cartItem.eventDate}
             />
 
             <PaymentForm

@@ -1,0 +1,638 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000010000000000000001 /* VenueBitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000001 /* VenueBitApp.swift */; };
+		A10000010000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000002 /* ContentView.swift */; };
+		A10000010000000000000003 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000003 /* AppState.swift */; };
+		A10000010000000000000004 /* CategoryPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000004 /* CategoryPill.swift */; };
+		A10000010000000000000005 /* DebugBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000005 /* DebugBadge.swift */; };
+		A10000010000000000000006 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000006 /* EmptyStateView.swift */; };
+		A10000010000000000000007 /* EventCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000007 /* EventCard.swift */; };
+		A10000010000000000000008 /* GenerateUserButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000008 /* GenerateUserButton.swift */; };
+		A10000010000000000000009 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000009 /* LoadingView.swift */; };
+		A10000010000000000000010 /* PriceRangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000010 /* PriceRangeView.swift */; };
+		A10000010000000000000011 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000011 /* Color+Extensions.swift */; };
+		A10000010000000000000012 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000012 /* APIClient.swift */; };
+		A10000010000000000000013 /* Cart.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000013 /* Cart.swift */; };
+		A10000010000000000000014 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000014 /* Event.swift */; };
+		A10000010000000000000015 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000015 /* Order.swift */; };
+		A10000010000000000000016 /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000016 /* Ticket.swift */; };
+		A10000010000000000000017 /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000017 /* Venue.swift */; };
+		A10000010000000000000018 /* OptimizelyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000018 /* OptimizelyManager.swift */; };
+		A10000010000000000000019 /* UserIdentityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000019 /* UserIdentityManager.swift */; };
+		A10000010000000000000020 /* WebViewBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000020 /* WebViewBridge.swift */; };
+		A10000010000000000000021 /* WebViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000021 /* WebViewContainer.swift */; };
+		A10000010000000000000022 /* WebViewURLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000022 /* WebViewURLBuilder.swift */; };
+		A10000010000000000000023 /* DiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000023 /* DiscoveryView.swift */; };
+		A10000010000000000000024 /* DiscoveryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000024 /* DiscoveryViewModel.swift */; };
+		A10000010000000000000025 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000025 /* EventDetailView.swift */; };
+		A10000010000000000000026 /* EventDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000026 /* EventDetailViewModel.swift */; };
+		A10000010000000000000027 /* MyTicketsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000027 /* MyTicketsView.swift */; };
+		A10000010000000000000028 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000028 /* SearchView.swift */; };
+		A10000010000000000000029 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000029 /* SearchViewModel.swift */; };
+		A10000010000000000000030 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000030 /* SettingsView.swift */; };
+		A10000010000000000000031 /* CheckoutWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000031 /* CheckoutWebView.swift */; };
+		A10000010000000000000032 /* SeatSelectionWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000032 /* SeatSelectionWebView.swift */; };
+		A10000010000000000000033 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000033 /* Assets.xcassets */; };
+		A10000010000000000000034 /* VenueBitLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000034 /* VenueBitLogo.swift */; };
+		A10000010000000000000035 /* Pacifico-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000035 /* Pacifico-Regular.ttf */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A00000010000000000000001 /* VenueBitApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VenueBitApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20000010000000000000001 /* VenueBitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueBitApp.swift; sourceTree = "<group>"; };
+		A20000010000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A20000010000000000000003 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		A20000010000000000000004 /* CategoryPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPill.swift; sourceTree = "<group>"; };
+		A20000010000000000000005 /* DebugBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugBadge.swift; sourceTree = "<group>"; };
+		A20000010000000000000006 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		A20000010000000000000007 /* EventCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCard.swift; sourceTree = "<group>"; };
+		A20000010000000000000008 /* GenerateUserButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateUserButton.swift; sourceTree = "<group>"; };
+		A20000010000000000000009 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		A20000010000000000000010 /* PriceRangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceRangeView.swift; sourceTree = "<group>"; };
+		A20000010000000000000011 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
+		A20000010000000000000012 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		A20000010000000000000013 /* Cart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cart.swift; sourceTree = "<group>"; };
+		A20000010000000000000014 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		A20000010000000000000015 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
+		A20000010000000000000016 /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
+		A20000010000000000000017 /* Venue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Venue.swift; sourceTree = "<group>"; };
+		A20000010000000000000018 /* OptimizelyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptimizelyManager.swift; sourceTree = "<group>"; };
+		A20000010000000000000019 /* UserIdentityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIdentityManager.swift; sourceTree = "<group>"; };
+		A20000010000000000000020 /* WebViewBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewBridge.swift; sourceTree = "<group>"; };
+		A20000010000000000000021 /* WebViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewContainer.swift; sourceTree = "<group>"; };
+		A20000010000000000000022 /* WebViewURLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewURLBuilder.swift; sourceTree = "<group>"; };
+		A20000010000000000000023 /* DiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryView.swift; sourceTree = "<group>"; };
+		A20000010000000000000024 /* DiscoveryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryViewModel.swift; sourceTree = "<group>"; };
+		A20000010000000000000025 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
+		A20000010000000000000026 /* EventDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewModel.swift; sourceTree = "<group>"; };
+		A20000010000000000000027 /* MyTicketsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTicketsView.swift; sourceTree = "<group>"; };
+		A20000010000000000000028 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		A20000010000000000000029 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		A20000010000000000000030 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A20000010000000000000031 /* CheckoutWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutWebView.swift; sourceTree = "<group>"; };
+		A20000010000000000000032 /* SeatSelectionWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeatSelectionWebView.swift; sourceTree = "<group>"; };
+		A20000010000000000000033 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20000010000000000000034 /* VenueBitLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueBitLogo.swift; sourceTree = "<group>"; };
+		A20000010000000000000035 /* Pacifico-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pacifico-Regular.ttf"; sourceTree = "<group>"; };
+		A20000010000000000000036 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A30000010000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A40000010000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A40000010000000000000002 /* VenueBitApp */,
+				A40000010000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A40000010000000000000002 /* VenueBitApp */ = {
+			isa = PBXGroup;
+			children = (
+				A40000010000000000000004 /* App */,
+				A40000010000000000000005 /* Components */,
+				A40000010000000000000006 /* Core */,
+				A40000010000000000000007 /* Features */,
+				A40000010000000000000020 /* Resources */,
+				A20000010000000000000036 /* Info.plist */,
+			);
+			path = VenueBitApp;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A00000010000000000000001 /* VenueBitApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000004 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000001 /* VenueBitApp.swift */,
+				A20000010000000000000002 /* ContentView.swift */,
+				A20000010000000000000003 /* AppState.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000005 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000004 /* CategoryPill.swift */,
+				A20000010000000000000005 /* DebugBadge.swift */,
+				A20000010000000000000006 /* EmptyStateView.swift */,
+				A20000010000000000000007 /* EventCard.swift */,
+				A20000010000000000000008 /* GenerateUserButton.swift */,
+				A20000010000000000000009 /* LoadingView.swift */,
+				A20000010000000000000010 /* PriceRangeView.swift */,
+				A20000010000000000000034 /* VenueBitLogo.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000006 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A40000010000000000000008 /* Extensions */,
+				A40000010000000000000009 /* Networking */,
+				A40000010000000000000011 /* Optimizely */,
+				A40000010000000000000012 /* UserIdentity */,
+				A40000010000000000000013 /* WebView */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000007 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				A40000010000000000000014 /* Discovery */,
+				A40000010000000000000015 /* EventDetail */,
+				A40000010000000000000016 /* MyTickets */,
+				A40000010000000000000017 /* Search */,
+				A40000010000000000000018 /* Settings */,
+				A40000010000000000000019 /* Tickets */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000008 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000011 /* Color+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000009 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000012 /* APIClient.swift */,
+				A40000010000000000000010 /* Models */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000010 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000013 /* Cart.swift */,
+				A20000010000000000000014 /* Event.swift */,
+				A20000010000000000000015 /* Order.swift */,
+				A20000010000000000000016 /* Ticket.swift */,
+				A20000010000000000000017 /* Venue.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000011 /* Optimizely */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000018 /* OptimizelyManager.swift */,
+			);
+			path = Optimizely;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000012 /* UserIdentity */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000019 /* UserIdentityManager.swift */,
+			);
+			path = UserIdentity;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000013 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000020 /* WebViewBridge.swift */,
+				A20000010000000000000021 /* WebViewContainer.swift */,
+				A20000010000000000000022 /* WebViewURLBuilder.swift */,
+			);
+			path = WebView;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000014 /* Discovery */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000023 /* DiscoveryView.swift */,
+				A20000010000000000000024 /* DiscoveryViewModel.swift */,
+			);
+			path = Discovery;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000015 /* EventDetail */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000025 /* EventDetailView.swift */,
+				A20000010000000000000026 /* EventDetailViewModel.swift */,
+			);
+			path = EventDetail;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000016 /* MyTickets */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000027 /* MyTicketsView.swift */,
+			);
+			path = MyTickets;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000017 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000028 /* SearchView.swift */,
+				A20000010000000000000029 /* SearchViewModel.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000018 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000030 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000019 /* Tickets */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000031 /* CheckoutWebView.swift */,
+				A20000010000000000000032 /* SeatSelectionWebView.swift */,
+			);
+			path = Tickets;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000020 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000033 /* Assets.xcassets */,
+				A40000010000000000000021 /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000021 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000035 /* Pacifico-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A50000010000000000000001 /* VenueBitApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A70000010000000000000001 /* Build configuration list for PBXNativeTarget "VenueBitApp" */;
+			buildPhases = (
+				A60000010000000000000001 /* Sources */,
+				A30000010000000000000001 /* Frameworks */,
+				A60000010000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VenueBitApp;
+			packageProductDependencies = (
+				A90000010000000000000001 /* Optimizely */,
+			);
+			productName = VenueBitApp;
+			productReference = A00000010000000000000001 /* VenueBitApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A80000010000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A50000010000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A70000010000000000000002 /* Build configuration list for PBXProject "VenueBitApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A40000010000000000000001;
+			packageReferences = (
+				A90000010000000000000002 /* XCRemoteSwiftPackageReference "swift-sdk" */,
+			);
+			productRefGroup = A40000010000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A50000010000000000000001 /* VenueBitApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A60000010000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000010000000000000033 /* Assets.xcassets in Resources */,
+				A10000010000000000000035 /* Pacifico-Regular.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A60000010000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000010000000000000001 /* VenueBitApp.swift in Sources */,
+				A10000010000000000000002 /* ContentView.swift in Sources */,
+				A10000010000000000000003 /* AppState.swift in Sources */,
+				A10000010000000000000004 /* CategoryPill.swift in Sources */,
+				A10000010000000000000005 /* DebugBadge.swift in Sources */,
+				A10000010000000000000006 /* EmptyStateView.swift in Sources */,
+				A10000010000000000000007 /* EventCard.swift in Sources */,
+				A10000010000000000000008 /* GenerateUserButton.swift in Sources */,
+				A10000010000000000000009 /* LoadingView.swift in Sources */,
+				A10000010000000000000010 /* PriceRangeView.swift in Sources */,
+				A10000010000000000000011 /* Color+Extensions.swift in Sources */,
+				A10000010000000000000012 /* APIClient.swift in Sources */,
+				A10000010000000000000013 /* Cart.swift in Sources */,
+				A10000010000000000000014 /* Event.swift in Sources */,
+				A10000010000000000000015 /* Order.swift in Sources */,
+				A10000010000000000000016 /* Ticket.swift in Sources */,
+				A10000010000000000000017 /* Venue.swift in Sources */,
+				A10000010000000000000018 /* OptimizelyManager.swift in Sources */,
+				A10000010000000000000019 /* UserIdentityManager.swift in Sources */,
+				A10000010000000000000020 /* WebViewBridge.swift in Sources */,
+				A10000010000000000000021 /* WebViewContainer.swift in Sources */,
+				A10000010000000000000022 /* WebViewURLBuilder.swift in Sources */,
+				A10000010000000000000023 /* DiscoveryView.swift in Sources */,
+				A10000010000000000000024 /* DiscoveryViewModel.swift in Sources */,
+				A10000010000000000000025 /* EventDetailView.swift in Sources */,
+				A10000010000000000000026 /* EventDetailViewModel.swift in Sources */,
+				A10000010000000000000027 /* MyTicketsView.swift in Sources */,
+				A10000010000000000000028 /* SearchView.swift in Sources */,
+				A10000010000000000000029 /* SearchViewModel.swift in Sources */,
+				A10000010000000000000030 /* SettingsView.swift in Sources */,
+				A10000010000000000000031 /* CheckoutWebView.swift in Sources */,
+				A10000010000000000000032 /* SeatSelectionWebView.swift in Sources */,
+				A10000010000000000000034 /* VenueBitLogo.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B10000010000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B10000010000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B10000010000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VenueBitApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = VenueBit;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.venuebit.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B10000010000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VenueBitApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = VenueBit;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.venuebit.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A70000010000000000000001 /* Build configuration list for PBXNativeTarget "VenueBitApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B10000010000000000000003 /* Debug */,
+				B10000010000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A70000010000000000000002 /* Build configuration list for PBXProject "VenueBitApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B10000010000000000000001 /* Debug */,
+				B10000010000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A90000010000000000000002 /* XCRemoteSwiftPackageReference "swift-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/optimizely/swift-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A90000010000000000000001 /* Optimizely */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A90000010000000000000002 /* XCRemoteSwiftPackageReference "swift-sdk" */;
+			productName = Optimizely;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A80000010000000000000001 /* Project object */;
+}

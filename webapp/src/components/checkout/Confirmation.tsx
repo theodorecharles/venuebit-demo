@@ -10,6 +10,10 @@ interface ConfirmationProps {
 }
 
 export const Confirmation: React.FC<ConfirmationProps> = ({ order, onClose }) => {
+  // Get first item for event details, flatten all seats
+  const firstItem = order.items?.[0];
+  const allSeats = order.items?.flatMap((item) => item.seats) || [];
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="text-center mb-8">
@@ -28,7 +32,7 @@ export const Confirmation: React.FC<ConfirmationProps> = ({ order, onClose }) =>
             />
           </svg>
         </div>
-        <h1 className="text-4xl font-bold mb-2">You're going to see {order.event_artist}!</h1>
+        <h1 className="text-4xl font-bold mb-2">You're going to see {firstItem?.eventTitle || 'the show'}!</h1>
         <p className="text-text-secondary text-lg">Your tickets have been confirmed</p>
       </div>
 
@@ -41,26 +45,26 @@ export const Confirmation: React.FC<ConfirmationProps> = ({ order, onClose }) =>
         </div>
 
         <div className="mb-6">
-          <h3 className="text-xl font-bold mb-2">{order.event_artist}</h3>
-          <p className="text-text-secondary">{order.event_venue}</p>
-          <p className="text-text-secondary">{formatDateTime(order.event_date)}</p>
+          <h3 className="text-xl font-bold mb-2">{firstItem?.eventTitle}</h3>
+          <p className="text-text-secondary">{firstItem?.venueName}</p>
+          <p className="text-text-secondary">{formatDateTime(firstItem?.eventDate || '')}</p>
         </div>
 
         <div className="space-y-3 mb-6">
-          <h4 className="font-semibold">Your Tickets ({order.tickets.length})</h4>
-          {order.tickets.map((ticket, index) => (
+          <h4 className="font-semibold">Your Tickets ({allSeats.length})</h4>
+          {allSeats.map((seat) => (
             <div
-              key={index}
+              key={seat.id}
               className="flex justify-between items-center p-3 bg-surface-light rounded"
             >
               <div>
-                <div className="font-semibold">{ticket.section_name}</div>
+                <div className="font-semibold">{seat.section}</div>
                 <div className="text-sm text-text-secondary">
-                  Row {ticket.row}, Seat {ticket.seat_number}
+                  Row {seat.row}, Seat {seat.seatNumber}
                 </div>
               </div>
               <div className="font-semibold text-primary">
-                {formatPrice(ticket.price)}
+                {formatPrice(seat.price)}
               </div>
             </div>
           ))}
@@ -73,7 +77,7 @@ export const Confirmation: React.FC<ConfirmationProps> = ({ order, onClose }) =>
           </div>
           <div className="flex justify-between">
             <span className="text-text-secondary">Service Fee</span>
-            <span className="font-semibold">{formatPrice(order.service_fee)}</span>
+            <span className="font-semibold">{formatPrice(order.serviceFee)}</span>
           </div>
           <div className="flex justify-between text-lg font-bold border-t border-slate-600 pt-2">
             <span>Total</span>

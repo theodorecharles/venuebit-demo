@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { useFeatureFlag } from '../../hooks/useFeatureFlag';
 import { useUserId, generateNewUserId } from '../../hooks/useUserId';
 import { useUserStore } from '../../store/userStore';
@@ -10,6 +10,10 @@ export const DebugBanner: React.FC = () => {
   const { variation } = useFeatureFlag();
   const { setUserId } = useUserStore();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+
+  // Hide banner - the iOS app has its own header
+  return null;
 
   const handleNewUserId = () => {
     const newUserId = generateNewUserId();

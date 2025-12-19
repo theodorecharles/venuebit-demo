@@ -1,23 +1,35 @@
-export interface CartItem {
-  seat_id: string;
-  seat_number: string;
+export interface CartSeat {
+  id: string;
+  eventId: string;
+  section: string;
   row: string;
-  section_name: string;
+  seatNumber: number;
   price: number;
+  status: string;
+}
+
+export interface CartItem {
+  id: string;
+  eventId: string;
+  eventTitle: string;
+  eventDate: string;
+  eventTime: string;
+  venueName: string;
+  seats: CartSeat[];
+  subtotal: number;
 }
 
 export interface Cart {
   id: string;
-  user_id: string;
-  event_id: string;
+  userId: string;
   items: CartItem[];
-  created_at: string;
-  expires_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CartSummary {
   subtotal: number;
-  service_fee: number;
+  serviceFee: number;
   total: number;
-  item_count: number;
+  itemCount: number;
 }

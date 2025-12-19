@@ -1,15 +1,11 @@
 export interface Seat {
   id: string;
-  seat_number: string;
+  eventId: string;
+  section: string;
   row: string;
-  section_id: string;
-  section_name: string;
+  seatNumber: number;
   price: number;
   status: 'available' | 'selected' | 'sold';
-  position?: {
-    x: number;
-    y: number;
-  };
 }
 
 export interface SeatWithDetails extends Seat {

@@ -4,31 +4,40 @@ struct Event: Codable, Identifiable {
     let id: String
     let title: String
     let category: EventCategory
-    let performer: Performer
-    let venue: Venue
-    let dateTime: String
-    let priceRange: PriceRange
-    let imageUrl: String
+    let performer: String
+    let date: String
+    let time: String
+    let venueId: String
+    let venueName: String
+    let city: String
+    let state: String
     let description: String
-    let status: EventStatus
+    let imageUrl: String
     let featured: Bool
+    let minPrice: Double
+    let maxPrice: Double
+    let availableSeats: Int
 
     var formattedDate: String {
-        let formatter = ISO8601DateFormatter()
-        guard let date = formatter.date(from: dateTime) else { return dateTime }
+        // Parse "2025-08-15" format
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        guard let dateObj = formatter.date(from: date) else { return date }
 
         let displayFormatter = DateFormatter()
         displayFormatter.dateFormat = "EEEE, MMMM d, yyyy"
-        return displayFormatter.string(from: date)
+        return displayFormatter.string(from: dateObj)
     }
 
     var formattedTime: String {
-        let formatter = ISO8601DateFormatter()
-        guard let date = formatter.date(from: dateTime) else { return "" }
+        // Parse "19:00" format
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        guard let timeObj = formatter.date(from: time) else { return time }
 
         let displayFormatter = DateFormatter()
         displayFormatter.dateFormat = "h:mm a"
-        return displayFormatter.string(from: date)
+        return displayFormatter.string(from: timeObj)
     }
 
     var formattedDateTime: String {
@@ -42,6 +51,25 @@ struct Event: Codable, Identifiable {
         case .theater: return "theatermasks"
         case .comedy: return "face.smiling"
         }
+    }
+
+    var priceRange: PriceRange {
+        PriceRange(min: minPrice, max: maxPrice)
+    }
+
+    var venue: VenueInfo {
+        VenueInfo(id: venueId, name: venueName, city: city, state: state)
+    }
+}
+
+struct VenueInfo {
+    let id: String
+    let name: String
+    let city: String
+    let state: String
+
+    var cityState: String {
+        "\(city), \(state)"
     }
 }
 
@@ -65,20 +93,7 @@ enum EventCategory: String, Codable, CaseIterable {
     }
 }
 
-enum EventStatus: String, Codable {
-    case onSale = "on_sale"
-    case soldOut = "sold_out"
-    case cancelled
-    case postponed
-}
-
-struct Performer: Codable {
-    let id: String
-    let name: String
-    let imageUrl: String
-}
-
-struct PriceRange: Codable {
+struct PriceRange {
     let min: Double
     let max: Double
 
@@ -89,4 +104,25 @@ struct PriceRange: Codable {
     var minFormatted: String {
         "From $\(Int(min))"
     }
+}
+
+extension Event {
+    static let preview = Event(
+        id: "evt_001",
+        title: "Taylor Swift - Eras Tour",
+        category: .concerts,
+        performer: "Taylor Swift",
+        date: "2025-08-15",
+        time: "19:30",
+        venueId: "ven_001",
+        venueName: "SoFi Stadium",
+        city: "Los Angeles",
+        state: "CA",
+        description: "Experience the record-breaking Eras Tour",
+        imageUrl: "https://picsum.photos/400/300",
+        featured: true,
+        minPrice: 99,
+        maxPrice: 899,
+        availableSeats: 1000
+    )
 }

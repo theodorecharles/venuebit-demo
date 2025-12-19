@@ -36,6 +36,17 @@ class AppState: ObservableObject {
     }
 
     func addPurchasedTickets(_ tickets: [Ticket]) {
-        purchasedTickets.append(contentsOf: tickets)
+        // Only add tickets that aren't already in the list (by ID)
+        let existingIds = Set(purchasedTickets.map { $0.id })
+        let newTickets = tickets.filter { !existingIds.contains($0.id) }
+        purchasedTickets.append(contentsOf: newTickets)
+    }
+
+    func removeTicket(_ ticket: Ticket) {
+        purchasedTickets.removeAll { $0.id == ticket.id }
+    }
+
+    func clearAllTickets() {
+        purchasedTickets.removeAll()
     }
 }

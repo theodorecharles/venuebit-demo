@@ -5,8 +5,7 @@ struct SeatSelectionWebView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var userManager: UserIdentityManager
     @EnvironmentObject var appState: AppState
-    @State private var cartId: String?
-    @State private var showingCheckout = false
+    @State private var currentTitle = "Select Seats"
 
     private let bridge = WebViewBridge()
 
@@ -20,10 +19,13 @@ struct SeatSelectionWebView: View {
                         eventId: eventId,
                         userId: userManager.userId
                     ),
-                    bridge: bridge
+                    bridge: bridge,
+                    onURLChange: { url in
+                        updateTitle(for: url)
+                    }
                 )
             }
-            .navigationTitle("Select Seats")
+            .navigationTitle(currentTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -37,30 +39,55 @@ struct SeatSelectionWebView: View {
                     DebugBadge()
                 }
             }
-            .fullScreenCover(isPresented: $showingCheckout) {
-                if let cartId = cartId {
-                    CheckoutWebView(cartId: cartId)
-                }
-            }
             .onAppear {
                 setupBridge()
             }
         }
     }
 
+    private func updateTitle(for url: URL) {
+        let path = url.path
+        if path.contains("/confirmation") {
+            currentTitle = "Confirmed"
+        } else if path.contains("/checkout") {
+            currentTitle = "Checkout"
+        } else {
+            currentTitle = "Select Seats"
+        }
+    }
+
     private func setupBridge() {
         bridge.onDismiss = {
+            // Switch to My Tickets tab when closing from confirmation
+            if currentTitle == "Confirmed" {
+                appState.selectedTab = .myTickets
+            }
             dismiss()
-        }
-
-        bridge.onCartCreated = { newCartId in
-            cartId = newCartId
-            showingCheckout = true
         }
 
         bridge.onPurchaseComplete = { orderId, total in
-            // Handle purchase complete if needed
-            dismiss()
+            // Track purchase
+            OptimizelyManager.shared.trackEvent(
+                eventKey: "purchase",
+                tags: [
+                    "order_id": orderId,
+                    "revenue": total
+                ]
+            )
+
+            appState.addTrackedEvent("purchase", tags: ["order_id": orderId, "revenue": total])
+
+            // Load the new order and add tickets silently
+            Task {
+                do {
+                    let order = try await APIClient.shared.getOrder(orderId: orderId)
+                    await MainActor.run {
+                        appState.addPurchasedTickets(order.tickets)
+                    }
+                } catch {
+                    print("[SeatSelectionWebView] Error loading order: \(error)")
+                }
+            }
         }
     }
 }

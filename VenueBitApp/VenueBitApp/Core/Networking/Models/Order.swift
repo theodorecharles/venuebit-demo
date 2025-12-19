@@ -4,17 +4,26 @@ struct Order: Codable, Identifiable {
     let id: String
     let userId: String
     let status: OrderStatus
-    let items: [CartItem]
+    let items: [OrderItem]
     let subtotal: Double
-    let fees: Double
+    let serviceFee: Double
     let total: Double
-    let tickets: [Ticket]
     let createdAt: String
+
+    // Convert order items + seats to tickets for display
+    var tickets: [Ticket] {
+        items.flatMap { item in
+            item.seats.map { seat in
+                Ticket.fromOrderItem(item, seat: seat)
+            }
+        }
+    }
 }
 
 enum OrderStatus: String, Codable {
     case pending
     case confirmed
+    case completed
     case cancelled
     case refunded
 }

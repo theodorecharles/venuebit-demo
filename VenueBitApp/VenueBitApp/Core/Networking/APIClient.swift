@@ -31,7 +31,7 @@ class APIClient {
 
         let (data, _) = try await session.data(from: components.url!)
         let response = try JSONDecoder().decode(EventsResponse.self, from: data)
-        return response.data.events
+        return response.data
     }
 
     func getEvent(id: String) async throws -> Event {
@@ -41,7 +41,7 @@ class APIClient {
         return response.data
     }
 
-    func getSeats(eventId: String) async throws -> SeatsResponse {
+    func getSeats(eventId: String) async throws -> [APISeat] {
         let url = URL(string: "\(baseURL)/events/\(eventId)/seats")!
         let (data, _) = try await session.data(from: url)
         let response = try JSONDecoder().decode(SeatsDataResponse.self, from: data)
@@ -168,14 +168,9 @@ class APIClient {
 // MARK: - Response Types
 
 struct EventsResponse: Codable {
-    let data: EventsData
-}
-
-struct EventsData: Codable {
-    let events: [Event]
-    let total: Int
-    let limit: Int
-    let offset: Int
+    let success: Bool
+    let data: [Event]
+    let count: Int?
 }
 
 struct SingleEventResponse: Codable {
@@ -183,7 +178,9 @@ struct SingleEventResponse: Codable {
 }
 
 struct SeatsDataResponse: Codable {
-    let data: SeatsResponse
+    let success: Bool
+    let data: [APISeat]
+    let count: Int
 }
 
 struct SearchResponse: Codable {

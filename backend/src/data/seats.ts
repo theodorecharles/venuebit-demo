@@ -1,7 +1,6 @@
 import { Seat, SeatStatus } from '../types/seat';
 import { Event } from '../types/event';
 import { getVenueById } from './venues';
-import { v4 as uuidv4 } from 'uuid';
 
 interface SeatConfiguration {
   section: string;
@@ -91,8 +90,10 @@ function generateSeatsForConfiguration(
         const isSold = Math.random() < 0.3;
         const priceVariation = Math.random() * 20 - 10;
 
+        // Use deterministic ID so it survives container restarts
+        const seatId = `${eventId}-${config.section}-${row}-${seatNum}`;
         seats.push({
-          id: uuidv4(),
+          id: seatId,
           eventId,
           section: config.section,
           row,

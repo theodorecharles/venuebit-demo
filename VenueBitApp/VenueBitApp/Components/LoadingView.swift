@@ -59,42 +59,11 @@ struct ErrorView: View {
     }
 }
 
-struct EmptyStateView: View {
-    let icon: String
-    let title: String
-    let message: String
-
-    var body: some View {
-        VStack(spacing: 16) {
-            Image(systemName: icon)
-                .font(.system(size: 48))
-                .foregroundColor(.slate500)
-
-            Text(title)
-                .font(.headline)
-                .foregroundColor(.white)
-
-            Text(message)
-                .font(.subheadline)
-                .foregroundColor(.slate400)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.slate900)
-    }
-}
-
 #Preview {
     VStack {
         LoadingView()
         ErrorView(message: "Network connection failed") {
             print("Retry tapped")
         }
-        EmptyStateView(
-            icon: "ticket",
-            title: "No Tickets Yet",
-            message: "Your purchased tickets will appear here"
-        )
     }
 }

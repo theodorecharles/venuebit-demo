@@ -1,29 +1,38 @@
 export interface Order {
   id: string;
-  user_id: string;
-  event_id: string;
-  event_artist: string;
-  event_venue: string;
-  event_date: string;
-  tickets: OrderTicket[];
+  userId: string;
+  items: OrderItem[];
   subtotal: number;
-  service_fee: number;
+  serviceFee: number;
   total: number;
   status: 'pending' | 'confirmed' | 'cancelled';
-  created_at: string;
+  createdAt: string;
 }
 
-export interface OrderTicket {
-  seat_id: string;
-  seat_number: string;
+export interface OrderItem {
+  id: string;
+  eventId: string;
+  eventTitle: string;
+  eventDate: string;
+  eventTime: string;
+  venueName: string;
+  seats: OrderSeat[];
+  subtotal: number;
+}
+
+export interface OrderSeat {
+  id: string;
+  section: string;
   row: string;
-  section_name: string;
+  seatNumber: number;
   price: number;
 }
 
 export interface CheckoutRequest {
-  cart_id: string;
-  user_id: string;
-  payment_method: string;
-  cardholder_name?: string;
+  cartId: string;
+  userId: string;
+  payment: {
+    cardLast4: string;
+    cardholderName?: string;
+  };
 }

@@ -4,55 +4,94 @@ struct Ticket: Codable, Identifiable {
     let id: String
     let eventId: String
     let eventTitle: String
-    let eventDateTime: String
+    let eventDate: String
+    let eventTime: String
     let venueName: String
     let section: String
     let row: String
-    let seat: Int
+    let seatNumber: Int
     let price: Double
 
     var seatDescription: String {
-        "Section \(section), Row \(row), Seat \(seat)"
+        "Section \(section), Row \(row), Seat \(seatNumber)"
     }
 
     var formattedDate: String {
-        let formatter = ISO8601DateFormatter()
-        guard let date = formatter.date(from: eventDateTime) else { return eventDateTime }
+        // Try parsing the date
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        guard let date = formatter.date(from: eventDate) else { return "\(eventDate) \(eventTime)" }
 
         let displayFormatter = DateFormatter()
-        displayFormatter.dateFormat = "MMM d, yyyy • h:mm a"
-        return displayFormatter.string(from: date)
+        displayFormatter.dateFormat = "MMM d, yyyy"
+        return "\(displayFormatter.string(from: date)) • \(eventTime)"
+    }
+
+    // Create ticket from order item and seat
+    static func fromOrderItem(_ item: OrderItem, seat: OrderSeat) -> Ticket {
+        Ticket(
+            id: seat.id,
+            eventId: item.eventId,
+            eventTitle: item.eventTitle,
+            eventDate: item.eventDate,
+            eventTime: item.eventTime,
+            venueName: item.venueName,
+            section: seat.section,
+            row: seat.row,
+            seatNumber: seat.seatNumber,
+            price: seat.price
+        )
     }
 }
 
-struct Seat: Codable, Identifiable {
+struct OrderSeat: Codable, Identifiable {
     let id: String
-    let sectionId: String
-    let sectionName: String
+    let section: String
     let row: String
-    let number: Int
+    let seatNumber: Int
     let price: Double
-    let status: SeatStatus
+}
+
+struct OrderItem: Codable, Identifiable {
+    let id: String
+    let eventId: String
+    let eventTitle: String
+    let eventDate: String
+    let eventTime: String
+    let venueName: String
+    let seats: [OrderSeat]
+    let subtotal: Double
+}
+
+struct CartSeat: Codable, Identifiable {
+    let id: String
+    let eventId: String
+    let section: String
+    let row: String
+    let seatNumber: Int
+    let price: Double
+    let status: String
 }
 
 enum SeatStatus: String, Codable {
     case available
-    case held
+    case reserved
     case sold
 }
 
-struct Section: Codable, Identifiable {
-    let id: String
-    let name: String
-    let rows: [SeatRow]
-}
-
-struct SeatRow: Codable {
-    let row: String
-    let seats: [Seat]
-}
-
+// API response types for seats
 struct SeatsResponse: Codable {
+    let success: Bool
+    let data: [APISeat]
+    let count: Int
+}
+
+struct APISeat: Codable, Identifiable {
+    let id: String
     let eventId: String
-    let sections: [Section]
+    let section: String
+    let row: String
+    let seatNumber: Int
+    let price: Double
+    let status: String
 }

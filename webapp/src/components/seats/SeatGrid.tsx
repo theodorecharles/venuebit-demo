@@ -28,18 +28,18 @@ export const SeatGrid: React.FC<SeatGridProps> = ({
   const sortedRows = Object.keys(seatsByRow).sort();
 
   return (
-    <div className="space-y-3">
-      <div className="bg-gradient-to-b from-primary/30 to-transparent p-4 rounded-lg text-center mb-6">
-        <div className="text-text-primary font-bold text-lg">STAGE</div>
+    <div className="space-y-1">
+      <div className="bg-gradient-to-b from-primary/30 to-transparent p-3 rounded-lg text-center mb-4">
+        <div className="text-text-primary font-bold text-sm">STAGE</div>
       </div>
 
       {sortedRows.map((row) => (
-        <div key={row} className="flex items-center gap-2">
-          <div className="w-12 text-text-secondary font-semibold text-sm flex-shrink-0">
+        <div key={row} className="flex items-center gap-1">
+          <div className="w-10 text-text-secondary font-semibold text-xs flex-shrink-0">
             Row {row}
           </div>
-          <div className="flex flex-wrap gap-2 flex-1 justify-center">
-            {seatsByRow[row].map((seat) => {
+          <div className="grid grid-cols-10 gap-1 flex-1 justify-items-center">
+            {seatsByRow[row].slice(0, 10).map((seat) => {
               const isSelected = selectedSeats.some((s) => s.id === seat.id);
               return (
                 <SeatComponent

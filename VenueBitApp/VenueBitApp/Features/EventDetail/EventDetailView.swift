@@ -99,23 +99,15 @@ struct EventDetailView: View {
                                     .foregroundColor(.white)
 
                                 HStack(spacing: 12) {
-                                    AsyncImage(url: URL(string: event.performer.imageUrl)) { phase in
-                                        switch phase {
-                                        case .success(let image):
-                                            image.resizable().aspectRatio(contentMode: .fill)
-                                        default:
-                                            Circle().fill(Color.slate700)
-                                                .overlay(
-                                                    Text(String(event.performer.name.prefix(1)))
-                                                        .font(.title2.bold())
-                                                        .foregroundColor(.slate400)
-                                                )
-                                        }
-                                    }
-                                    .frame(width: 60, height: 60)
-                                    .clipShape(Circle())
+                                    Circle().fill(Color.slate700)
+                                        .overlay(
+                                            Text(String(event.performer.prefix(1)))
+                                                .font(.title2.bold())
+                                                .foregroundColor(.slate400)
+                                        )
+                                        .frame(width: 60, height: 60)
 
-                                    Text(event.performer.name)
+                                    Text(event.performer)
                                         .font(.subheadline.bold())
                                         .foregroundColor(.white)
                                 }

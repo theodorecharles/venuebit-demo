@@ -20,6 +20,8 @@ export const ConfirmationPage: React.FC = () => {
 
   useEffect(() => {
     if (orderId) {
+      // Scroll to top when confirmation page loads
+      window.scrollTo(0, 0);
       loadOrder();
       trackPageView('confirmation', { order_id: orderId });
     }

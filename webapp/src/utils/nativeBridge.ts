@@ -6,21 +6,21 @@ interface WebKitMessageHandler {
 interface WindowWithWebKit extends Window {
   webkit?: {
     messageHandlers?: {
-      venuebit?: WebKitMessageHandler;
+      nativeBridge?: WebKitMessageHandler;
     };
   };
 }
 
 // Send message to native iOS app
-export const sendToNative = (action: string, data?: unknown): void => {
+export const sendToNative = (action: string, data?: Record<string, unknown>): void => {
   const windowWithWebKit = window as WindowWithWebKit;
 
-  if (windowWithWebKit.webkit?.messageHandlers?.venuebit) {
+  if (windowWithWebKit.webkit?.messageHandlers?.nativeBridge) {
     try {
-      windowWithWebKit.webkit.messageHandlers.venuebit.postMessage({
+      // iOS expects action + data spread at top level
+      windowWithWebKit.webkit.messageHandlers.nativeBridge.postMessage({
         action,
-        data,
-        timestamp: new Date().toISOString(),
+        ...data,
       });
       console.log('Message sent to native app:', action, data);
     } catch (error) {
@@ -34,19 +34,19 @@ export const sendToNative = (action: string, data?: unknown): void => {
 
 // Notify native app of purchase completion
 export const notifyPurchaseComplete = (orderId: string, total: number): void => {
-  sendToNative('purchase_complete', {
-    order_id: orderId,
+  sendToNative('purchaseComplete', {
+    orderId,
     total,
   });
 };
 
 // Request native app to close the web view
 export const requestCloseWebView = (): void => {
-  sendToNative('close_webview');
+  sendToNative('closeWebView', {});
 };
 
 // Check if running in native app context
 export const isNativeContext = (): boolean => {
   const windowWithWebKit = window as WindowWithWebKit;
-  return !!windowWithWebKit.webkit?.messageHandlers?.venuebit;
+  return !!windowWithWebKit.webkit?.messageHandlers?.nativeBridge;
 };

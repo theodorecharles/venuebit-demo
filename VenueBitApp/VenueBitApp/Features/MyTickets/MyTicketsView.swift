@@ -5,6 +5,7 @@ struct MyTicketsView: View {
     @EnvironmentObject var userManager: UserIdentityManager
     @State private var orders: [Order] = []
     @State private var isLoading = false
+    @State private var showingClearAlert = false
 
     var body: some View {
         NavigationStack {
@@ -20,30 +21,62 @@ struct MyTicketsView: View {
                         message: "Your purchased tickets will appear here"
                     )
                 } else {
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 20) {
-                            if !appState.purchasedTickets.isEmpty {
-                                TicketsSection(
-                                    title: "Recent Purchases",
-                                    tickets: appState.purchasedTickets
-                                )
-                            }
-
-                            if !orders.isEmpty {
-                                OrdersSection(orders: orders)
+                    List {
+                        if !appState.purchasedTickets.isEmpty {
+                            Section {
+                                ForEach(appState.purchasedTickets) { ticket in
+                                    TicketRow(ticket: ticket)
+                                        .listRowBackground(Color.slate800)
+                                }
+                                .onDelete { indexSet in
+                                    for index in indexSet {
+                                        appState.removeTicket(appState.purchasedTickets[index])
+                                    }
+                                }
+                            } header: {
+                                Text("Recent Purchases")
+                                    .foregroundColor(.white)
                             }
                         }
-                        .padding(16)
-                        .padding(.bottom, 100)
+
+                        if !orders.isEmpty {
+                            Section {
+                                ForEach(orders) { order in
+                                    OrderRow(order: order)
+                                        .listRowBackground(Color.slate800)
+                                }
+                            } header: {
+                                Text("Order History")
+                                    .foregroundColor(.white)
+                            }
+                        }
                     }
+                    .listStyle(.grouped)
+                    .scrollContentBackground(.hidden)
                 }
             }
             .navigationTitle("My Tickets")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    if !appState.purchasedTickets.isEmpty {
+                        Button("Clear All") {
+                            showingClearAlert = true
+                        }
+                        .foregroundColor(.red)
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     DebugBadge()
                 }
+            }
+            .alert("Clear All Tickets?", isPresented: $showingClearAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Clear", role: .destructive) {
+                    appState.clearAllTickets()
+                }
+            } message: {
+                Text("This will remove all tickets from this view. This is for demo purposes only.")
             }
             .refreshable {
                 await loadOrders()
@@ -203,7 +236,7 @@ struct StatusBadge: View {
 
     var color: Color {
         switch status {
-        case .confirmed: return .green
+        case .confirmed, .completed: return .green
         case .pending: return .orange
         case .cancelled, .refunded: return .red
         }

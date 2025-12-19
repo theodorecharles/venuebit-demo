@@ -7,23 +7,30 @@ export interface GetSeatsParams {
   section_id?: string;
 }
 
+// Transform backend response to add compatibility fields
+const transformEvent = (data: any): Event => ({
+  ...data,
+  artist: data.performer,
+  venue: data.venueName,
+});
+
 export const eventsApi = {
   // Get event details
   getEvent: async (eventId: string): Promise<Event> => {
     const response = await apiClient.get(`/events/${eventId}`);
-    return response.data;
+    return transformEvent(response.data.data);
   },
 
   // Get all events
   getEvents: async (): Promise<Event[]> => {
     const response = await apiClient.get('/events');
-    return response.data;
+    return response.data.data.map(transformEvent);
   },
 
   // Get sections for an event
   getSections: async (eventId: string): Promise<Section[]> => {
     const response = await apiClient.get(`/events/${eventId}/sections`);
-    return response.data;
+    return response.data.data || response.data;
   },
 
   // Get seats for an event/section
@@ -33,7 +40,7 @@ export const eventsApi = {
       ? `/events/${event_id}/sections/${section_id}/seats`
       : `/events/${event_id}/seats`;
     const response = await apiClient.get(url);
-    return response.data;
+    return response.data.data || response.data;
   },
 
   // Reserve seats (temporary hold)

@@ -1,5 +1,5 @@
 import Foundation
-import Optimizely
+import Combine
 
 @MainActor
 class OptimizelyManager: ObservableObject {
@@ -8,12 +8,8 @@ class OptimizelyManager: ObservableObject {
     @Published private(set) var isReady = false
     @Published private(set) var currentDecision: TicketExperienceDecision = .defaultDecision
 
-    private var optimizely: OptimizelyClient?
-
-    // Replace with your actual SDK key or load from config
-    private let sdkKey = "YOUR_OPTIMIZELY_SDK_KEY"
-
-    private var cancellables = Set<AnyCancellable>()
+    // Set to a valid SDK key to enable Optimizely
+    private let sdkKey: String? = nil
 
     init() {
         // Listen for user ID changes
@@ -26,19 +22,18 @@ class OptimizelyManager: ObservableObject {
     }
 
     func initialize() async {
-        optimizely = OptimizelyClient(sdkKey: sdkKey)
-
-        do {
-            try optimizely?.start()
+        // Skip Optimizely initialization if no SDK key is configured
+        guard let sdkKey = sdkKey, !sdkKey.isEmpty, sdkKey != "YOUR_OPTIMIZELY_SDK_KEY" else {
+            print("[Optimizely] No SDK key configured - using default values")
             isReady = true
-            await MainActor.run {
-                updateDecision()
-            }
-            print("[Optimizely] SDK initialized successfully")
-        } catch {
-            print("[Optimizely] Failed to initialize: \(error)")
-            isReady = false
+            currentDecision = .defaultDecision
+            return
         }
+
+        // Optimizely initialization would go here when SDK key is available
+        print("[Optimizely] SDK key provided - would initialize here")
+        isReady = true
+        updateDecision()
     }
 
     @objc private func handleUserIdChange(_ notification: Notification) {
@@ -48,58 +43,18 @@ class OptimizelyManager: ObservableObject {
     }
 
     private func updateDecision() {
-        let userId = UserIdentityManager.shared.userId
-        currentDecision = getTicketExperienceDecision(userId: userId)
+        // Without Optimizely, just use defaults
+        currentDecision = .defaultDecision
     }
 
     func getTicketExperienceDecision(userId: String) -> TicketExperienceDecision {
-        guard let optimizely = optimizely, isReady else {
-            return .defaultDecision
-        }
-
-        let user = optimizely.createUserContext(userId: userId)
-        let decision = user?.decide(key: "ticket_experience")
-
-        let enabled = decision?.enabled ?? false
-        let variationKey = decision?.variationKey ?? "control"
-
-        return TicketExperienceDecision(
-            enabled: enabled,
-            variationKey: variationKey,
-            showSeatPreview: decision?.variables["show_seat_preview"] as? Bool ?? false,
-            showRecommendations: decision?.variables["show_recommendations"] as? Bool ?? false,
-            checkoutLayout: decision?.variables["checkout_layout"] as? String ?? "standard",
-            showUrgencyBanner: decision?.variables["show_urgency_banner"] as? Bool ?? false
-        )
+        // Without Optimizely, return default decision
+        return .defaultDecision
     }
 
     func trackEvent(eventKey: String, tags: [String: Any]? = nil) {
-        guard let optimizely = optimizely, isReady else {
-            print("[Optimizely] Cannot track - SDK not ready")
-            return
-        }
-
-        let userId = UserIdentityManager.shared.userId
-        let user = optimizely.createUserContext(userId: userId)
-
-        do {
-            try user?.trackEvent(eventKey: eventKey, eventTags: tags)
-            print("[Optimizely] Tracked event: \(eventKey)")
-
-            // Also update app state for debug panel
-            Task { @MainActor in
-                if let appState = await getAppState() {
-                    appState.addTrackedEvent(eventKey, tags: tags)
-                }
-            }
-        } catch {
-            print("[Optimizely] Failed to track event: \(error)")
-        }
-    }
-
-    private func getAppState() async -> AppState? {
-        // This is a simplified approach - in production you'd use proper DI
-        return nil
+        // Log locally for debugging, but don't require Optimizely
+        print("[Optimizely] Event tracked (local only): \(eventKey)")
     }
 }
 
@@ -124,6 +79,3 @@ struct TicketExperienceDecision {
         showUrgencyBanner: false
     )
 }
-
-// Import for AnyCancellable
-import Combine

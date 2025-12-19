@@ -78,13 +78,13 @@ export const SeatSelectionPage: React.FC = () => {
 
       // Create cart
       const cart = await cartApi.createCart({
-        user_id: userId,
-        event_id: eventId,
+        userId: userId,
       });
 
       // Add seats to cart
       const updatedCart = await cartApi.addToCart(cart.id, {
-        seat_ids: selectedSeats.map((s) => s.id),
+        eventId: eventId,
+        seatIds: selectedSeats.map((s) => s.id),
       });
 
       setCart(updatedCart);
@@ -128,16 +128,18 @@ export const SeatSelectionPage: React.FC = () => {
 
   const totalSeatsAvailable = 150; // Mock value
 
+  const total = selectedSeats.reduce((sum, s) => sum + s.price, 0);
+
   return (
-    <div>
+    <div className="pb-24">
       <DebugBanner />
 
       <div className="container mx-auto px-4 py-8">
         {/* Event Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">{event.artist}</h1>
-          <p className="text-xl text-text-secondary mb-1">{event.venue}</p>
-          <p className="text-text-secondary">{formatDateTime(event.date)}</p>
+          <h1 className="text-4xl font-bold mb-2">{event.performer}</h1>
+          <p className="text-xl text-text-secondary mb-1">{event.venueName}</p>
+          <p className="text-text-secondary">{formatDateTime(event.date, event.time)}</p>
         </div>
 
         {/* Enhanced variation: Urgency Banner */}
@@ -162,17 +164,8 @@ export const SeatSelectionPage: React.FC = () => {
             )}
           </div>
 
-          <div>
+          <div className="hidden lg:block">
             <SelectedSeats seats={selectedSeats} onRemove={handleRemoveSeat} />
-
-            <Button
-              onClick={handleAddToCart}
-              disabled={selectedSeats.length === 0 || addingToCart}
-              fullWidth
-              className="mt-4"
-            >
-              {addingToCart ? 'Adding to Cart...' : `Add ${selectedSeats.length} Seat${selectedSeats.length !== 1 ? 's' : ''} to Cart`}
-            </Button>
           </div>
         </div>
 
@@ -180,6 +173,27 @@ export const SeatSelectionPage: React.FC = () => {
         {isEnhanced && hoveredSeat && hoveredSeat.status === 'available' && (
           <SeatPreview seat={hoveredSeat} />
         )}
+      </div>
+
+      {/* Sticky Add to Cart Footer */}
+      <div className="fixed bottom-0 left-0 right-0 bg-surface-light border-t border-slate-600 px-4 py-4 z-50">
+        <div className="container mx-auto flex items-center justify-between gap-4">
+          <div className="flex-1">
+            {selectedSeats.length > 0 && (
+              <div>
+                <span className="text-text-secondary text-sm">{selectedSeats.length} seat{selectedSeats.length !== 1 ? 's' : ''} selected</span>
+                <span className="text-white font-bold ml-2">${total.toFixed(2)}</span>
+              </div>
+            )}
+          </div>
+          <Button
+            onClick={handleAddToCart}
+            disabled={selectedSeats.length === 0 || addingToCart}
+            className="px-8"
+          >
+            {addingToCart ? 'Adding to Cart...' : `Add to Cart`}
+          </Button>
+        </div>
       </div>
     </div>
   );

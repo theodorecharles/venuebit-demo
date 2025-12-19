@@ -1,11 +1,23 @@
 export interface Event {
   id: string;
-  artist: string;
-  venue: string;
+  title: string;
+  performer: string;
+  category: string;
   date: string;
+  time: string;
+  venueId: string;
+  venueName: string;
   city: string;
-  image_url?: string;
+  state: string;
   description?: string;
+  imageUrl?: string;
+  featured?: boolean;
+  minPrice?: number;
+  maxPrice?: number;
+  availableSeats?: number;
+  // Computed for backwards compatibility
+  artist?: string;
+  venue?: string;
 }
 
 export interface Section {

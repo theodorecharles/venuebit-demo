@@ -27,10 +27,10 @@ export const Seat: React.FC<SeatProps> = ({ seat, isSelected, onClick, onHover }
       onMouseEnter={() => onHover?.(true)}
       onMouseLeave={() => onHover?.(false)}
       disabled={isSold}
-      className={`w-10 h-10 rounded transition-all duration-200 ${getColorClasses()} flex items-center justify-center text-xs font-semibold text-white`}
-      title={`Seat ${seat.seat_number} - Row ${seat.row} - $${seat.price}`}
+      className={`w-7 h-7 rounded transition-all duration-200 ${getColorClasses()} flex items-center justify-center text-[10px] font-semibold text-white`}
+      title={`Seat ${seat.seatNumber} - Row ${seat.row} - $${seat.price}`}
     >
-      {seat.seat_number}
+      {seat.seatNumber}
     </button>
   );
 };

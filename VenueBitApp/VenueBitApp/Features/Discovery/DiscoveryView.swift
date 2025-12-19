@@ -54,9 +54,11 @@ struct DiscoveryView: View {
                     }
                 }
             }
-            .navigationTitle("VenueBit")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    VenueBitLogo(size: 28)
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     DebugBadge()
                 }

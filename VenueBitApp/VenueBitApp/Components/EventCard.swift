@@ -156,19 +156,6 @@ struct FeaturedEventCard: View {
     }
 }
 
-// Custom colors extension
-extension Color {
-    static let slate400 = Color(red: 148/255, green: 163/255, blue: 184/255)
-    static let slate500 = Color(red: 100/255, green: 116/255, blue: 139/255)
-    static let slate700 = Color(red: 51/255, green: 65/255, blue: 85/255)
-    static let slate800 = Color(red: 30/255, green: 41/255, blue: 59/255)
-    static let slate900 = Color(red: 15/255, green: 23/255, blue: 42/255)
-    static let indigo300 = Color(red: 165/255, green: 180/255, blue: 252/255)
-    static let indigo400 = Color(red: 129/255, green: 140/255, blue: 248/255)
-    static let indigo500 = Color(red: 99/255, green: 102/255, blue: 241/255)
-    static let slate300 = Color(red: 203/255, green: 213/255, blue: 225/255)
-}
-
 #Preview {
     ScrollView {
         VStack(spacing: 16) {
@@ -179,20 +166,4 @@ extension Color {
         .padding()
     }
     .background(Color.slate900)
-}
-
-extension Event {
-    static let preview = Event(
-        id: "evt_001",
-        title: "Taylor Swift - Eras Tour",
-        category: .concerts,
-        performer: Performer(id: "prf_001", name: "Taylor Swift", imageUrl: ""),
-        venue: Venue(id: "ven_001", name: "SoFi Stadium", address: nil, city: "Los Angeles", state: "CA", zipCode: nil, capacity: 70000, type: .stadium),
-        dateTime: "2025-08-15T19:30:00Z",
-        priceRange: PriceRange(min: 99, max: 899),
-        imageUrl: "https://picsum.photos/400/300",
-        description: "Experience the record-breaking Eras Tour",
-        status: .onSale,
-        featured: true
-    )
 }

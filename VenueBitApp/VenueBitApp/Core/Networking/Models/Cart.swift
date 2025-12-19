@@ -3,29 +3,27 @@ import Foundation
 struct Cart: Codable, Identifiable {
     let id: String
     let userId: String
-    let items: [CartItem]
-    let subtotal: Double
-    let fees: Double
-    let total: Double
+    let items: [CartItemData]
     let createdAt: String
-    let expiresAt: String
+    let updatedAt: String
 }
 
-struct CartItem: Codable, Identifiable {
+struct CartItemData: Codable, Identifiable {
     let id: String
     let eventId: String
     let eventTitle: String
-    let eventDateTime: String
+    let eventDate: String
+    let eventTime: String
     let venueName: String
-    let seats: [Seat]
+    let seats: [CartSeat]
     let subtotal: Double
 
     var seatsDescription: String {
         if seats.isEmpty { return "" }
-        let sectionName = seats.first?.sectionName ?? ""
+        let section = seats.first?.section ?? ""
         let row = seats.first?.row ?? ""
-        let seatNumbers = seats.map { String($0.number) }.joined(separator: ", ")
-        return "\(sectionName), Row \(row), Seats \(seatNumbers)"
+        let seatNumbers = seats.map { String($0.seatNumber) }.joined(separator: ", ")
+        return "\(section), Row \(row), Seats \(seatNumbers)"
     }
 }
 

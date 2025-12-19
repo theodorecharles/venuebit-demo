@@ -4,6 +4,7 @@ import WebKit
 struct WebViewContainer: UIViewRepresentable {
     let url: URL
     let bridge: WebViewBridge
+    var onURLChange: ((URL) -> Void)?
 
     func makeUIView(context: Context) -> WKWebView {
         let configuration = WKWebViewConfiguration()
@@ -23,13 +24,17 @@ struct WebViewContainer: UIViewRepresentable {
         webView.scrollView.backgroundColor = UIColor(red: 15/255, green: 23/255, blue: 42/255, alpha: 1)
 
         bridge.webView = webView
+        context.coordinator.onURLChange = onURLChange
 
         return webView
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        let request = URLRequest(url: url)
-        webView.load(request)
+        // Only load if URL is different to avoid reloading on state changes
+        if webView.url != url {
+            let request = URLRequest(url: url)
+            webView.load(request)
+        }
     }
 
     func makeCoordinator() -> Coordinator {
@@ -37,8 +42,13 @@ struct WebViewContainer: UIViewRepresentable {
     }
 
     class Coordinator: NSObject, WKNavigationDelegate {
+        var onURLChange: ((URL) -> Void)?
+
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             print("[WebView] Finished loading: \(webView.url?.absoluteString ?? "unknown")")
+            if let url = webView.url {
+                onURLChange?(url)
+            }
         }
 
         func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
@@ -51,36 +61,3 @@ struct WebViewContainer: UIViewRepresentable {
     }
 }
 
-// MARK: - URL Builders
-
-struct WebViewURLBuilder {
-    static let baseURL = "http://localhost:4000"
-
-    static func seatSelectionURL(eventId: String, userId: String) -> URL {
-        var components = URLComponents(string: "\(baseURL)/seats/\(eventId)")!
-        components.queryItems = [
-            URLQueryItem(name: "userId", value: userId),
-            URLQueryItem(name: "platform", value: "ios")
-        ]
-        return components.url!
-    }
-
-    static func checkoutURL(userId: String, cartId: String) -> URL {
-        var components = URLComponents(string: "\(baseURL)/checkout")!
-        components.queryItems = [
-            URLQueryItem(name: "userId", value: userId),
-            URLQueryItem(name: "cartId", value: cartId),
-            URLQueryItem(name: "platform", value: "ios")
-        ]
-        return components.url!
-    }
-
-    static func confirmationURL(orderId: String, userId: String) -> URL {
-        var components = URLComponents(string: "\(baseURL)/confirmation/\(orderId)")!
-        components.queryItems = [
-            URLQueryItem(name: "userId", value: userId),
-            URLQueryItem(name: "platform", value: "ios")
-        ]
-        return components.url!
-    }
-}

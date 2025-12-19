@@ -16,6 +16,9 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
   eventVenue,
   eventDate,
 }) => {
+  // Flatten all seats from all cart items
+  const allSeats = cart.items.flatMap((item) => item.seats);
+
   return (
     <Card>
       <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
@@ -28,21 +31,21 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
 
       <div className="space-y-3">
         <h4 className="font-semibold text-text-primary mb-3">
-          Your Tickets ({cart.items.length})
+          Your Tickets ({allSeats.length})
         </h4>
-        {cart.items.map((item, index) => (
+        {allSeats.map((seat) => (
           <div
-            key={index}
+            key={seat.id}
             className="flex justify-between items-start p-3 bg-surface-light rounded"
           >
             <div>
-              <div className="font-semibold">{item.section_name}</div>
+              <div className="font-semibold">{seat.section}</div>
               <div className="text-sm text-text-secondary">
-                Row {item.row}, Seat {item.seat_number}
+                Row {seat.row}, Seat {seat.seatNumber}
               </div>
             </div>
             <div className="font-semibold text-primary">
-              {formatPrice(item.price)}
+              {formatPrice(seat.price)}
             </div>
           </div>
         ))}
