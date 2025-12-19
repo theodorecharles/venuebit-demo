@@ -1,5 +1,6 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import path from 'path';
 import routes from './routes';
 
 export function createApp(): Express {
@@ -10,6 +11,9 @@ export function createApp(): Express {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
   }));
+
+  // Serve static files from public folder
+  app.use('/images', express.static(path.join(__dirname, '../public/images')));
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
