@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1b4b"/>
+      <stop offset="100%" style="stop-color:#312e81"/>
+    </linearGradient>
+    <linearGradient id="ticketGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#818cf8"/>
+      <stop offset="100%" style="stop-color:#6366f1"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f472b6"/>
+      <stop offset="100%" style="stop-color:#ec4899"/>
+    </linearGradient>
+    <linearGradient id="shimmer" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#c7d2fe"/>
+      <stop offset="50%" style="stop-color:#a5b4fc"/>
+      <stop offset="100%" style="stop-color:#818cf8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background with rounded corners -->
+  <rect x="0" y="0" width="1024" height="1024" rx="224" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.05">
+    <line x1="256" y1="0" x2="256" y2="1024" stroke="#fff" stroke-width="2"/>
+    <line x1="512" y1="0" x2="512" y2="1024" stroke="#fff" stroke-width="2"/>
+    <line x1="768" y1="0" x2="768" y2="1024" stroke="#fff" stroke-width="2"/>
+    <line x1="0" y1="256" x2="1024" y2="256" stroke="#fff" stroke-width="2"/>
+    <line x1="0" y1="512" x2="1024" y2="512" stroke="#fff" stroke-width="2"/>
+    <line x1="0" y1="768" x2="1024" y2="768" stroke="#fff" stroke-width="2"/>
+  </g>
+
+  <!-- Main ticket shape - angled for dynamic look -->
+  <g transform="translate(512, 512) rotate(-8) translate(-512, -512)">
+    <!-- Ticket body -->
+    <path d="M160 340C160 304 189 275 225 275H799C835 275 864 304 864 340V465C820 465 784 501 784 545C784 589 820 625 864 625V749C864 785 835 814 799 814H225C189 814 160 785 160 749V625C204 625 240 589 240 545C240 501 204 465 160 465V340Z" fill="url(#ticketGrad)"/>
+
+    <!-- Ticket stub perforation -->
+    <line x1="680" y1="275" x2="680" y2="814" stroke="#1e1b4b" stroke-width="4" stroke-dasharray="16 12" opacity="0.3"/>
+
+    <!-- Ticket shine -->
+    <path d="M160 340C160 304 189 275 225 275H799C835 275 864 304 864 340V380L160 480V340Z" fill="url(#shimmer)" opacity="0.15"/>
+  </g>
+
+  <!-- Star burst accent -->
+  <g transform="translate(512, 512) rotate(-8) translate(-512, -512)">
+    <path d="M400 500L440 560L510 545L470 600L495 670L430 640L375 690L385 620L320 580L390 565L400 500Z" fill="url(#accentGrad)"/>
+  </g>
+
+  <!-- Music notes -->
+  <g transform="translate(512, 512) rotate(-8) translate(-512, -512)" opacity="0.4">
+    <circle cx="760" cy="620" r="28" fill="#1e1b4b"/>
+    <path d="M788 620V500L830 480V580" stroke="#1e1b4b" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="760" cy="560" r="20" fill="#1e1b4b"/>
+  </g>
+
+  <!-- VB letters stylized -->
+  <g transform="translate(512, 512) rotate(-8) translate(-512, -512)">
+    <text x="380" y="580" font-family="Georgia, serif" font-size="180" font-weight="bold" fill="#1e1b4b" opacity="0.2">VB</text>
+  </g>
+
+  <!-- Small decorative dots -->
+  <circle cx="200" cy="200" r="8" fill="#818cf8" opacity="0.5"/>
+  <circle cx="824" cy="180" r="6" fill="#f472b6" opacity="0.5"/>
+  <circle cx="180" cy="824" r="10" fill="#6366f1" opacity="0.4"/>
+  <circle cx="844" cy="844" r="8" fill="#ec4899" opacity="0.5"/>
+</svg>

@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  webapp:
+    build:
+      context: ./webapp
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - VITE_OPTIMIZELY_SDK_KEY=${OPTIMIZELY_SDK_KEY}
+      - VITE_API_URL=http://localhost:4001
+    depends_on:
+      - backend
+    networks:
+      - venuebit
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "4001:4001"
+    environment:
+      - OPTIMIZELY_SDK_KEY=${OPTIMIZELY_SDK_KEY}
+      - PORT=4001
+    networks:
+      - venuebit
+
+networks:
+  venuebit:
+    driver: bridge
