@@ -4,7 +4,7 @@ A multi-platform demo application showcasing Optimizely Feature Experimentation 
 
 ## Overview
 
-VenueBit is a Ticketmaster-style event discovery and ticket purchasing app that demonstrates how Optimizely feature flags can deliver consistent experiences across:
+VenueBit is an event discovery and ticket purchasing app that demonstrates how Optimizely feature flags can deliver consistent experiences across:
 
 - **Native iOS** (Swift SDK)
 - **Web Views** (JavaScript SDK)
