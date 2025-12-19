@@ -47,10 +47,108 @@ struct Event: Codable, Identifiable {
     var categoryIcon: String {
         switch category {
         case .concerts: return "music.note"
-        case .sports: return "sportscourt"
+        case .sports: return sportIcon
         case .theater: return "theatermasks"
         case .comedy: return "face.smiling"
         }
+    }
+
+    /// Returns the appropriate SF Symbol for the specific sport
+    private var sportIcon: String {
+        let titleLower = title.lowercased()
+
+        // Basketball
+        if titleLower.contains("lakers") || titleLower.contains("celtics") ||
+           titleLower.contains("warriors") || titleLower.contains("clippers") ||
+           titleLower.contains("mavericks") {
+            return "basketball.fill"
+        }
+
+        // Baseball
+        if titleLower.contains("dodgers") || titleLower.contains("yankees") ||
+           titleLower.contains("giants") && !titleLower.contains("49ers") {
+            return "baseball.fill"
+        }
+
+        // Football (NFL & College)
+        if titleLower.contains("rams") || titleLower.contains("49ers") ||
+           titleLower.contains("chargers") || titleLower.contains("chiefs") ||
+           titleLower.contains("usc") || titleLower.contains("ucla") ||
+           titleLower.contains("football") {
+            return "football.fill"
+        }
+
+        // Hockey
+        if titleLower.contains("kings") && titleLower.contains("golden knights") ||
+           titleLower.contains("hockey") || titleLower.contains("nhl") {
+            return "hockey.puck.fill"
+        }
+
+        // Soccer/MLS
+        if titleLower.contains("lafc") || titleLower.contains("galaxy") ||
+           titleLower.contains("tráfico") || titleLower.contains("mls") {
+            return "soccerball"
+        }
+
+        // MMA/UFC
+        if titleLower.contains("ufc") || titleLower.contains("mma") {
+            return "figure.boxing"
+        }
+
+        return "sportscourt"
+    }
+
+    /// Returns the appropriate emoji for the specific sport
+    var sportEmoji: String {
+        let titleLower = title.lowercased()
+
+        // Basketball
+        if titleLower.contains("lakers") || titleLower.contains("celtics") ||
+           titleLower.contains("warriors") || titleLower.contains("clippers") ||
+           titleLower.contains("mavericks") {
+            return "🏀"
+        }
+
+        // Baseball
+        if titleLower.contains("dodgers") || titleLower.contains("yankees") ||
+           titleLower.contains("giants") && !titleLower.contains("49ers") {
+            return "⚾"
+        }
+
+        // Football (NFL & College)
+        if titleLower.contains("rams") || titleLower.contains("49ers") ||
+           titleLower.contains("chargers") || titleLower.contains("chiefs") ||
+           titleLower.contains("usc") || titleLower.contains("ucla") ||
+           titleLower.contains("football") {
+            return "🏈"
+        }
+
+        // Hockey
+        if titleLower.contains("kings") && titleLower.contains("golden knights") ||
+           titleLower.contains("hockey") || titleLower.contains("nhl") {
+            return "🏒"
+        }
+
+        // Soccer/MLS
+        if titleLower.contains("lafc") || titleLower.contains("galaxy") ||
+           titleLower.contains("tráfico") || titleLower.contains("mls") {
+            return "⚽"
+        }
+
+        // MMA/UFC
+        if titleLower.contains("ufc") || titleLower.contains("mma") {
+            return "🥊"
+        }
+
+        return "🏟️"
+    }
+
+    /// Returns the appropriate emoji for this event's category (sport-aware)
+    var displayEmoji: String {
+        if category == .sports {
+            return sportEmoji
+        }
+        return category.icon
     }
 
     var priceRange: PriceRange {
@@ -109,20 +207,20 @@ struct PriceRange {
 extension Event {
     static let preview = Event(
         id: "evt_001",
-        title: "Taylor Swift - Eras Tour",
+        title: "Beyoncé - Renaissance World Tour",
         category: .concerts,
-        performer: "Taylor Swift",
+        performer: "Beyoncé",
         date: "2025-08-15",
-        time: "19:30",
+        time: "19:00",
         venueId: "ven_001",
         venueName: "SoFi Stadium",
         city: "Los Angeles",
         state: "CA",
-        description: "Experience the record-breaking Eras Tour",
+        description: "Queen Bey brings her groundbreaking Renaissance World Tour to LA",
         imageUrl: "https://picsum.photos/400/300",
         featured: true,
-        minPrice: 99,
-        maxPrice: 899,
+        minPrice: 149,
+        maxPrice: 999,
         availableSeats: 1000
     )
 }

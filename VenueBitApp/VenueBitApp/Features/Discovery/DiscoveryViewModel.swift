@@ -12,7 +12,10 @@ class DiscoveryViewModel: ObservableObject {
     private let apiClient = APIClient.shared
 
     func loadEvents() async {
-        isLoading = true
+        // Only show loading if we have no data yet
+        if allEvents.isEmpty {
+            isLoading = true
+        }
         errorMessage = nil
 
         do {
@@ -22,9 +25,15 @@ class DiscoveryViewModel: ObservableObject {
             trendingEvents = Array(events.shuffled().prefix(6))
             weekendEvents = Array(events.shuffled().prefix(6))
             isLoading = false
+        } catch is CancellationError {
+            // Ignore cancellation - this happens during pull-to-refresh
+            isLoading = false
         } catch {
             isLoading = false
-            errorMessage = error.localizedDescription
+            // Only show error if we have no data to display
+            if allEvents.isEmpty {
+                errorMessage = error.localizedDescription
+            }
             print("[DiscoveryViewModel] Error loading events: \(error)")
         }
     }

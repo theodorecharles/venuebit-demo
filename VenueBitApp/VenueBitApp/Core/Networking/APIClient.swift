@@ -59,7 +59,7 @@ class APIClient {
 
         let (data, _) = try await session.data(for: request)
         let response = try JSONDecoder().decode(SearchResponse.self, from: data)
-        return response.data.results
+        return response.data
     }
 
     // MARK: - Cart
@@ -184,12 +184,10 @@ struct SeatsDataResponse: Codable {
 }
 
 struct SearchResponse: Codable {
-    let data: SearchData
-}
-
-struct SearchData: Codable {
+    let success: Bool
+    let data: [Event]
+    let count: Int
     let query: String
-    let results: [Event]
 }
 
 struct FeaturesDataResponse: Codable {

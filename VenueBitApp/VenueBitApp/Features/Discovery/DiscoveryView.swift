@@ -72,19 +72,32 @@ struct DiscoveryView: View {
 
 struct FeaturedEventsSection: View {
     let events: [Event]
+    @State private var currentIndex = 0
 
     var body: some View {
-        TabView {
-            ForEach(events) { event in
-                NavigationLink(destination: EventDetailView(eventId: event.id)) {
-                    FeaturedEventCard(event: event)
-                        .padding(.horizontal, 16)
+        VStack(spacing: 8) {
+            TabView(selection: $currentIndex) {
+                ForEach(Array(events.enumerated()), id: \.element.id) { index, event in
+                    NavigationLink(destination: EventDetailView(eventId: event.id)) {
+                        FeaturedEventCard(event: event)
+                            .padding(.horizontal, 16)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .tag(index)
                 }
-                .buttonStyle(PlainButtonStyle())
+            }
+            .frame(height: 230)
+            .tabViewStyle(.page(indexDisplayMode: .never))
+
+            // Page dots below the image
+            HStack(spacing: 6) {
+                ForEach(0..<events.count, id: \.self) { index in
+                    Circle()
+                        .fill(index == currentIndex ? Color.white : Color.slate500)
+                        .frame(width: 8, height: 8)
+                }
             }
         }
-        .frame(height: 240)
-        .tabViewStyle(.page(indexDisplayMode: .automatic))
     }
 }
 
@@ -194,16 +207,13 @@ struct EventListRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            AsyncImage(url: URL(string: event.imageUrl)) { phase in
-                switch phase {
-                case .success(let image):
-                    image.resizable().aspectRatio(contentMode: .fill)
-                default:
-                    Rectangle().fill(Color.slate700)
-                        .overlay(
-                            Text(event.category.icon)
-                        )
-                }
+            CachedAsyncImage(url: URL(string: event.imageUrl)) { image in
+                image.resizable().aspectRatio(contentMode: .fill)
+            } placeholder: {
+                Rectangle().fill(Color.slate700)
+                    .overlay(
+                        Text(event.displayEmoji)
+                    )
             }
             .frame(width: 80, height: 80)
             .cornerRadius(8)

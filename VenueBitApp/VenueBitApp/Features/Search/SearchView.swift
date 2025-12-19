@@ -12,11 +12,16 @@ struct SearchView: View {
 
                 VStack(spacing: 0) {
                     // Search bar
-                    SearchBar(text: $viewModel.searchQuery) {
-                        Task {
-                            await viewModel.search(userId: userManager.userId)
+                    SearchBar(text: $viewModel.searchQuery)
+                        .onChange(of: viewModel.searchQuery) { _, newValue in
+                            // Search as user types (with small delay handled in view model)
+                            Task {
+                                try? await Task.sleep(nanoseconds: 300_000_000) // 0.3s debounce
+                                if viewModel.searchQuery == newValue {
+                                    await viewModel.search(userId: userManager.userId)
+                                }
+                            }
                         }
-                    }
 
                     // Category filter
                     CategorySelector(selectedCategory: $selectedCategory)
@@ -24,19 +29,25 @@ struct SearchView: View {
 
                     // Results
                     if viewModel.isLoading {
+                        Spacer()
                         LoadingView(message: "Searching...")
+                        Spacer()
                     } else if viewModel.searchQuery.isEmpty && viewModel.results.isEmpty {
+                        Spacer()
                         EmptyStateView(
                             icon: "magnifyingglass",
                             title: "Search Events",
                             message: "Find concerts, sports, theater, and more"
                         )
+                        Spacer()
                     } else if viewModel.results.isEmpty && !viewModel.searchQuery.isEmpty {
+                        Spacer()
                         EmptyStateView(
                             icon: "magnifyingglass",
                             title: "No Results",
                             message: "Try a different search term"
                         )
+                        Spacer()
                     } else {
                         ScrollView {
                             LazyVStack(spacing: 12) {
@@ -73,7 +84,6 @@ struct SearchView: View {
 
 struct SearchBar: View {
     @Binding var text: String
-    var onSubmit: () -> Void
 
     var body: some View {
         HStack(spacing: 12) {
@@ -83,7 +93,6 @@ struct SearchBar: View {
             TextField("Search events, artists, venues...", text: $text)
                 .foregroundColor(.white)
                 .autocorrectionDisabled()
-                .onSubmit(onSubmit)
 
             if !text.isEmpty {
                 Button(action: { text = "" }) {

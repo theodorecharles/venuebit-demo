@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { sendToNative, notifyPurchaseComplete, requestCloseWebView } from '../utils/nativeBridge';
+import { sendToNative, notifyPurchaseComplete, requestCloseWebView, requestScrollToTop } from '../utils/nativeBridge';
 
 export const useNativeBridge = () => {
   const handlePurchaseComplete = useCallback((orderId: string, total: number) => {
@@ -10,6 +10,10 @@ export const useNativeBridge = () => {
     requestCloseWebView();
   }, []);
 
+  const handleScrollToTop = useCallback(() => {
+    requestScrollToTop();
+  }, []);
+
   const sendCustomMessage = useCallback((action: string, data?: unknown) => {
     sendToNative(action, data);
   }, []);
@@ -17,6 +21,7 @@ export const useNativeBridge = () => {
   return {
     handlePurchaseComplete,
     handleCloseWebView,
+    handleScrollToTop,
     sendCustomMessage,
   };
 };

@@ -8,37 +8,23 @@ struct EventCard: View {
         VStack(alignment: .leading, spacing: 0) {
             // Image
             ZStack(alignment: .topTrailing) {
-                AsyncImage(url: URL(string: event.imageUrl)) { phase in
-                    switch phase {
-                    case .empty:
-                        Rectangle()
-                            .fill(Color.slate700)
-                            .overlay(
-                                ProgressView()
-                                    .tint(.white)
-                            )
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    case .failure:
-                        Rectangle()
-                            .fill(Color.slate700)
-                            .overlay(
-                                Image(systemName: event.categoryIcon)
-                                    .font(.largeTitle)
-                                    .foregroundColor(.slate400)
-                            )
-                    @unknown default:
-                        Rectangle()
-                            .fill(Color.slate700)
-                    }
+                CachedAsyncImage(url: URL(string: event.imageUrl)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Rectangle()
+                        .fill(Color.slate700)
+                        .overlay(
+                            ProgressView()
+                                .tint(.white)
+                        )
                 }
                 .frame(height: isCompact ? 120 : 160)
                 .clipped()
 
                 // Category badge
-                Text(event.category.icon)
+                Text(event.displayEmoji)
                     .font(.caption)
                     .padding(6)
                     .background(Color.slate800.opacity(0.9))
@@ -84,27 +70,14 @@ struct FeaturedEventCard: View {
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             // Background image
-            AsyncImage(url: URL(string: event.imageUrl)) { phase in
-                switch phase {
-                case .empty:
-                    Rectangle()
-                        .fill(Color.slate700)
-                        .overlay(ProgressView().tint(.white))
-                case .success(let image):
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                case .failure:
-                    Rectangle()
-                        .fill(Color.slate700)
-                        .overlay(
-                            Image(systemName: event.categoryIcon)
-                                .font(.system(size: 60))
-                                .foregroundColor(.slate500)
-                        )
-                @unknown default:
-                    Rectangle().fill(Color.slate700)
-                }
+            CachedAsyncImage(url: URL(string: event.imageUrl)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            } placeholder: {
+                Rectangle()
+                    .fill(Color.slate700)
+                    .overlay(ProgressView().tint(.white))
             }
             .frame(height: 220)
             .clipped()
@@ -119,7 +92,7 @@ struct FeaturedEventCard: View {
             // Content
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text(event.category.icon)
+                    Text(event.displayEmoji)
                     Text(event.category.displayName)
                         .font(.caption.bold())
                         .textCase(.uppercase)
@@ -153,6 +126,94 @@ struct FeaturedEventCard: View {
         }
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 4)
+    }
+}
+
+// MARK: - Cached Async Image
+
+/// A cached version of AsyncImage that properly persists images across view reappearances
+struct CachedAsyncImage<Content: View, Placeholder: View>: View {
+    let url: URL?
+    let content: (Image) -> Content
+    let placeholder: () -> Placeholder
+
+    @State private var image: UIImage?
+    @State private var loadTask: Task<Void, Never>?
+
+    init(
+        url: URL?,
+        @ViewBuilder content: @escaping (Image) -> Content,
+        @ViewBuilder placeholder: @escaping () -> Placeholder
+    ) {
+        self.url = url
+        self.content = content
+        self.placeholder = placeholder
+    }
+
+    var body: some View {
+        Group {
+            if let image = image {
+                content(Image(uiImage: image))
+            } else {
+                placeholder()
+            }
+        }
+        .onAppear {
+            loadImageIfNeeded()
+        }
+    }
+
+    private func loadImageIfNeeded() {
+        // Already have image
+        if image != nil { return }
+
+        guard let url = url else { return }
+
+        // Check cache first
+        if let cached = ImageCache.shared.get(for: url) {
+            self.image = cached
+            return
+        }
+
+        // Cancel any existing task
+        loadTask?.cancel()
+
+        // Start new load task
+        loadTask = Task {
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                if Task.isCancelled { return }
+
+                if let uiImage = UIImage(data: data) {
+                    ImageCache.shared.set(uiImage, for: url)
+                    await MainActor.run {
+                        self.image = uiImage
+                    }
+                }
+            } catch {
+                // Silently fail - placeholder will remain shown
+            }
+        }
+    }
+}
+
+/// Simple in-memory image cache
+class ImageCache {
+    static let shared = ImageCache()
+
+    private var cache = NSCache<NSURL, UIImage>()
+
+    private init() {
+        cache.countLimit = 100
+        cache.totalCostLimit = 50 * 1024 * 1024 // 50MB
+    }
+
+    func get(for url: URL) -> UIImage? {
+        return cache.object(forKey: url as NSURL)
+    }
+
+    func set(_ image: UIImage, for url: URL) {
+        cache.setObject(image, forKey: url as NSURL)
     }
 }
 

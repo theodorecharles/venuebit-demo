@@ -13,19 +13,19 @@ export const ConfirmationPage: React.FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
   useUserId(); // Initialize userId from URL params
   const { trackPageView } = useTracking();
-  const { handlePurchaseComplete, handleCloseWebView } = useNativeBridge();
+  const { handlePurchaseComplete, handleCloseWebView, handleScrollToTop } = useNativeBridge();
 
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (orderId) {
-      // Scroll to top when confirmation page loads
-      window.scrollTo(0, 0);
-      loadOrder();
-      trackPageView('confirmation', { order_id: orderId });
-    }
-  }, [orderId]);
+  const scrollToTop = () => {
+    // Try native WebView scroll first
+    handleScrollToTop();
+    // Also try web-based scroll as fallback
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  };
 
   const loadOrder = async () => {
     if (!orderId) return;
@@ -35,6 +35,9 @@ export const ConfirmationPage: React.FC = () => {
       const data = await checkoutApi.getOrder(orderId);
       setOrder(data);
 
+      // Scroll to top after content loads
+      setTimeout(scrollToTop, 50);
+
       // Notify native app of purchase completion
       handlePurchaseComplete(orderId, data.total);
     } catch (error) {
@@ -43,6 +46,14 @@ export const ConfirmationPage: React.FC = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (orderId) {
+      scrollToTop();
+      loadOrder();
+      trackPageView('confirmation', { order_id: orderId });
+    }
+  }, [orderId]);
 
   const handleClose = () => {
     // Request native app to close the web view

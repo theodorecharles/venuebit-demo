@@ -46,6 +46,11 @@ class WebViewBridge: NSObject, WKScriptMessageHandler {
                 // Tracking is handled in the web view via Optimizely JS SDK
             }
 
+        case "scrollToTop":
+            DispatchQueue.main.async {
+                self.webView?.scrollView.setContentOffset(.zero, animated: false)
+            }
+
         case "navigateToCheckout":
             if let cartId = body["cartId"] as? String {
                 print("[WebViewBridge] Navigate to checkout with cart: \(cartId)")
@@ -78,6 +83,9 @@ class WebViewBridge: NSObject, WKScriptMessageHandler {
             },
             trackEvent: function(eventKey, tags) {
                 this.postMessage('trackEvent', { eventKey: eventKey, tags: tags });
+            },
+            scrollToTop: function() {
+                this.postMessage('scrollToTop', {});
             }
         };
         console.log('[iOSBridge] Bridge initialized');

@@ -42,7 +42,7 @@ struct EventDetailView: View {
                         VStack(alignment: .leading, spacing: 20) {
                             // Category badge
                             HStack {
-                                Text(event.category.icon)
+                                Text(event.displayEmoji)
                                 Text(event.category.displayName)
                                     .textCase(.uppercase)
                             }

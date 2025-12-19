@@ -45,6 +45,11 @@ export const requestCloseWebView = (): void => {
   sendToNative('closeWebView', {});
 };
 
+// Request native app to scroll WebView to top
+export const requestScrollToTop = (): void => {
+  sendToNative('scrollToTop', {});
+};
+
 // Check if running in native app context
 export const isNativeContext = (): boolean => {
   const windowWithWebKit = window as WindowWithWebKit;
