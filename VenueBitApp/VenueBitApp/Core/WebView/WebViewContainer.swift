@@ -26,15 +26,15 @@ struct WebViewContainer: UIViewRepresentable {
         bridge.webView = webView
         context.coordinator.onURLChange = onURLChange
 
+        // Load the initial URL
+        let request = URLRequest(url: url)
+        webView.load(request)
+
         return webView
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        // Only load if URL is different to avoid reloading on state changes
-        if webView.url != url {
-            let request = URLRequest(url: url)
-            webView.load(request)
-        }
+        // Don't reload - the webapp handles all navigation via client-side routing
     }
 
     func makeCoordinator() -> Coordinator {
