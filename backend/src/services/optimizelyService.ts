@@ -1,4 +1,5 @@
 import optimizely, { Client } from '@optimizely/optimizely-sdk';
+import { HomescreenConfiguration, DEFAULT_HOMESCREEN_CONFIG } from '../types/homescreen';
 
 let optimizelyClient: Client | null = null;
 
@@ -95,4 +96,44 @@ export function trackEvent(params: TrackEventParams): void {
 
 export function getOptimizelyClient(): Client | null {
   return optimizelyClient;
+}
+
+export function getHomescreenConfiguration(userId: string): HomescreenConfiguration {
+  if (!optimizelyClient) {
+    return DEFAULT_HOMESCREEN_CONFIG;
+  }
+
+  try {
+    const user = optimizelyClient.createUserContext(userId);
+    if (!user) {
+      return DEFAULT_HOMESCREEN_CONFIG;
+    }
+
+    const decision = user.decide('venuebit_homescreen');
+
+    if (!decision.enabled) {
+      return DEFAULT_HOMESCREEN_CONFIG;
+    }
+
+    const configVariable = decision.variables['homescreen_configuration'];
+    if (configVariable && typeof configVariable === 'string') {
+      try {
+        const parsed = JSON.parse(configVariable) as HomescreenConfiguration;
+        return parsed;
+      } catch {
+        console.warn('Failed to parse homescreen_configuration variable, using defaults');
+        return DEFAULT_HOMESCREEN_CONFIG;
+      }
+    }
+
+    // If variable is already an object/array
+    if (configVariable && Array.isArray(configVariable)) {
+      return configVariable as HomescreenConfiguration;
+    }
+
+    return DEFAULT_HOMESCREEN_CONFIG;
+  } catch (error) {
+    console.error('Error getting homescreen configuration:', error);
+    return DEFAULT_HOMESCREEN_CONFIG;
+  }
 }

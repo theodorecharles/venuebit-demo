@@ -24,6 +24,7 @@
 		A10000010000000000000015 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000015 /* Order.swift */; };
 		A10000010000000000000016 /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000016 /* Ticket.swift */; };
 		A10000010000000000000017 /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000017 /* Venue.swift */; };
+		A10000010000000000000038 /* HomescreenConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000038 /* HomescreenConfig.swift */; };
 		A10000010000000000000018 /* OptimizelyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000018 /* OptimizelyManager.swift */; };
 		A10000010000000000000019 /* UserIdentityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000019 /* UserIdentityManager.swift */; };
 		A10000010000000000000020 /* WebViewBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000020 /* WebViewBridge.swift */; };
@@ -42,6 +43,7 @@
 		A10000010000000000000033 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000033 /* Assets.xcassets */; };
 		A10000010000000000000034 /* VenueBitLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000034 /* VenueBitLogo.swift */; };
 		A10000010000000000000035 /* Pacifico-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000035 /* Pacifico-Regular.ttf */; };
+		A10000010000000000000036 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000037 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +65,7 @@
 		A20000010000000000000015 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		A20000010000000000000016 /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
 		A20000010000000000000017 /* Venue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Venue.swift; sourceTree = "<group>"; };
+		A20000010000000000000038 /* HomescreenConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomescreenConfig.swift; sourceTree = "<group>"; };
 		A20000010000000000000018 /* OptimizelyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptimizelyManager.swift; sourceTree = "<group>"; };
 		A20000010000000000000019 /* UserIdentityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIdentityManager.swift; sourceTree = "<group>"; };
 		A20000010000000000000020 /* WebViewBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewBridge.swift; sourceTree = "<group>"; };
@@ -82,6 +85,7 @@
 		A20000010000000000000034 /* VenueBitLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueBitLogo.swift; sourceTree = "<group>"; };
 		A20000010000000000000035 /* Pacifico-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pacifico-Regular.ttf"; sourceTree = "<group>"; };
 		A20000010000000000000036 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A20000010000000000000037 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +200,7 @@
 			children = (
 				A20000010000000000000013 /* Cart.swift */,
 				A20000010000000000000014 /* Event.swift */,
+				A20000010000000000000038 /* HomescreenConfig.swift */,
 				A20000010000000000000015 /* Order.swift */,
 				A20000010000000000000016 /* Ticket.swift */,
 				A20000010000000000000017 /* Venue.swift */,
@@ -286,6 +291,7 @@
 			children = (
 				A20000010000000000000033 /* Assets.xcassets */,
 				A40000010000000000000021 /* Fonts */,
+				A20000010000000000000037 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -364,6 +370,7 @@
 			files = (
 				A10000010000000000000033 /* Assets.xcassets in Resources */,
 				A10000010000000000000035 /* Pacifico-Regular.ttf in Resources */,
+				A10000010000000000000036 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,6 +398,7 @@
 				A10000010000000000000015 /* Order.swift in Sources */,
 				A10000010000000000000016 /* Ticket.swift in Sources */,
 				A10000010000000000000017 /* Venue.swift in Sources */,
+				A10000010000000000000038 /* HomescreenConfig.swift in Sources */,
 				A10000010000000000000018 /* OptimizelyManager.swift in Sources */,
 				A10000010000000000000019 /* UserIdentityManager.swift in Sources */,
 				A10000010000000000000020 /* WebViewBridge.swift in Sources */,
@@ -546,7 +554,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = VenueBit;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -576,7 +584,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = VenueBit;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

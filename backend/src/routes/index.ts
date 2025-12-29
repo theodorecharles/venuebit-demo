@@ -6,6 +6,7 @@ import checkoutRouter from './checkout';
 import ordersRouter from './orders';
 import featuresRouter from './features';
 import trackRouter from './track';
+import homescreenRouter from './homescreen';
 
 const router = Router();
 
@@ -20,6 +21,7 @@ router.use('/users/:userId/orders', (req, _res, next) => {
 }, ordersRouter);
 router.use('/features', featuresRouter);
 router.use('/track', trackRouter);
+router.use('/homescreen', homescreenRouter);
 
 router.get('/health', (_req, res) => {
   res.json({

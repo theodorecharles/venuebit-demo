@@ -3,54 +3,35 @@ import SwiftUI
 struct DiscoveryView: View {
     @StateObject private var viewModel = DiscoveryViewModel()
     @EnvironmentObject var optimizelyManager: OptimizelyManager
+    @EnvironmentObject var userIdentityManager: UserIdentityManager
 
     var body: some View {
         NavigationStack {
             ZStack {
                 Color.slate900.ignoresSafeArea()
 
-                if viewModel.isLoading && viewModel.featuredEvents.isEmpty {
+                if viewModel.isLoading && viewModel.allEvents.isEmpty {
                     LoadingView(message: "Loading events...")
                 } else if let error = viewModel.errorMessage {
                     ErrorView(message: error) {
-                        Task { await viewModel.loadEvents() }
+                        Task { await viewModel.loadEvents(userId: userIdentityManager.userId) }
                     }
                 } else {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 24) {
-                            // Featured Events Carousel
-                            if !viewModel.featuredEvents.isEmpty {
-                                FeaturedEventsSection(events: viewModel.featuredEvents)
-                            }
-
-                            // Categories
-                            CategoriesSection()
-
-                            // Trending Now
-                            if !viewModel.trendingEvents.isEmpty {
-                                EventsHorizontalSection(
-                                    title: "Trending Now",
-                                    events: viewModel.trendingEvents
-                                )
-                            }
-
-                            // This Weekend
-                            if !viewModel.weekendEvents.isEmpty {
-                                EventsHorizontalSection(
-                                    title: "This Weekend",
-                                    events: viewModel.weekendEvents
-                                )
-                            }
-
-                            // All Events
-                            if !viewModel.allEvents.isEmpty {
-                                AllEventsSection(events: viewModel.allEvents)
+                            ForEach(viewModel.homescreenModules) { module in
+                                renderModule(module)
                             }
                         }
                         .padding(.bottom, 100) // Space for FAB
                     }
                     .refreshable {
-                        await viewModel.loadEvents()
+                        await withCheckedContinuation { continuation in
+                            Task {
+                                await viewModel.loadEvents(userId: userIdentityManager.userId)
+                                continuation.resume()
+                            }
+                        }
                     }
                 }
             }
@@ -65,7 +46,33 @@ struct DiscoveryView: View {
             }
         }
         .task {
-            await viewModel.loadEvents()
+            await viewModel.loadEvents(userId: userIdentityManager.userId)
+        }
+    }
+
+    @ViewBuilder
+    private func renderModule(_ module: HomescreenModule) -> some View {
+        let events = viewModel.eventsForModule(module)
+
+        switch module.module {
+        case .hero_carousel:
+            if !events.isEmpty {
+                FeaturedEventsSection(events: events)
+            }
+        case .categories:
+            CategoriesSection(categories: module.categoryFilters)
+        case .trending_now:
+            if !events.isEmpty {
+                EventsHorizontalSection(title: "Trending Now", events: events)
+            }
+        case .this_weekend:
+            if !events.isEmpty {
+                EventsHorizontalSection(title: "This Weekend", events: events)
+            }
+        case .all_events:
+            if !events.isEmpty {
+                AllEventsSection(events: events)
+            }
         }
     }
 }
@@ -86,7 +93,7 @@ struct FeaturedEventsSection: View {
                     .tag(index)
                 }
             }
-            .frame(height: 230)
+            .frame(height: 240)
             .tabViewStyle(.page(indexDisplayMode: .never))
 
             // Page dots below the image
@@ -102,6 +109,8 @@ struct FeaturedEventsSection: View {
 }
 
 struct CategoriesSection: View {
+    var categories: [EventCategory] = EventCategory.allCases
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Categories")
@@ -111,7 +120,7 @@ struct CategoriesSection: View {
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
-                    ForEach(EventCategory.allCases, id: \.self) { category in
+                    ForEach(categories, id: \.self) { category in
                         NavigationLink(destination: CategoryEventsView(category: category)) {
                             CategoryCard(category: category)
                         }
@@ -256,6 +265,7 @@ struct EventListRow: View {
 struct CategoryEventsView: View {
     let category: EventCategory
     @StateObject private var viewModel = DiscoveryViewModel()
+    @EnvironmentObject var userIdentityManager: UserIdentityManager
 
     var body: some View {
         ZStack {
@@ -279,7 +289,7 @@ struct CategoryEventsView: View {
         }
         .navigationTitle(category.displayName)
         .task {
-            await viewModel.loadEvents()
+            await viewModel.loadEvents(userId: userIdentityManager.userId)
         }
     }
 }

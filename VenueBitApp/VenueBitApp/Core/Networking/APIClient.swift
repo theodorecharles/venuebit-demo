@@ -9,6 +9,8 @@ class APIClient {
     init() {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 30
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.urlCache = nil
         self.session = URLSession(configuration: config)
     }
 
@@ -144,6 +146,15 @@ class APIClient {
         return response.data
     }
 
+    // MARK: - Homescreen
+
+    func getHomescreenConfig(userId: String) async throws -> [HomescreenModule] {
+        let url = URL(string: "\(baseURL)/homescreen/\(userId)")!
+        let (data, _) = try await session.data(from: url)
+        let response = try JSONDecoder().decode(HomescreenConfigResponse.self, from: data)
+        return response.data
+    }
+
     // MARK: - Tracking
 
     func trackEvent(userId: String, eventKey: String, tags: [String: Any]?) async throws {
@@ -192,6 +203,11 @@ struct SearchResponse: Codable {
 
 struct FeaturesDataResponse: Codable {
     let data: FeaturesResponse
+}
+
+struct HomescreenConfigResponse: Codable {
+    let success: Bool
+    let data: [HomescreenModule]
 }
 
 struct FeaturesResponse: Codable {
