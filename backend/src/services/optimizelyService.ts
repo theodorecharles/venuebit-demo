@@ -14,7 +14,7 @@ export function initializeOptimizely(sdkKey: string): void {
       sdkKey,
       datafileOptions: {
         autoUpdate: true,
-        updateInterval: 1000
+        updateInterval: 5000
       }
     });
 

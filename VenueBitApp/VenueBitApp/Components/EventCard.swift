@@ -9,7 +9,7 @@ struct EventCard: View {
         VStack(alignment: .leading, spacing: 0) {
             // Image
             ZStack(alignment: .topTrailing) {
-                CachedAsyncImage(url: URL(string: event.imageUrl)) { image in
+                CachedAsyncImage(url: URL(string: event.fullImageUrl)) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -70,7 +70,7 @@ struct FeaturedEventCard: View {
     @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
-        CachedAsyncImage(url: URL(string: event.imageUrl)) { image in
+        CachedAsyncImage(url: URL(string: event.fullImageUrl)) { image in
             image
                 .resizable()
                 .aspectRatio(contentMode: .fill)

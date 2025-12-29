@@ -222,7 +222,7 @@ struct EventListRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            CachedAsyncImage(url: URL(string: event.imageUrl)) { image in
+            CachedAsyncImage(url: URL(string: event.fullImageUrl)) { image in
                 image.resizable().aspectRatio(contentMode: .fill)
             } placeholder: {
                 Rectangle().fill(themeManager.colors.surfaceSecondary)

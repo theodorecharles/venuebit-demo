@@ -205,6 +205,17 @@ struct PriceRange {
 }
 
 extension Event {
+    /// Returns the full image URL by prepending the server base URL to the relative image path
+    @MainActor
+    var fullImageUrl: String {
+        // If already a full URL, return as-is
+        if imageUrl.hasPrefix("http://") || imageUrl.hasPrefix("https://") {
+            return imageUrl
+        }
+        // Otherwise, prepend the image base URL from server config
+        return ServerConfig.shared.imageBaseURL + imageUrl
+    }
+
     static let preview = Event(
         id: "evt_001",
         title: "Beyoncé - Renaissance World Tour",

@@ -21,7 +21,7 @@ struct EventDetailView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         // Hero image
-                        AsyncImage(url: URL(string: event.imageUrl)) { phase in
+                        AsyncImage(url: URL(string: event.fullImageUrl)) { phase in
                             switch phase {
                             case .success(let image):
                                 image

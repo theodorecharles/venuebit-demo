@@ -33,6 +33,13 @@ class ServerConfig: ObservableObject {
         return "\(protocol_)://\(serverAddress)\(port)"
     }
 
+    /// Base URL for images (served from backend)
+    var imageBaseURL: String {
+        let protocol_ = serverAddress == "localhost" ? "http" : "https"
+        let port = serverAddress == "localhost" ? ":4001" : ""
+        return "\(protocol_)://\(serverAddress)\(port)"
+    }
+
     /// Reset to default localhost
     func resetToDefault() {
         serverAddress = defaultAddress
