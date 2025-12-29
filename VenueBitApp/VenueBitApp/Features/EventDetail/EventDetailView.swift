@@ -4,11 +4,12 @@ struct EventDetailView: View {
     let eventId: String
     @StateObject private var viewModel = EventDetailViewModel()
     @EnvironmentObject var userManager: UserIdentityManager
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var showingSeatSelection = false
 
     var body: some View {
         ZStack {
-            Color.slate900.ignoresSafeArea()
+            themeManager.colors.background.ignoresSafeArea()
 
             if viewModel.isLoading {
                 LoadingView(message: "Loading event...")
@@ -28,11 +29,11 @@ struct EventDetailView: View {
                                     .aspectRatio(contentMode: .fill)
                             default:
                                 Rectangle()
-                                    .fill(Color.slate700)
+                                    .fill(themeManager.colors.surfaceSecondary)
                                     .overlay(
                                         Image(systemName: event.categoryIcon)
                                             .font(.system(size: 60))
-                                            .foregroundColor(.slate500)
+                                            .foregroundColor(themeManager.colors.textTertiary)
                                     )
                             }
                         }
@@ -47,12 +48,12 @@ struct EventDetailView: View {
                                     .textCase(.uppercase)
                             }
                             .font(.caption.bold())
-                            .foregroundColor(.indigo400)
+                            .foregroundColor(themeManager.colors.primaryLight)
 
                             // Title
                             Text(event.title)
                                 .font(.title.bold())
-                                .foregroundColor(.white)
+                                .foregroundColor(themeManager.colors.textPrimary)
 
                             // Event info
                             VStack(alignment: .leading, spacing: 12) {
@@ -76,40 +77,40 @@ struct EventDetailView: View {
                             }
 
                             Divider()
-                                .background(Color.slate700)
+                                .background(themeManager.colors.border)
 
                             // Description
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("About This Event")
                                     .font(.headline)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(themeManager.colors.textPrimary)
 
                                 Text(event.description)
                                     .font(.body)
-                                    .foregroundColor(.slate300)
+                                    .foregroundColor(themeManager.colors.textSecondary)
                             }
 
                             Divider()
-                                .background(Color.slate700)
+                                .background(themeManager.colors.border)
 
                             // Performer
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Performer")
                                     .font(.headline)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(themeManager.colors.textPrimary)
 
                                 HStack(spacing: 12) {
-                                    Circle().fill(Color.slate700)
+                                    Circle().fill(themeManager.colors.surfaceSecondary)
                                         .overlay(
                                             Text(String(event.performer.prefix(1)))
                                                 .font(.title2.bold())
-                                                .foregroundColor(.slate400)
+                                                .foregroundColor(themeManager.colors.textSecondary)
                                         )
                                         .frame(width: 60, height: 60)
 
                                     Text(event.performer)
                                         .font(.subheadline.bold())
-                                        .foregroundColor(.white)
+                                        .foregroundColor(themeManager.colors.textPrimary)
                                 }
                             }
                         }
@@ -124,16 +125,16 @@ struct EventDetailView: View {
 
                     VStack(spacing: 0) {
                         Divider()
-                            .background(Color.slate700)
+                            .background(themeManager.colors.border)
 
                         HStack {
                             VStack(alignment: .leading) {
                                 Text(event.priceRange.minFormatted)
                                     .font(.headline.bold())
-                                    .foregroundColor(.white)
+                                    .foregroundColor(themeManager.colors.textPrimary)
                                 Text("per ticket")
                                     .font(.caption)
-                                    .foregroundColor(.slate400)
+                                    .foregroundColor(themeManager.colors.textSecondary)
                             }
 
                             Spacer()
@@ -147,22 +148,17 @@ struct EventDetailView: View {
                                 .foregroundColor(.white)
                                 .padding(.horizontal, 24)
                                 .padding(.vertical, 14)
-                                .background(Color.indigo500)
+                                .background(themeManager.colors.primary)
                                 .cornerRadius(12)
                             }
                         }
                         .padding(16)
-                        .background(Color.slate800)
+                        .background(themeManager.colors.surface)
                     }
                 }
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                DebugBadge()
-            }
-        }
         .fullScreenCover(isPresented: $showingSeatSelection) {
             SeatSelectionWebView(eventId: eventId)
         }
@@ -176,21 +172,22 @@ struct EventInfoRow: View {
     let icon: String
     let title: String
     let value: String
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
             Image(systemName: icon)
-                .foregroundColor(.indigo400)
+                .foregroundColor(themeManager.colors.primaryLight)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.caption)
-                    .foregroundColor(.slate400)
+                    .foregroundColor(themeManager.colors.textSecondary)
 
                 Text(value)
                     .font(.subheadline)
-                    .foregroundColor(.white)
+                    .foregroundColor(themeManager.colors.textPrimary)
             }
         }
     }
@@ -202,5 +199,6 @@ struct EventInfoRow: View {
             .environmentObject(AppState())
             .environmentObject(UserIdentityManager.shared)
             .environmentObject(OptimizelyManager.shared)
+            .environmentObject(ThemeManager.shared)
     }
 }

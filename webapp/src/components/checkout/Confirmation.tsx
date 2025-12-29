@@ -37,7 +37,7 @@ export const Confirmation: React.FC<ConfirmationProps> = ({ order, onClose }) =>
       </div>
 
       <Card className="mb-6">
-        <div className="border-b border-slate-600 pb-4 mb-4">
+        <div className="border-b border-border pb-4 mb-4">
           <div className="text-sm text-text-secondary mb-1">Order Number</div>
           <div className="text-2xl font-bold text-primary font-mono">
             #{order.id.substring(0, 8).toUpperCase()}
@@ -70,7 +70,7 @@ export const Confirmation: React.FC<ConfirmationProps> = ({ order, onClose }) =>
           ))}
         </div>
 
-        <div className="border-t border-slate-600 pt-4 space-y-2">
+        <div className="border-t border-border pt-4 space-y-2">
           <div className="flex justify-between">
             <span className="text-text-secondary">Subtotal</span>
             <span className="font-semibold">{formatPrice(order.subtotal)}</span>
@@ -79,14 +79,14 @@ export const Confirmation: React.FC<ConfirmationProps> = ({ order, onClose }) =>
             <span className="text-text-secondary">Service Fee</span>
             <span className="font-semibold">{formatPrice(order.serviceFee)}</span>
           </div>
-          <div className="flex justify-between text-lg font-bold border-t border-slate-600 pt-2">
+          <div className="flex justify-between text-lg font-bold border-t border-border pt-2">
             <span>Total</span>
             <span className="text-primary">{formatPrice(order.total)}</span>
           </div>
         </div>
       </Card>
 
-      <div className="bg-surface-light border border-slate-600 rounded-lg p-4 mb-6">
+      <div className="bg-surface-light border border-border rounded-lg p-4 mb-6">
         <p className="text-sm text-text-secondary">
           A confirmation email has been sent to your email address with your tickets and event details.
         </p>

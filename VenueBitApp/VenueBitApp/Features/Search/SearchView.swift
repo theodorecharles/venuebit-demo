@@ -3,12 +3,13 @@ import SwiftUI
 struct SearchView: View {
     @StateObject private var viewModel = SearchViewModel()
     @EnvironmentObject var userManager: UserIdentityManager
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var selectedCategory: EventCategory?
 
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.slate900.ignoresSafeArea()
+                themeManager.colors.background.ignoresSafeArea()
 
                 VStack(spacing: 0) {
                     // Search bar
@@ -66,11 +67,6 @@ struct SearchView: View {
             }
             .navigationTitle("Search")
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    DebugBadge()
-                }
-            }
         }
     }
 
@@ -84,25 +80,26 @@ struct SearchView: View {
 
 struct SearchBar: View {
     @Binding var text: String
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(.slate400)
+                .foregroundColor(themeManager.colors.textSecondary)
 
             TextField("Search events, artists, venues...", text: $text)
-                .foregroundColor(.white)
+                .foregroundColor(themeManager.colors.textPrimary)
                 .autocorrectionDisabled()
 
             if !text.isEmpty {
                 Button(action: { text = "" }) {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.slate400)
+                        .foregroundColor(themeManager.colors.textSecondary)
                 }
             }
         }
         .padding(12)
-        .background(Color.slate800)
+        .background(themeManager.colors.surface)
         .cornerRadius(12)
         .padding(.horizontal, 16)
         .padding(.top, 8)
@@ -114,4 +111,5 @@ struct SearchBar: View {
         .environmentObject(AppState())
         .environmentObject(UserIdentityManager.shared)
         .environmentObject(OptimizelyManager.shared)
+        .environmentObject(ThemeManager.shared)
 }

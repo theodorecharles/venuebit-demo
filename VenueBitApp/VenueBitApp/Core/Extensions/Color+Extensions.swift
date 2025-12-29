@@ -1,7 +1,7 @@
 import SwiftUI
 
 extension Color {
-    // Slate color palette
+    // Slate color palette (for backwards compatibility)
     static let slate900 = Color(red: 15/255, green: 23/255, blue: 42/255)
     static let slate800 = Color(red: 30/255, green: 41/255, blue: 59/255)
     static let slate700 = Color(red: 51/255, green: 65/255, blue: 85/255)
@@ -17,10 +17,21 @@ extension Color {
     static let indigo400 = Color(red: 129/255, green: 140/255, blue: 248/255)
     static let indigo300 = Color(red: 165/255, green: 180/255, blue: 252/255)
 
-    // Semantic colors
+    // Legacy semantic colors (for backwards compatibility)
     static let primaryColor = indigo500
     static let backgroundColor = slate900
     static let surfaceColor = slate800
     static let textPrimary = Color.white
     static let textSecondary = slate400
+
+    // Theme-aware colors (use these going forward)
+    @MainActor static var themeBackground: Color { ThemeManager.shared.colors.background }
+    @MainActor static var themeSurface: Color { ThemeManager.shared.colors.surface }
+    @MainActor static var themeSurfaceSecondary: Color { ThemeManager.shared.colors.surfaceSecondary }
+    @MainActor static var themeBorder: Color { ThemeManager.shared.colors.border }
+    @MainActor static var themeTextPrimary: Color { ThemeManager.shared.colors.textPrimary }
+    @MainActor static var themeTextSecondary: Color { ThemeManager.shared.colors.textSecondary }
+    @MainActor static var themeTextTertiary: Color { ThemeManager.shared.colors.textTertiary }
+    @MainActor static var themePrimary: Color { ThemeManager.shared.colors.primary }
+    @MainActor static var themePrimaryLight: Color { ThemeManager.shared.colors.primaryLight }
 }

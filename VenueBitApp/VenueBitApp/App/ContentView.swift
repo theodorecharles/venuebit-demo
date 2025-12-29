@@ -47,4 +47,5 @@ enum AppTab: Int {
         .environmentObject(AppState())
         .environmentObject(UserIdentityManager.shared)
         .environmentObject(OptimizelyManager.shared)
+        .environmentObject(ThemeManager.shared)
 }

@@ -1,14 +1,22 @@
 import Foundation
+import SwiftUI
 
 /// Builds URLs for WebView navigation with proper query parameters
+@MainActor
 enum WebViewURLBuilder {
     private static let baseURL = "http://localhost:4000"
+
+    /// Gets the current theme from ThemeManager
+    private static var currentTheme: String {
+        ThemeManager.shared.currentTheme.rawValue
+    }
 
     /// Builds URL for seat selection WebView
     static func seatSelectionURL(eventId: String, userId: String) -> URL {
         var components = URLComponents(string: "\(baseURL)/seats/\(eventId)")!
         components.queryItems = [
-            URLQueryItem(name: "userId", value: userId)
+            URLQueryItem(name: "userId", value: userId),
+            URLQueryItem(name: "theme", value: currentTheme)
         ]
         return components.url!
     }
@@ -18,7 +26,8 @@ enum WebViewURLBuilder {
         var components = URLComponents(string: "\(baseURL)/checkout")!
         components.queryItems = [
             URLQueryItem(name: "userId", value: userId),
-            URLQueryItem(name: "cartId", value: cartId)
+            URLQueryItem(name: "cartId", value: cartId),
+            URLQueryItem(name: "theme", value: currentTheme)
         ]
         return components.url!
     }
@@ -27,7 +36,8 @@ enum WebViewURLBuilder {
     static func confirmationURL(userId: String, orderId: String) -> URL {
         var components = URLComponents(string: "\(baseURL)/confirmation/\(orderId)")!
         components.queryItems = [
-            URLQueryItem(name: "userId", value: userId)
+            URLQueryItem(name: "userId", value: userId),
+            URLQueryItem(name: "theme", value: currentTheme)
         ]
         return components.url!
     }

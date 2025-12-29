@@ -21,7 +21,7 @@ export const SeatPreview: React.FC<SeatPreviewProps> = ({ seat }) => {
         </div>
 
         {/* Simulated seat view image */}
-        <div className="relative bg-gradient-to-b from-slate-700 to-slate-800 rounded-lg overflow-hidden mb-3">
+        <div className="relative bg-surface-light rounded-lg overflow-hidden mb-3">
           <div className="aspect-video flex items-center justify-center">
             <div className="text-center">
               {/* Simulated stage view */}
@@ -33,7 +33,7 @@ export const SeatPreview: React.FC<SeatPreviewProps> = ({ seat }) => {
           </div>
 
           {/* View rating badge */}
-          <div className="absolute top-2 right-2 bg-success text-white px-2 py-1 rounded text-xs font-bold">
+          <div className="absolute top-2 right-2 bg-success text-text-primary px-2 py-1 rounded text-xs font-bold">
             {viewRating}/10 View
           </div>
         </div>

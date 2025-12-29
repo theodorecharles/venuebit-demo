@@ -7,23 +7,27 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Theme-aware colors using CSS variables
         primary: {
-          DEFAULT: '#6366F1',
+          DEFAULT: 'var(--color-primary)',
+          light: 'var(--color-primary-light)',
           dark: '#4F46E5',
         },
         secondary: '#EC4899',
         success: '#10B981',
         warning: '#F59E0B',
         error: '#EF4444',
-        background: '#0F172A',
+        background: 'var(--color-background)',
         surface: {
-          DEFAULT: '#1E293B',
-          light: '#334155',
+          DEFAULT: 'var(--color-surface)',
+          light: 'var(--color-surface-secondary)',
         },
         text: {
-          primary: '#F8FAFC',
-          secondary: '#94A3B8',
+          primary: 'var(--color-text-primary)',
+          secondary: 'var(--color-text-secondary)',
+          tertiary: 'var(--color-text-tertiary)',
         },
+        border: 'var(--color-border)',
       },
     },
   },

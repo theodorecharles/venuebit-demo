@@ -4,6 +4,7 @@ import Foundation
 class DiscoveryViewModel: ObservableObject {
     @Published var allEvents: [Event] = []
     @Published var homescreenModules: [HomescreenModule] = []
+    @Published var homescreenVariationKey: String = "off"
     @Published var isLoading = false
     @Published var errorMessage: String?
 
@@ -31,12 +32,13 @@ class DiscoveryViewModel: ObservableObject {
             // Check for cancellation before second request
             try Task.checkCancellation()
 
-            let config = try await apiClient.getHomescreenConfig(userId: userId)
+            let configResponse = try await apiClient.getHomescreenConfig(userId: userId)
 
             allEvents = events
-            homescreenModules = config
+            homescreenModules = configResponse.data
+            homescreenVariationKey = configResponse.variationKey ?? "off"
             isLoading = false
-            print("[DiscoveryViewModel] Loaded \(events.count) events and \(config.count) modules")
+            print("[DiscoveryViewModel] Loaded \(events.count) events and \(configResponse.data.count) modules (variation: \(homescreenVariationKey))")
         } catch is CancellationError {
             // Silently ignore cancellation - this happens during pull-to-refresh
             print("[DiscoveryViewModel] Request cancelled (normal during refresh)")

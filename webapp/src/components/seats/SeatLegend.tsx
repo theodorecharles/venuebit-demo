@@ -12,7 +12,7 @@ export const SeatLegend: React.FC = () => {
         <span className="text-sm text-text-secondary">Selected</span>
       </div>
       <div className="flex items-center gap-2">
-        <div className="w-6 h-6 bg-slate-600 rounded"></div>
+        <div className="w-6 h-6 bg-surface-light opacity-50 rounded"></div>
         <span className="text-sm text-text-secondary">Sold</span>
       </div>
     </div>

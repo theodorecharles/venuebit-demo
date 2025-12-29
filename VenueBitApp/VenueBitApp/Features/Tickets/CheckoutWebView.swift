@@ -32,10 +32,6 @@ struct CheckoutWebView: View {
                     }
                     .foregroundColor(.indigo400)
                 }
-
-                ToolbarItem(placement: .topBarTrailing) {
-                    DebugBadge()
-                }
             }
             .alert("Purchase Complete!", isPresented: $showingConfirmation) {
                 Button("View My Tickets") {

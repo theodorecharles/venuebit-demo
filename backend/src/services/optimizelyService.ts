@@ -26,6 +26,7 @@ export function initializeOptimizely(sdkKey: string): void {
 
 export interface FeatureDecisions {
   ticket_experience: boolean;
+  variation_key: string;
   show_seat_preview: boolean;
   show_recommendations: boolean;
   checkout_layout: string;
@@ -35,6 +36,7 @@ export interface FeatureDecisions {
 export function getFeatureDecisions(userId: string): FeatureDecisions {
   const defaults: FeatureDecisions = {
     ticket_experience: true,
+    variation_key: 'off',
     show_seat_preview: true,
     show_recommendations: true,
     checkout_layout: 'standard',
@@ -56,6 +58,7 @@ export function getFeatureDecisions(userId: string): FeatureDecisions {
 
     const decisions: FeatureDecisions = {
       ticket_experience: enabled,
+      variation_key: ticketExperience.variationKey || 'off',
       show_seat_preview: ticketExperience.variables['show_seat_preview'] as boolean ?? defaults.show_seat_preview,
       show_recommendations: ticketExperience.variables['show_recommendations'] as boolean ?? defaults.show_recommendations,
       checkout_layout: ticketExperience.variables['checkout_layout'] as string ?? defaults.checkout_layout,
@@ -96,6 +99,126 @@ export function trackEvent(params: TrackEventParams): void {
 
 export function getOptimizelyClient(): Client | null {
   return optimizelyClient;
+}
+
+export interface HomescreenDecision {
+  enabled: boolean;
+  variationKey: string;
+  modules: HomescreenConfiguration;
+}
+
+export function getHomescreenDecision(userId: string): HomescreenDecision {
+  const defaultDecision: HomescreenDecision = {
+    enabled: false,
+    variationKey: 'off',
+    modules: DEFAULT_HOMESCREEN_CONFIG
+  };
+
+  if (!optimizelyClient) {
+    return defaultDecision;
+  }
+
+  try {
+    const user = optimizelyClient.createUserContext(userId);
+    if (!user) {
+      return defaultDecision;
+    }
+
+    const decision = user.decide('venuebit_homescreen');
+
+    if (!decision.enabled) {
+      return {
+        enabled: false,
+        variationKey: decision.variationKey || 'off',
+        modules: DEFAULT_HOMESCREEN_CONFIG
+      };
+    }
+
+    const configVariable = decision.variables['homescreen_configuration'];
+    let modules = DEFAULT_HOMESCREEN_CONFIG;
+
+    if (configVariable && typeof configVariable === 'string') {
+      try {
+        const parsed = JSON.parse(configVariable);
+        if (parsed.modules && Array.isArray(parsed.modules)) {
+          modules = parsed.modules as HomescreenConfiguration;
+        } else if (Array.isArray(parsed)) {
+          modules = parsed as HomescreenConfiguration;
+        }
+      } catch {
+        console.warn('Failed to parse homescreen_configuration variable');
+      }
+    } else if (configVariable && typeof configVariable === 'object') {
+      const obj = configVariable as { modules?: HomescreenConfiguration };
+      if (obj.modules && Array.isArray(obj.modules)) {
+        modules = obj.modules;
+      } else if (Array.isArray(configVariable)) {
+        modules = configVariable as HomescreenConfiguration;
+      }
+    }
+
+    return {
+      enabled: decision.enabled,
+      variationKey: decision.variationKey || 'on',
+      modules
+    };
+  } catch (error) {
+    console.error('Error getting homescreen decision:', error);
+    return defaultDecision;
+  }
+}
+
+export type AppTheme = 'off' | 'black' | 'dark' | 'beige' | 'light';
+
+export interface AppThemeDecision {
+  enabled: boolean;
+  variationKey: string;
+  theme: AppTheme;
+}
+
+export function getAppThemeDecision(userId: string): AppThemeDecision {
+  const defaultDecision: AppThemeDecision = {
+    enabled: false,
+    variationKey: 'off',
+    theme: 'off'
+  };
+
+  if (!optimizelyClient) {
+    return defaultDecision;
+  }
+
+  try {
+    const user = optimizelyClient.createUserContext(userId);
+    if (!user) {
+      return defaultDecision;
+    }
+
+    const decision = user.decide('app_theme');
+
+    if (!decision.enabled) {
+      return {
+        enabled: false,
+        variationKey: decision.variationKey || 'off',
+        theme: 'off'
+      };
+    }
+
+    // The variation key itself represents the theme
+    const variationKey = decision.variationKey || 'off';
+    const validThemes: AppTheme[] = ['off', 'black', 'dark', 'beige', 'light'];
+    const theme: AppTheme = validThemes.includes(variationKey as AppTheme)
+      ? (variationKey as AppTheme)
+      : 'off';
+
+    return {
+      enabled: decision.enabled,
+      variationKey,
+      theme
+    };
+  } catch (error) {
+    console.error('Error getting app theme decision:', error);
+    return defaultDecision;
+  }
 }
 
 export function getHomescreenConfiguration(userId: string): HomescreenConfiguration {

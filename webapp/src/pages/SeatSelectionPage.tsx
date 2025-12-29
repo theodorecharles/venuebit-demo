@@ -176,13 +176,13 @@ export const SeatSelectionPage: React.FC = () => {
       </div>
 
       {/* Sticky Add to Cart Footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-surface-light border-t border-slate-600 px-4 py-4 z-50">
+      <div className="fixed bottom-0 left-0 right-0 bg-theme-surface-secondary border-t border-theme px-4 py-4 z-50">
         <div className="container mx-auto flex items-center justify-between gap-4">
           <div className="flex-1">
             {selectedSeats.length > 0 && (
               <div>
                 <span className="text-text-secondary text-sm">{selectedSeats.length} seat{selectedSeats.length !== 1 ? 's' : ''} selected</span>
-                <span className="text-white font-bold ml-2">${total.toFixed(2)}</span>
+                <span className="text-text-primary font-bold ml-2">${total.toFixed(2)}</span>
               </div>
             )}
           </div>

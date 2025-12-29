@@ -5,6 +5,7 @@ struct SeatSelectionWebView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var userManager: UserIdentityManager
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var currentTitle = "Select Seats"
 
     private let bridge = WebViewBridge()
@@ -12,7 +13,7 @@ struct SeatSelectionWebView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.slate900.ignoresSafeArea()
+                themeManager.colors.background.ignoresSafeArea()
 
                 WebViewContainer(
                     url: WebViewURLBuilder.seatSelectionURL(
@@ -32,11 +33,7 @@ struct SeatSelectionWebView: View {
                     Button("Close") {
                         dismiss()
                     }
-                    .foregroundColor(.indigo400)
-                }
-
-                ToolbarItem(placement: .topBarTrailing) {
-                    DebugBadge()
+                    .foregroundColor(themeManager.colors.primaryLight)
                 }
             }
             .onAppear {
@@ -97,4 +94,5 @@ struct SeatSelectionWebView: View {
         .environmentObject(AppState())
         .environmentObject(UserIdentityManager.shared)
         .environmentObject(OptimizelyManager.shared)
+        .environmentObject(ThemeManager.shared)
 }

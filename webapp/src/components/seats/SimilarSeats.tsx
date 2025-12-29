@@ -85,7 +85,7 @@ export const SimilarSeats: React.FC<SimilarSeatsProps> = ({ currentSeats, onSeat
           <button
             key={item.seat.id}
             onClick={() => onSeatClick(item.seat)}
-            className="text-left p-4 bg-surface-light rounded-lg hover:bg-slate-600 transition-all duration-200 border-2 border-transparent hover:border-primary"
+            className="text-left p-4 bg-surface-light rounded-lg hover:opacity-80 transition-all duration-200 border-2 border-transparent hover:border-primary"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">

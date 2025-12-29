@@ -6,6 +6,12 @@ struct WebViewContainer: UIViewRepresentable {
     let bridge: WebViewBridge
     var onURLChange: ((URL) -> Void)?
 
+    // Get theme-appropriate background color
+    private var backgroundColor: UIColor {
+        let colors = ThemeManager.shared.colors
+        return UIColor(colors.background)
+    }
+
     func makeUIView(context: Context) -> WKWebView {
         let configuration = WKWebViewConfiguration()
 
@@ -20,8 +26,8 @@ struct WebViewContainer: UIViewRepresentable {
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = context.coordinator
         webView.isOpaque = false
-        webView.backgroundColor = UIColor(red: 15/255, green: 23/255, blue: 42/255, alpha: 1)
-        webView.scrollView.backgroundColor = UIColor(red: 15/255, green: 23/255, blue: 42/255, alpha: 1)
+        webView.backgroundColor = backgroundColor
+        webView.scrollView.backgroundColor = backgroundColor
 
         bridge.webView = webView
         context.coordinator.onURLChange = onURLChange
@@ -34,7 +40,9 @@ struct WebViewContainer: UIViewRepresentable {
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        // Don't reload - the webapp handles all navigation via client-side routing
+        // Update background color when theme changes
+        webView.backgroundColor = backgroundColor
+        webView.scrollView.backgroundColor = backgroundColor
     }
 
     func makeCoordinator() -> Coordinator {

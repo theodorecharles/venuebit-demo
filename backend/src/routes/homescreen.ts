@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getHomescreenConfiguration } from '../services/optimizelyService';
+import { getHomescreenDecision } from '../services/optimizelyService';
 
 const router = Router();
 
@@ -14,11 +14,13 @@ router.get('/:userId', (req: Request, res: Response) => {
       });
     }
 
-    const configuration = getHomescreenConfiguration(userId);
+    const decision = getHomescreenDecision(userId);
 
     return res.json({
       success: true,
-      data: configuration
+      data: decision.modules,
+      variationKey: decision.variationKey,
+      enabled: decision.enabled
     });
   } catch (error) {
     console.error('Error fetching homescreen configuration:', error);

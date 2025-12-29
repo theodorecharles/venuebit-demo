@@ -4,6 +4,7 @@ struct CategoryPill: View {
     let category: EventCategory
     let isSelected: Bool
     let action: () -> Void
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         Button(action: action) {
@@ -12,11 +13,11 @@ struct CategoryPill: View {
                 Text(category.displayName)
                     .font(.subheadline.bold())
             }
-            .foregroundColor(isSelected ? .white : .slate300)
+            .foregroundColor(isSelected ? .white : themeManager.colors.textSecondary)
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .background(
-                isSelected ? Color.indigo500 : Color.slate700
+                isSelected ? themeManager.colors.primary : themeManager.colors.surfaceSecondary
             )
             .cornerRadius(20)
         }
@@ -26,6 +27,7 @@ struct CategoryPill: View {
 struct CategorySelector: View {
     @Binding var selectedCategory: EventCategory?
     var categories: [EventCategory] = EventCategory.allCases
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -34,11 +36,11 @@ struct CategorySelector: View {
                 Button(action: { selectedCategory = nil }) {
                     Text("All")
                         .font(.subheadline.bold())
-                        .foregroundColor(selectedCategory == nil ? .white : .slate300)
+                        .foregroundColor(selectedCategory == nil ? .white : themeManager.colors.textSecondary)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 10)
                         .background(
-                            selectedCategory == nil ? Color.indigo500 : Color.slate700
+                            selectedCategory == nil ? themeManager.colors.primary : themeManager.colors.surfaceSecondary
                         )
                         .cornerRadius(20)
                 }
@@ -64,4 +66,5 @@ struct CategorySelector: View {
     }
     .padding(.vertical)
     .background(Color.slate900)
+    .environmentObject(ThemeManager.shared)
 }

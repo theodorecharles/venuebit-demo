@@ -3,6 +3,7 @@ import SwiftUI
 struct EventCard: View {
     let event: Event
     var isCompact: Bool = false
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -14,10 +15,10 @@ struct EventCard: View {
                         .aspectRatio(contentMode: .fill)
                 } placeholder: {
                     Rectangle()
-                        .fill(Color.slate700)
+                        .fill(themeManager.colors.surfaceSecondary)
                         .overlay(
                             ProgressView()
-                                .tint(.white)
+                                .tint(themeManager.colors.textPrimary)
                         )
                 }
                 .frame(height: isCompact ? 120 : 160)
@@ -27,7 +28,7 @@ struct EventCard: View {
                 Text(event.displayEmoji)
                     .font(.caption)
                     .padding(6)
-                    .background(Color.slate800.opacity(0.9))
+                    .background(themeManager.colors.surface.opacity(0.9))
                     .cornerRadius(8)
                     .padding(8)
             }
@@ -36,29 +37,29 @@ struct EventCard: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(event.title)
                     .font(isCompact ? .subheadline.bold() : .headline.bold())
-                    .foregroundColor(.white)
+                    .foregroundColor(themeManager.colors.textPrimary)
                     .lineLimit(2)
 
                 Text(event.venue.name)
                     .font(.caption)
-                    .foregroundColor(.slate400)
+                    .foregroundColor(themeManager.colors.textSecondary)
                     .lineLimit(1)
 
                 HStack {
                     Text(event.formattedDate)
                         .font(.caption2)
-                        .foregroundColor(.slate500)
+                        .foregroundColor(themeManager.colors.textTertiary)
 
                     Spacer()
 
                     Text(event.priceRange.minFormatted)
                         .font(.caption.bold())
-                        .foregroundColor(.indigo400)
+                        .foregroundColor(themeManager.colors.primaryLight)
                 }
             }
             .padding(12)
         }
-        .background(Color.slate800)
+        .background(themeManager.colors.surface)
         .cornerRadius(12)
         .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
     }
@@ -66,29 +67,28 @@ struct EventCard: View {
 
 struct FeaturedEventCard: View {
     let event: Event
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
-        ZStack(alignment: .bottomLeading) {
-            // Background image
-            CachedAsyncImage(url: URL(string: event.imageUrl)) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } placeholder: {
-                Rectangle()
-                    .fill(Color.slate700)
-                    .overlay(ProgressView().tint(.white))
-            }
-            .frame(height: 220)
-            .clipped()
-
+        CachedAsyncImage(url: URL(string: event.imageUrl)) { image in
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+        } placeholder: {
+            Rectangle()
+                .fill(themeManager.colors.surfaceSecondary)
+                .overlay(ProgressView().tint(themeManager.colors.textPrimary))
+        }
+        .frame(height: 220)
+        .overlay(alignment: .bottomLeading) {
             // Gradient overlay
             LinearGradient(
                 colors: [.clear, .black.opacity(0.8)],
                 startPoint: .top,
                 endPoint: .bottom
             )
-
+        }
+        .overlay(alignment: .bottomLeading) {
             // Content
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
@@ -97,7 +97,7 @@ struct FeaturedEventCard: View {
                         .font(.caption.bold())
                         .textCase(.uppercase)
                 }
-                .foregroundColor(.indigo300)
+                .foregroundColor(themeManager.colors.primaryLight)
 
                 Text(event.title)
                     .font(.title2.bold())
@@ -109,7 +109,7 @@ struct FeaturedEventCard: View {
                     Text(event.venue.name)
                 }
                 .font(.caption)
-                .foregroundColor(.slate300)
+                .foregroundColor(.white.opacity(0.8))
 
                 HStack {
                     Image(systemName: "calendar")
@@ -117,14 +117,14 @@ struct FeaturedEventCard: View {
                     Spacer()
                     Text(event.priceRange.minFormatted)
                         .font(.subheadline.bold())
-                        .foregroundColor(.indigo300)
+                        .foregroundColor(themeManager.colors.primaryLight)
                 }
                 .font(.caption)
-                .foregroundColor(.slate300)
+                .foregroundColor(.white.opacity(0.8))
             }
             .padding(16)
         }
-        .cornerRadius(16)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 4)
     }
 }
@@ -227,4 +227,5 @@ class ImageCache {
         .padding()
     }
     .background(Color.slate900)
+    .environmentObject(ThemeManager.shared)
 }

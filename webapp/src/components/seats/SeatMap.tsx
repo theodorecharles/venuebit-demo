@@ -88,7 +88,7 @@ export const SeatMap: React.FC<SeatMapProps> = ({
               <button
                 key={section.name}
                 onClick={() => handleSectionClick(section)}
-                className="p-4 bg-surface-light rounded-lg hover:bg-slate-600 transition-colors text-left"
+                className="p-4 bg-surface-light rounded-lg hover:opacity-80 transition-colors text-left"
               >
                 <h3 className="font-bold text-lg">{section.name}</h3>
                 <p className="text-text-secondary text-sm">

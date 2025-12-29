@@ -2,19 +2,21 @@ import SwiftUI
 
 struct DebugBadge: View {
     @EnvironmentObject var userManager: UserIdentityManager
-    @EnvironmentObject var optimizelyManager: OptimizelyManager
+    var variationKey: String = "off"
     @State private var showingAlert = false
-    @State private var previousVariation: String = ""
-    @State private var newVariation: String = ""
+
+    var isEnabled: Bool {
+        variationKey != "off"
+    }
 
     var body: some View {
         Button(action: generateNewUser) {
             HStack(spacing: 6) {
                 Circle()
-                    .fill(optimizelyManager.currentDecision.isEnhanced ? Color.green : Color.blue)
+                    .fill(isEnabled ? Color.green : Color.blue)
                     .frame(width: 8, height: 8)
 
-                Text(optimizelyManager.currentDecision.variationKey)
+                Text(variationKey)
                     .font(.caption2.bold())
                     .foregroundColor(.white)
             }
@@ -26,19 +28,13 @@ struct DebugBadge: View {
         .alert("New User Generated", isPresented: $showingAlert) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text("User ID: \(userManager.userId)\n\nVariation: \(previousVariation) → \(newVariation)")
+            Text("User ID: \(userManager.userId)\n\nPull to refresh to see new variation")
         }
     }
 
     private func generateNewUser() {
-        previousVariation = optimizelyManager.currentDecision.variationKey
         userManager.generateNewUserId()
-
-        // Small delay to let Optimizely re-evaluate
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            newVariation = optimizelyManager.currentDecision.variationKey
-            showingAlert = true
-        }
+        showingAlert = true
     }
 }
 
@@ -99,7 +95,7 @@ struct VariationBadge: View {
     VStack {
         DebugBanner()
         Spacer()
-        DebugBadge()
+        DebugBadge(variationKey: "on")
     }
     .background(Color.slate900)
     .environmentObject(UserIdentityManager.shared)

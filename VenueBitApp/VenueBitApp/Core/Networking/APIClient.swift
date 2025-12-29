@@ -148,11 +148,11 @@ class APIClient {
 
     // MARK: - Homescreen
 
-    func getHomescreenConfig(userId: String) async throws -> [HomescreenModule] {
+    func getHomescreenConfig(userId: String) async throws -> HomescreenConfigResponse {
         let url = URL(string: "\(baseURL)/homescreen/\(userId)")!
         let (data, _) = try await session.data(from: url)
         let response = try JSONDecoder().decode(HomescreenConfigResponse.self, from: data)
-        return response.data
+        return response
     }
 
     // MARK: - Tracking
@@ -208,6 +208,8 @@ struct FeaturesDataResponse: Codable {
 struct HomescreenConfigResponse: Codable {
     let success: Bool
     let data: [HomescreenModule]
+    let variationKey: String?
+    let enabled: Bool?
 }
 
 struct FeaturesResponse: Codable {

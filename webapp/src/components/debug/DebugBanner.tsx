@@ -28,7 +28,7 @@ export const DebugBanner: React.FC = () => {
   };
 
   return (
-    <div className="bg-surface-light border-b border-slate-600 px-4 py-3 sticky top-0 z-50 shadow-lg">
+    <div className="bg-surface-light border-b border-border px-4 py-3 sticky top-0 z-50 shadow-lg">
       <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-4 flex-wrap">
           {/* Logo */}
@@ -38,7 +38,7 @@ export const DebugBanner: React.FC = () => {
             </span>
           </div>
 
-          <div className="h-6 w-px bg-slate-600 hidden sm:block" />
+          <div className="h-6 w-px bg-border hidden sm:block" />
 
           <div className="flex items-center gap-2">
             <span className="text-text-secondary text-sm font-medium">User ID:</span>
@@ -52,7 +52,7 @@ export const DebugBanner: React.FC = () => {
 
         <button
           onClick={handleNewUserId}
-          className="px-4 py-1.5 bg-primary hover:bg-primary-dark text-white text-sm font-semibold rounded transition-colors"
+          className="px-4 py-1.5 bg-primary hover:bg-primary-dark text-text-primary text-sm font-semibold rounded transition-colors"
         >
           New User ID
         </button>

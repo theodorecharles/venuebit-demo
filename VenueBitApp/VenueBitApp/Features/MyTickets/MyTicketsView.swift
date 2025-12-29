@@ -3,6 +3,7 @@ import SwiftUI
 struct MyTicketsView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var userManager: UserIdentityManager
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var orders: [Order] = []
     @State private var isLoading = false
     @State private var showingClearAlert = false
@@ -10,7 +11,7 @@ struct MyTicketsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.slate900.ignoresSafeArea()
+                themeManager.colors.background.ignoresSafeArea()
 
                 if isLoading {
                     LoadingView(message: "Loading tickets...")
@@ -26,7 +27,7 @@ struct MyTicketsView: View {
                             Section {
                                 ForEach(appState.purchasedTickets) { ticket in
                                     TicketRow(ticket: ticket)
-                                        .listRowBackground(Color.slate800)
+                                        .listRowBackground(themeManager.colors.surface)
                                 }
                                 .onDelete { indexSet in
                                     for index in indexSet {
@@ -35,7 +36,7 @@ struct MyTicketsView: View {
                                 }
                             } header: {
                                 Text("Recent Purchases")
-                                    .foregroundColor(.white)
+                                    .foregroundColor(themeManager.colors.textPrimary)
                             }
                         }
 
@@ -43,11 +44,11 @@ struct MyTicketsView: View {
                             Section {
                                 ForEach(orders) { order in
                                     OrderRow(order: order)
-                                        .listRowBackground(Color.slate800)
+                                        .listRowBackground(themeManager.colors.surface)
                                 }
                             } header: {
                                 Text("Order History")
-                                    .foregroundColor(.white)
+                                    .foregroundColor(themeManager.colors.textPrimary)
                             }
                         }
                     }
@@ -65,9 +66,6 @@ struct MyTicketsView: View {
                         }
                         .foregroundColor(.red)
                     }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    DebugBadge()
                 }
             }
             .alert("Clear All Tickets?", isPresented: $showingClearAlert) {
@@ -101,12 +99,13 @@ struct MyTicketsView: View {
 struct TicketsSection: View {
     let title: String
     let tickets: [Ticket]
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
                 .font(.headline)
-                .foregroundColor(.white)
+                .foregroundColor(themeManager.colors.textPrimary)
 
             ForEach(tickets) { ticket in
                 TicketRow(ticket: ticket)
@@ -117,6 +116,7 @@ struct TicketsSection: View {
 
 struct TicketRow: View {
     let ticket: Ticket
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -124,31 +124,31 @@ struct TicketRow: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(ticket.eventTitle)
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .foregroundColor(themeManager.colors.textPrimary)
 
                     Text(ticket.formattedDate)
                         .font(.caption)
-                        .foregroundColor(.slate400)
+                        .foregroundColor(themeManager.colors.textSecondary)
                 }
 
                 Spacer()
 
                 Image(systemName: "qrcode")
                     .font(.title)
-                    .foregroundColor(.indigo400)
+                    .foregroundColor(themeManager.colors.primaryLight)
             }
 
             Divider()
-                .background(Color.slate700)
+                .background(themeManager.colors.border)
 
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Venue")
                         .font(.caption2)
-                        .foregroundColor(.slate500)
+                        .foregroundColor(themeManager.colors.textTertiary)
                     Text(ticket.venueName)
                         .font(.caption)
-                        .foregroundColor(.slate300)
+                        .foregroundColor(themeManager.colors.textSecondary)
                 }
 
                 Spacer()
@@ -156,27 +156,28 @@ struct TicketRow: View {
                 VStack(alignment: .trailing, spacing: 2) {
                     Text("Seat")
                         .font(.caption2)
-                        .foregroundColor(.slate500)
+                        .foregroundColor(themeManager.colors.textTertiary)
                     Text(ticket.seatDescription)
                         .font(.caption)
-                        .foregroundColor(.slate300)
+                        .foregroundColor(themeManager.colors.textSecondary)
                 }
             }
         }
         .padding(16)
-        .background(Color.slate800)
+        .background(themeManager.colors.surface)
         .cornerRadius(12)
     }
 }
 
 struct OrdersSection: View {
     let orders: [Order]
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Order History")
                 .font(.headline)
-                .foregroundColor(.white)
+                .foregroundColor(themeManager.colors.textPrimary)
 
             ForEach(orders) { order in
                 OrderRow(order: order)
@@ -187,13 +188,14 @@ struct OrdersSection: View {
 
 struct OrderRow: View {
     let order: Order
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("Order #\(order.id.suffix(8))")
                     .font(.subheadline.bold())
-                    .foregroundColor(.white)
+                    .foregroundColor(themeManager.colors.textPrimary)
 
                 Spacer()
 
@@ -202,22 +204,22 @@ struct OrderRow: View {
 
             Text("\(order.tickets.count) ticket(s)")
                 .font(.caption)
-                .foregroundColor(.slate400)
+                .foregroundColor(themeManager.colors.textSecondary)
 
             HStack {
                 Text("Total: $\(String(format: "%.2f", order.total))")
                     .font(.caption.bold())
-                    .foregroundColor(.indigo400)
+                    .foregroundColor(themeManager.colors.primaryLight)
 
                 Spacer()
 
                 Text(formatDate(order.createdAt))
                     .font(.caption2)
-                    .foregroundColor(.slate500)
+                    .foregroundColor(themeManager.colors.textTertiary)
             }
         }
         .padding(16)
-        .background(Color.slate800)
+        .background(themeManager.colors.surface)
         .cornerRadius(12)
     }
 
@@ -258,4 +260,5 @@ struct StatusBadge: View {
         .environmentObject(AppState())
         .environmentObject(UserIdentityManager.shared)
         .environmentObject(OptimizelyManager.shared)
+        .environmentObject(ThemeManager.shared)
 }

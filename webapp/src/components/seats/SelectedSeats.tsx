@@ -67,7 +67,7 @@ export const SelectedSeats: React.FC<SelectedSeatsProps> = ({ seats, onRemove })
         ))}
       </div>
 
-      <div className="border-t border-slate-600 pt-4">
+      <div className="border-t border-border pt-4">
         <div className="flex justify-between items-center mb-2">
           <span className="text-text-secondary">Subtotal</span>
           <span className="font-semibold text-lg">{formatPrice(total)}</span>

@@ -4,11 +4,12 @@ struct DiscoveryView: View {
     @StateObject private var viewModel = DiscoveryViewModel()
     @EnvironmentObject var optimizelyManager: OptimizelyManager
     @EnvironmentObject var userIdentityManager: UserIdentityManager
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.slate900.ignoresSafeArea()
+                themeManager.colors.background.ignoresSafeArea()
 
                 if viewModel.isLoading && viewModel.allEvents.isEmpty {
                     LoadingView(message: "Loading events...")
@@ -28,6 +29,8 @@ struct DiscoveryView: View {
                     .refreshable {
                         await withCheckedContinuation { continuation in
                             Task {
+                                // Refresh both events and Optimizely features (including theme)
+                                await optimizelyManager.fetchDecision(userId: userIdentityManager.userId)
                                 await viewModel.loadEvents(userId: userIdentityManager.userId)
                                 continuation.resume()
                             }
@@ -39,9 +42,6 @@ struct DiscoveryView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     VenueBitLogo(size: 28)
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    DebugBadge()
                 }
             }
         }
@@ -80,6 +80,7 @@ struct DiscoveryView: View {
 struct FeaturedEventsSection: View {
     let events: [Event]
     @State private var currentIndex = 0
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         VStack(spacing: 8) {
@@ -100,7 +101,7 @@ struct FeaturedEventsSection: View {
             HStack(spacing: 6) {
                 ForEach(0..<events.count, id: \.self) { index in
                     Circle()
-                        .fill(index == currentIndex ? Color.white : Color.slate500)
+                        .fill(index == currentIndex ? themeManager.colors.textPrimary : themeManager.colors.textTertiary)
                         .frame(width: 8, height: 8)
                 }
             }
@@ -110,12 +111,13 @@ struct FeaturedEventsSection: View {
 
 struct CategoriesSection: View {
     var categories: [EventCategory] = EventCategory.allCases
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Categories")
                 .font(.headline)
-                .foregroundColor(.white)
+                .foregroundColor(themeManager.colors.textPrimary)
                 .padding(.horizontal, 16)
 
             ScrollView(.horizontal, showsIndicators: false) {
@@ -135,6 +137,7 @@ struct CategoriesSection: View {
 
 struct CategoryCard: View {
     let category: EventCategory
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         VStack(spacing: 8) {
@@ -143,10 +146,10 @@ struct CategoryCard: View {
 
             Text(category.displayName)
                 .font(.caption.bold())
-                .foregroundColor(.white)
+                .foregroundColor(themeManager.colors.textPrimary)
         }
         .frame(width: 80, height: 80)
-        .background(Color.slate700)
+        .background(themeManager.colors.surfaceSecondary)
         .cornerRadius(12)
     }
 }
@@ -154,20 +157,21 @@ struct CategoryCard: View {
 struct EventsHorizontalSection: View {
     let title: String
     let events: [Event]
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text(title)
                     .font(.headline)
-                    .foregroundColor(.white)
+                    .foregroundColor(themeManager.colors.textPrimary)
 
                 Spacer()
 
                 NavigationLink(destination: AllEventsListView(title: title, events: events)) {
                     Text("See All")
                         .font(.subheadline)
-                        .foregroundColor(.indigo400)
+                        .foregroundColor(themeManager.colors.primaryLight)
                 }
             }
             .padding(.horizontal, 16)
@@ -190,12 +194,13 @@ struct EventsHorizontalSection: View {
 
 struct AllEventsSection: View {
     let events: [Event]
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("All Events")
                 .font(.headline)
-                .foregroundColor(.white)
+                .foregroundColor(themeManager.colors.textPrimary)
                 .padding(.horizontal, 16)
 
             LazyVStack(spacing: 12) {
@@ -213,13 +218,14 @@ struct AllEventsSection: View {
 
 struct EventListRow: View {
     let event: Event
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         HStack(spacing: 12) {
             CachedAsyncImage(url: URL(string: event.imageUrl)) { image in
                 image.resizable().aspectRatio(contentMode: .fill)
             } placeholder: {
-                Rectangle().fill(Color.slate700)
+                Rectangle().fill(themeManager.colors.surfaceSecondary)
                     .overlay(
                         Text(event.displayEmoji)
                     )
@@ -231,32 +237,32 @@ struct EventListRow: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(event.title)
                     .font(.subheadline.bold())
-                    .foregroundColor(.white)
+                    .foregroundColor(themeManager.colors.textPrimary)
                     .lineLimit(2)
 
                 Text(event.venue.name)
                     .font(.caption)
-                    .foregroundColor(.slate400)
+                    .foregroundColor(themeManager.colors.textSecondary)
 
                 HStack {
                     Text(event.formattedDate)
                         .font(.caption2)
-                        .foregroundColor(.slate500)
+                        .foregroundColor(themeManager.colors.textTertiary)
 
                     Spacer()
 
                     Text(event.priceRange.minFormatted)
                         .font(.caption.bold())
-                        .foregroundColor(.indigo400)
+                        .foregroundColor(themeManager.colors.primaryLight)
                 }
             }
 
             Image(systemName: "chevron.right")
-                .foregroundColor(.slate500)
+                .foregroundColor(themeManager.colors.textTertiary)
                 .font(.caption)
         }
         .padding(12)
-        .background(Color.slate800)
+        .background(themeManager.colors.surface)
         .cornerRadius(12)
     }
 }
@@ -266,10 +272,11 @@ struct CategoryEventsView: View {
     let category: EventCategory
     @StateObject private var viewModel = DiscoveryViewModel()
     @EnvironmentObject var userIdentityManager: UserIdentityManager
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         ZStack {
-            Color.slate900.ignoresSafeArea()
+            themeManager.colors.background.ignoresSafeArea()
 
             if viewModel.isLoading {
                 LoadingView()
@@ -297,10 +304,11 @@ struct CategoryEventsView: View {
 struct AllEventsListView: View {
     let title: String
     let events: [Event]
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         ZStack {
-            Color.slate900.ignoresSafeArea()
+            themeManager.colors.background.ignoresSafeArea()
 
             ScrollView {
                 LazyVStack(spacing: 12) {
@@ -323,4 +331,5 @@ struct AllEventsListView: View {
         .environmentObject(AppState())
         .environmentObject(UserIdentityManager.shared)
         .environmentObject(OptimizelyManager.shared)
+        .environmentObject(ThemeManager.shared)
 }

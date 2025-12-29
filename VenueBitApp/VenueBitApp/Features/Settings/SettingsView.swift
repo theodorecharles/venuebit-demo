@@ -4,11 +4,12 @@ struct SettingsView: View {
     @EnvironmentObject var userManager: UserIdentityManager
     @EnvironmentObject var optimizelyManager: OptimizelyManager
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.slate900.ignoresSafeArea()
+                themeManager.colors.background.ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: 20) {
@@ -32,6 +33,7 @@ struct DebugPanelView: View {
     @EnvironmentObject var userManager: UserIdentityManager
     @EnvironmentObject var optimizelyManager: OptimizelyManager
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var showCopiedAlert = false
 
     var body: some View {
@@ -39,32 +41,32 @@ struct DebugPanelView: View {
             // Header
             HStack {
                 Image(systemName: "flask")
-                    .foregroundColor(.indigo400)
+                    .foregroundColor(themeManager.colors.primaryLight)
                 Text("OPTIMIZELY DEBUG")
                     .font(.caption.bold())
-                    .foregroundColor(.indigo400)
+                    .foregroundColor(themeManager.colors.primaryLight)
             }
 
             // User ID section
             VStack(alignment: .leading, spacing: 8) {
                 Text("User ID")
                     .font(.caption)
-                    .foregroundColor(.slate400)
+                    .foregroundColor(themeManager.colors.textSecondary)
 
                 HStack {
                     Text(userManager.userId)
                         .font(.system(.subheadline, design: .monospaced))
-                        .foregroundColor(.white)
+                        .foregroundColor(themeManager.colors.textPrimary)
 
                     Spacer()
 
                     Button(action: copyUserId) {
                         Image(systemName: "doc.on.doc")
-                            .foregroundColor(.slate400)
+                            .foregroundColor(themeManager.colors.textSecondary)
                     }
                 }
                 .padding(12)
-                .background(Color.slate700)
+                .background(themeManager.colors.surfaceSecondary)
                 .cornerRadius(8)
 
                 Button(action: generateNewUser) {
@@ -76,107 +78,68 @@ struct DebugPanelView: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(12)
-                    .background(Color.indigo500)
+                    .background(themeManager.colors.primary)
                     .cornerRadius(8)
                 }
             }
 
             Divider()
-                .background(Color.slate700)
+                .background(themeManager.colors.border)
 
-            // Feature flag section
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Feature: ticket_experience")
+            // All Features section
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Feature Flags")
                     .font(.subheadline.bold())
-                    .foregroundColor(.white)
+                    .foregroundColor(themeManager.colors.textPrimary)
 
-                // Status
-                HStack {
-                    Text("Status:")
-                        .foregroundColor(.slate400)
-                    HStack(spacing: 4) {
-                        Circle()
-                            .fill(optimizelyManager.currentDecision.enabled ? Color.green : Color.red)
-                            .frame(width: 8, height: 8)
-                        Text(optimizelyManager.currentDecision.enabled ? "Enabled" : "Disabled")
-                            .foregroundColor(optimizelyManager.currentDecision.enabled ? .green : .red)
+                if optimizelyManager.allFeatures.isEmpty {
+                    Text("No features loaded")
+                        .font(.caption)
+                        .foregroundColor(themeManager.colors.textTertiary)
+                } else {
+                    ForEach(Array(optimizelyManager.allFeatures.keys.sorted()), id: \.self) { featureKey in
+                        if let feature = optimizelyManager.allFeatures[featureKey] {
+                            FeatureFlagSection(name: featureKey, feature: feature)
+                        }
                     }
                 }
-                .font(.caption)
-
-                // Variation
-                HStack {
-                    Text("Variation:")
-                        .foregroundColor(.slate400)
-                    Text(optimizelyManager.currentDecision.variationKey)
-                        .foregroundColor(optimizelyManager.currentDecision.isEnhanced ? .green : .blue)
-                        .bold()
-                }
-                .font(.caption)
-
-                // Variables
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Variables:")
-                        .font(.caption)
-                        .foregroundColor(.slate400)
-
-                    VariableRow(
-                        name: "show_seat_preview",
-                        value: optimizelyManager.currentDecision.showSeatPreview
-                    )
-                    VariableRow(
-                        name: "show_recommendations",
-                        value: optimizelyManager.currentDecision.showRecommendations
-                    )
-                    VariableRow(
-                        name: "checkout_layout",
-                        value: optimizelyManager.currentDecision.checkoutLayout
-                    )
-                    VariableRow(
-                        name: "show_urgency_banner",
-                        value: optimizelyManager.currentDecision.showUrgencyBanner
-                    )
-                }
-                .padding(12)
-                .background(Color.slate700)
-                .cornerRadius(8)
             }
 
             Divider()
-                .background(Color.slate700)
+                .background(themeManager.colors.border)
 
             // Recent events
             VStack(alignment: .leading, spacing: 8) {
                 Text("Recent Events Tracked")
                     .font(.caption)
-                    .foregroundColor(.slate400)
+                    .foregroundColor(themeManager.colors.textSecondary)
 
                 if appState.recentEvents.isEmpty {
                     Text("No events tracked yet")
                         .font(.caption)
-                        .foregroundColor(.slate500)
+                        .foregroundColor(themeManager.colors.textTertiary)
                         .padding(12)
                 } else {
                     VStack(alignment: .leading, spacing: 4) {
                         ForEach(appState.recentEvents.prefix(5)) { event in
                             HStack {
                                 Text("• \(event.eventKey)")
-                                    .foregroundColor(.white)
+                                    .foregroundColor(themeManager.colors.textPrimary)
                                 Spacer()
                                 Text(event.timeAgo)
-                                    .foregroundColor(.slate500)
+                                    .foregroundColor(themeManager.colors.textTertiary)
                             }
                             .font(.caption)
                         }
                     }
                     .padding(12)
-                    .background(Color.slate700)
+                    .background(themeManager.colors.surfaceSecondary)
                     .cornerRadius(8)
                 }
             }
         }
         .padding(16)
-        .background(Color.slate800)
+        .background(themeManager.colors.surface)
         .cornerRadius(12)
         .alert("Copied!", isPresented: $showCopiedAlert) {
             Button("OK", role: .cancel) {}
@@ -195,14 +158,68 @@ struct DebugPanelView: View {
     }
 }
 
+struct FeatureFlagSection: View {
+    let name: String
+    let feature: FeatureDecisionInfo
+    @EnvironmentObject var themeManager: ThemeManager
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            // Feature name
+            Text(name)
+                .font(.caption.bold())
+                .foregroundColor(themeManager.colors.primaryLight)
+
+            // Status and Variation
+            HStack {
+                HStack(spacing: 4) {
+                    Circle()
+                        .fill(feature.enabled ? Color.green : Color.red)
+                        .frame(width: 8, height: 8)
+                    Text(feature.enabled ? "Enabled" : "Disabled")
+                        .foregroundColor(feature.enabled ? .green : .red)
+                }
+
+                Spacer()
+
+                Text("Variation: \(feature.variationKey)")
+                    .foregroundColor(themeManager.colors.textSecondary)
+            }
+            .font(.caption)
+
+            // Variables
+            if !feature.variables.isEmpty {
+                VStack(alignment: .leading, spacing: 4) {
+                    ForEach(Array(feature.variables.keys.sorted()), id: \.self) { varKey in
+                        if let varValue = feature.variables[varKey] {
+                            HStack {
+                                Text("• \(varKey):")
+                                    .foregroundColor(themeManager.colors.textSecondary)
+                                Spacer()
+                                Text(varValue)
+                                    .foregroundColor(varValue == "true" ? .green : (varValue == "false" ? .red : themeManager.colors.primaryLight))
+                            }
+                            .font(.caption2)
+                        }
+                    }
+                }
+            }
+        }
+        .padding(12)
+        .background(themeManager.colors.surfaceSecondary)
+        .cornerRadius(8)
+    }
+}
+
 struct VariableRow: View {
     let name: String
     let value: Any
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         HStack {
             Text("• \(name):")
-                .foregroundColor(.slate300)
+                .foregroundColor(themeManager.colors.textSecondary)
 
             Spacer()
 
@@ -215,7 +232,7 @@ struct VariableRow: View {
                 }
             } else if let stringValue = value as? String {
                 Text(stringValue)
-                    .foregroundColor(.indigo300)
+                    .foregroundColor(themeManager.colors.primaryLight)
             }
         }
         .font(.caption)
@@ -223,20 +240,22 @@ struct VariableRow: View {
 }
 
 struct AboutSection: View {
+    @EnvironmentObject var themeManager: ThemeManager
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("ABOUT")
                 .font(.caption.bold())
-                .foregroundColor(.slate400)
+                .foregroundColor(themeManager.colors.textSecondary)
 
             VStack(spacing: 0) {
                 AboutRow(label: "App Version", value: "1.0.0")
-                Divider().background(Color.slate700)
+                Divider().background(themeManager.colors.border)
                 AboutRow(label: "Build", value: "Demo")
-                Divider().background(Color.slate700)
+                Divider().background(themeManager.colors.border)
                 AboutRow(label: "Platform", value: "iOS")
             }
-            .background(Color.slate800)
+            .background(themeManager.colors.surface)
             .cornerRadius(12)
         }
     }
@@ -245,14 +264,15 @@ struct AboutSection: View {
 struct AboutRow: View {
     let label: String
     let value: String
+    @EnvironmentObject var themeManager: ThemeManager
 
     var body: some View {
         HStack {
             Text(label)
-                .foregroundColor(.slate300)
+                .foregroundColor(themeManager.colors.textSecondary)
             Spacer()
             Text(value)
-                .foregroundColor(.slate400)
+                .foregroundColor(themeManager.colors.textTertiary)
         }
         .font(.subheadline)
         .padding(16)
@@ -264,4 +284,5 @@ struct AboutRow: View {
         .environmentObject(AppState())
         .environmentObject(UserIdentityManager.shared)
         .environmentObject(OptimizelyManager.shared)
+        .environmentObject(ThemeManager.shared)
 }

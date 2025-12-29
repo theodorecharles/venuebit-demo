@@ -25,7 +25,7 @@ export const PriceBreakdown: React.FC<PriceBreakdownProps> = ({
           <span className="text-text-secondary">Service Fee</span>
           <span className="font-semibold">{formatPrice(serviceFee)}</span>
         </div>
-        <div className="border-t border-slate-600 pt-3">
+        <div className="border-t border-border pt-3">
           <div className="flex justify-between items-center">
             <span className="text-lg font-bold">Total</span>
             <span className="text-2xl font-bold text-primary">
