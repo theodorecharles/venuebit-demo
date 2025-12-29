@@ -13,14 +13,14 @@ struct SettingsView: View {
 
                 ScrollView {
                     VStack(spacing: 20) {
-                        // Server Configuration
-                        ServerConfigSection()
-
                         // Debug Panel
                         DebugPanelView()
 
                         // About section
                         AboutSection()
+
+                        // Server Configuration (at bottom)
+                        ServerConfigSection()
                     }
                     .padding(16)
                     .padding(.bottom, 100)
