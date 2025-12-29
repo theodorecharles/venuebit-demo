@@ -7,6 +7,7 @@ import ordersRouter from './orders';
 import featuresRouter from './features';
 import trackRouter from './track';
 import homescreenRouter from './homescreen';
+import datafileRouter from './datafile';
 
 const router = Router();
 
@@ -22,6 +23,7 @@ router.use('/users/:userId/orders', (req, _res, next) => {
 router.use('/features', featuresRouter);
 router.use('/track', trackRouter);
 router.use('/homescreen', homescreenRouter);
+router.use('/', datafileRouter);
 
 router.get('/health', (_req, res) => {
   res.json({

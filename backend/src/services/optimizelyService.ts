@@ -3,24 +3,62 @@ import { HomescreenConfiguration, DEFAULT_HOMESCREEN_CONFIG } from '../types/hom
 
 let optimizelyClient: Client | null = null;
 
+let currentSdkKey: string | null = null;
+
 export function initializeOptimizely(sdkKey: string): void {
   if (!sdkKey) {
     console.warn('No Optimizely SDK key provided. Feature flags will use defaults.');
     return;
   }
 
+  currentSdkKey = sdkKey;
+
   try {
     optimizelyClient = optimizely.createInstance({
       sdkKey,
       datafileOptions: {
-        autoUpdate: true,
-        updateInterval: 5000
+        autoUpdate: false  // Disabled - using webhook instead
       }
     });
 
-    console.log('Optimizely SDK initialized successfully');
+    console.log('Optimizely SDK initialized successfully (webhook mode)');
   } catch (error) {
     console.error('Failed to initialize Optimizely SDK:', error);
+  }
+}
+
+export async function refreshDatafile(): Promise<boolean> {
+  if (!currentSdkKey) {
+    console.warn('Cannot refresh datafile: No SDK key configured');
+    return false;
+  }
+
+  try {
+    // Fetch the latest datafile
+    const datafileUrl = `https://cdn.optimizely.com/datafiles/${currentSdkKey}.json`;
+    const response = await fetch(datafileUrl);
+
+    if (!response.ok) {
+      console.error(`Failed to fetch datafile: ${response.status}`);
+      return false;
+    }
+
+    const datafile = await response.text();
+
+    // Create a new client instance with the fresh datafile
+    optimizelyClient = optimizely.createInstance({
+      sdkKey: currentSdkKey,
+      datafile,
+      datafileOptions: {
+        autoUpdate: false
+      }
+    });
+
+    console.log('Optimizely datafile refreshed successfully via webhook');
+    return true;
+  } catch (error) {
+    console.error('Error refreshing Optimizely datafile:', error);
+    return false;
   }
 }
 
