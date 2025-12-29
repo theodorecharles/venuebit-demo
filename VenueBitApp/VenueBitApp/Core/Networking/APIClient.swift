@@ -3,7 +3,6 @@ import Foundation
 class APIClient {
     static let shared = APIClient()
 
-    private let baseURL = "http://localhost:4001/api"
     private let session: URLSession
 
     init() {
@@ -14,10 +13,16 @@ class APIClient {
         self.session = URLSession(configuration: config)
     }
 
+    @MainActor
+    private var baseURL: String {
+        ServerConfig.shared.apiBaseURL
+    }
+
     // MARK: - Events
 
     func getEvents(category: EventCategory? = nil, featured: Bool? = nil) async throws -> [Event] {
-        var components = URLComponents(string: "\(baseURL)/events")!
+        let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
+        var components = URLComponents(string: "\(apiBaseURL)/events")!
         var queryItems: [URLQueryItem] = []
 
         if let category = category {
@@ -37,14 +42,16 @@ class APIClient {
     }
 
     func getEvent(id: String) async throws -> Event {
-        let url = URL(string: "\(baseURL)/events/\(id)")!
+        let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
+        let url = URL(string: "\(apiBaseURL)/events/\(id)")!
         let (data, _) = try await session.data(from: url)
         let response = try JSONDecoder().decode(SingleEventResponse.self, from: data)
         return response.data
     }
 
     func getSeats(eventId: String) async throws -> [APISeat] {
-        let url = URL(string: "\(baseURL)/events/\(eventId)/seats")!
+        let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
+        let url = URL(string: "\(apiBaseURL)/events/\(eventId)/seats")!
         let (data, _) = try await session.data(from: url)
         let response = try JSONDecoder().decode(SeatsDataResponse.self, from: data)
         return response.data
@@ -53,7 +60,8 @@ class APIClient {
     // MARK: - Search
 
     func searchEvents(query: String, userId: String) async throws -> [Event] {
-        var components = URLComponents(string: "\(baseURL)/search")!
+        let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
+        var components = URLComponents(string: "\(apiBaseURL)/search")!
         components.queryItems = [URLQueryItem(name: "q", value: query)]
 
         var request = URLRequest(url: components.url!)
@@ -67,7 +75,8 @@ class APIClient {
     // MARK: - Cart
 
     func createCart(userId: String) async throws -> Cart {
-        let url = URL(string: "\(baseURL)/cart")!
+        let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
+        let url = URL(string: "\(apiBaseURL)/cart")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -81,14 +90,16 @@ class APIClient {
     }
 
     func getCart(cartId: String) async throws -> Cart {
-        let url = URL(string: "\(baseURL)/cart/\(cartId)")!
+        let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
+        let url = URL(string: "\(apiBaseURL)/cart/\(cartId)")!
         let (data, _) = try await session.data(from: url)
         let response = try JSONDecoder().decode(CartResponse.self, from: data)
         return response.data
     }
 
     func addToCart(cartId: String, eventId: String, seatIds: [String]) async throws -> Cart {
-        let url = URL(string: "\(baseURL)/cart/\(cartId)/items")!
+        let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
+        let url = URL(string: "\(apiBaseURL)/cart/\(cartId)/items")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -104,7 +115,8 @@ class APIClient {
     // MARK: - Checkout
 
     func checkout(cartId: String, userId: String, cardLast4: String) async throws -> Order {
-        let url = URL(string: "\(baseURL)/checkout")!
+        let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
+        let url = URL(string: "\(apiBaseURL)/checkout")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -124,14 +136,16 @@ class APIClient {
     // MARK: - Orders
 
     func getOrder(orderId: String) async throws -> Order {
-        let url = URL(string: "\(baseURL)/orders/\(orderId)")!
+        let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
+        let url = URL(string: "\(apiBaseURL)/orders/\(orderId)")!
         let (data, _) = try await session.data(from: url)
         let response = try JSONDecoder().decode(OrderResponse.self, from: data)
         return response.data
     }
 
     func getUserOrders(userId: String) async throws -> [Order] {
-        let url = URL(string: "\(baseURL)/users/\(userId)/orders")!
+        let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
+        let url = URL(string: "\(apiBaseURL)/users/\(userId)/orders")!
         let (data, _) = try await session.data(from: url)
         let response = try JSONDecoder().decode(OrdersListResponse.self, from: data)
         return response.data
@@ -140,7 +154,8 @@ class APIClient {
     // MARK: - Features
 
     func getFeatures(userId: String) async throws -> FeaturesResponse {
-        let url = URL(string: "\(baseURL)/features/\(userId)")!
+        let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
+        let url = URL(string: "\(apiBaseURL)/features/\(userId)")!
         let (data, _) = try await session.data(from: url)
         let response = try JSONDecoder().decode(FeaturesDataResponse.self, from: data)
         return response.data
@@ -149,7 +164,8 @@ class APIClient {
     // MARK: - Homescreen
 
     func getHomescreenConfig(userId: String) async throws -> HomescreenConfigResponse {
-        let url = URL(string: "\(baseURL)/homescreen/\(userId)")!
+        let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
+        let url = URL(string: "\(apiBaseURL)/homescreen/\(userId)")!
         let (data, _) = try await session.data(from: url)
         let response = try JSONDecoder().decode(HomescreenConfigResponse.self, from: data)
         return response
@@ -158,7 +174,8 @@ class APIClient {
     // MARK: - Tracking
 
     func trackEvent(userId: String, eventKey: String, tags: [String: Any]?) async throws {
-        let url = URL(string: "\(baseURL)/track")!
+        let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
+        let url = URL(string: "\(apiBaseURL)/track")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

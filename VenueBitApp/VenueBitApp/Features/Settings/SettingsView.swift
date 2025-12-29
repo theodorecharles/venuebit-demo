@@ -13,6 +13,9 @@ struct SettingsView: View {
 
                 ScrollView {
                     VStack(spacing: 20) {
+                        // Server Configuration
+                        ServerConfigSection()
+
                         // Debug Panel
                         DebugPanelView()
 
@@ -25,6 +28,117 @@ struct SettingsView: View {
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+struct ServerConfigSection: View {
+    @StateObject private var serverConfig = ServerConfig.shared
+    @EnvironmentObject var themeManager: ThemeManager
+    @EnvironmentObject var optimizelyManager: OptimizelyManager
+    @EnvironmentObject var userManager: UserIdentityManager
+    @State private var serverAddress: String = ""
+    @State private var showingReloadAlert = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Header
+            HStack {
+                Image(systemName: "server.rack")
+                    .foregroundColor(themeManager.colors.primaryLight)
+                Text("SERVER")
+                    .font(.caption.bold())
+                    .foregroundColor(themeManager.colors.primaryLight)
+            }
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Server Address")
+                    .font(.caption)
+                    .foregroundColor(themeManager.colors.textSecondary)
+
+                HStack {
+                    TextField("localhost", text: $serverAddress)
+                        .font(.system(.subheadline, design: .monospaced))
+                        .foregroundColor(themeManager.colors.textPrimary)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .keyboardType(.URL)
+
+                    if serverAddress != serverConfig.serverAddress {
+                        Button(action: applyServerChange) {
+                            Text("Apply")
+                                .font(.caption.bold())
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(themeManager.colors.primary)
+                                .cornerRadius(6)
+                        }
+                    }
+                }
+                .padding(12)
+                .background(themeManager.colors.surfaceSecondary)
+                .cornerRadius(8)
+
+                // Current status
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(serverConfig.isRemote ? Color.orange : Color.green)
+                        .frame(width: 8, height: 8)
+                    Text(serverConfig.isRemote ? "Remote: \(serverConfig.serverAddress)" : "Local: localhost")
+                        .font(.caption)
+                        .foregroundColor(themeManager.colors.textSecondary)
+                }
+
+                // Quick presets
+                HStack(spacing: 8) {
+                    Button(action: { setServer("localhost") }) {
+                        Text("localhost")
+                            .font(.caption)
+                            .foregroundColor(serverConfig.serverAddress == "localhost" ? .white : themeManager.colors.textSecondary)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(serverConfig.serverAddress == "localhost" ? themeManager.colors.primary : themeManager.colors.surfaceSecondary)
+                            .cornerRadius(6)
+                    }
+
+                    Button(action: { setServer("venuebit.tedcharles.net") }) {
+                        Text("venuebit.tedcharles.net")
+                            .font(.caption)
+                            .foregroundColor(serverConfig.serverAddress == "venuebit.tedcharles.net" ? .white : themeManager.colors.textSecondary)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(serverConfig.serverAddress == "venuebit.tedcharles.net" ? themeManager.colors.primary : themeManager.colors.surfaceSecondary)
+                            .cornerRadius(6)
+                    }
+                }
+            }
+        }
+        .padding(16)
+        .background(themeManager.colors.surface)
+        .cornerRadius(12)
+        .onAppear {
+            serverAddress = serverConfig.serverAddress
+        }
+        .alert("Server Changed", isPresented: $showingReloadAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("The app will now use \(serverConfig.serverAddress). Pull to refresh to reload data from the new server.")
+        }
+    }
+
+    private func setServer(_ address: String) {
+        serverAddress = address
+        applyServerChange()
+    }
+
+    private func applyServerChange() {
+        serverConfig.serverAddress = serverAddress
+        showingReloadAlert = true
+
+        // Refresh Optimizely features from new server
+        Task {
+            await optimizelyManager.fetchDecision(userId: userManager.userId)
         }
     }
 }

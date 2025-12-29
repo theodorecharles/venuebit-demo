@@ -46,6 +46,7 @@
 		A10000010000000000000036 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000037 /* LaunchScreen.storyboard */; };
 		A10000010000000000000038 /* HomescreenConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000038 /* HomescreenConfig.swift */; };
 		A10000010000000000000039 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000039 /* ThemeManager.swift */; };
+		A10000010000000000000040 /* ServerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000040 /* ServerConfig.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,6 +90,7 @@
 		A20000010000000000000037 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A20000010000000000000038 /* HomescreenConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomescreenConfig.swift; sourceTree = "<group>"; };
 		A20000010000000000000039 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		A20000010000000000000040 /* ServerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfig.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				A20000010000000000000012 /* APIClient.swift */,
+				A20000010000000000000040 /* ServerConfig.swift */,
 				A40000010000000000000010 /* Models */,
 			);
 			path = Networking;
@@ -407,6 +410,7 @@
 				A10000010000000000000010 /* PriceRangeView.swift in Sources */,
 				A10000010000000000000011 /* Color+Extensions.swift in Sources */,
 				A10000010000000000000012 /* APIClient.swift in Sources */,
+				A10000010000000000000040 /* ServerConfig.swift in Sources */,
 				A10000010000000000000013 /* Cart.swift in Sources */,
 				A10000010000000000000014 /* Event.swift in Sources */,
 				A10000010000000000000015 /* Order.swift in Sources */,

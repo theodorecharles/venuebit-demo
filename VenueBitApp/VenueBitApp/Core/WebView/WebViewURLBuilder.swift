@@ -4,7 +4,10 @@ import SwiftUI
 /// Builds URLs for WebView navigation with proper query parameters
 @MainActor
 enum WebViewURLBuilder {
-    private static let baseURL = "http://localhost:4000"
+    /// Gets the base URL from ServerConfig
+    private static var baseURL: String {
+        ServerConfig.shared.webAppBaseURL
+    }
 
     /// Gets the current theme from ThemeManager
     private static var currentTheme: String {
