@@ -14,7 +14,7 @@ export function initializeOptimizely(sdkKey: string): void {
       sdkKey,
       datafileOptions: {
         autoUpdate: true,
-        updateInterval: 300000
+        updateInterval: 1000
       }
     });
 
@@ -118,17 +118,34 @@ export function getHomescreenConfiguration(userId: string): HomescreenConfigurat
     const configVariable = decision.variables['homescreen_configuration'];
     if (configVariable && typeof configVariable === 'string') {
       try {
-        const parsed = JSON.parse(configVariable) as HomescreenConfiguration;
-        return parsed;
+        const parsed = JSON.parse(configVariable);
+        // Handle wrapped object format: { modules: [...] }
+        if (parsed.modules && Array.isArray(parsed.modules)) {
+          return parsed.modules as HomescreenConfiguration;
+        }
+        // Handle direct array format
+        if (Array.isArray(parsed)) {
+          return parsed as HomescreenConfiguration;
+        }
+        console.warn('Invalid homescreen_configuration format, using defaults');
+        return DEFAULT_HOMESCREEN_CONFIG;
       } catch {
         console.warn('Failed to parse homescreen_configuration variable, using defaults');
         return DEFAULT_HOMESCREEN_CONFIG;
       }
     }
 
-    // If variable is already an object/array
-    if (configVariable && Array.isArray(configVariable)) {
-      return configVariable as HomescreenConfiguration;
+    // If variable is already an object (from Optimizely JSON type)
+    if (configVariable && typeof configVariable === 'object') {
+      // Handle wrapped object format: { modules: [...] }
+      const obj = configVariable as { modules?: HomescreenConfiguration };
+      if (obj.modules && Array.isArray(obj.modules)) {
+        return obj.modules;
+      }
+      // Handle direct array format
+      if (Array.isArray(configVariable)) {
+        return configVariable as HomescreenConfiguration;
+      }
     }
 
     return DEFAULT_HOMESCREEN_CONFIG;
