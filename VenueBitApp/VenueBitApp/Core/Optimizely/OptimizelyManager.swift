@@ -19,11 +19,29 @@ class OptimizelyManager: ObservableObject {
             name: .userIdDidChange,
             object: nil
         )
+
+        // Listen for datafile updates from WebSocket
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleDatafileUpdate),
+            name: .datafileDidUpdate,
+            object: nil
+        )
     }
 
     func initialize() async {
         isReady = true
         await fetchDecision(userId: UserIdentityManager.shared.userId)
+
+        // Connect to WebSocket for real-time updates
+        WebSocketService.shared.connect()
+    }
+
+    @objc private func handleDatafileUpdate(_ notification: Notification) {
+        Task { @MainActor in
+            print("[Optimizely] Datafile updated via WebSocket - refreshing features")
+            await fetchDecision(userId: UserIdentityManager.shared.userId)
+        }
     }
 
     @objc private func handleUserIdChange(_ notification: Notification) {

@@ -1,19 +1,26 @@
+import { createServer } from 'http';
 import { createApp } from './app';
 import { config } from './config';
 import { initializeOptimizely } from './services/optimizelyService';
+import { initializeWebSocket } from './services/websocketService';
 
 function startServer(): void {
   initializeOptimizely(config.optimizelySdkKey);
 
   const app = createApp();
+  const server = createServer(app);
 
-  app.listen(config.port, () => {
+  // Initialize WebSocket server
+  initializeWebSocket(server);
+
+  server.listen(config.port, () => {
     console.log('='.repeat(60));
     console.log('VenueBit Backend Server');
     console.log('='.repeat(60));
     console.log(`Environment: ${config.nodeEnv}`);
     console.log(`Server running on port: ${config.port}`);
     console.log(`API available at: http://localhost:${config.port}/api`);
+    console.log(`WebSocket available at: ws://localhost:${config.port}/api/ws`);
     console.log(`Optimizely SDK: ${config.optimizelySdkKey ? 'Configured' : 'Not configured (using defaults)'}`);
     console.log('='.repeat(60));
     console.log('Available endpoints:');

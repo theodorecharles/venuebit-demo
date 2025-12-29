@@ -40,6 +40,13 @@ class ServerConfig: ObservableObject {
         return "\(protocol_)://\(serverAddress)\(port)"
     }
 
+    /// WebSocket URL for real-time updates
+    var webSocketURL: String {
+        let scheme = serverAddress == "localhost" ? "ws" : "wss"
+        let port = serverAddress == "localhost" ? ":4001" : ""
+        return "\(scheme)://\(serverAddress)\(port)/api/ws"
+    }
+
     /// Reset to default localhost
     func resetToDefault() {
         serverAddress = defaultAddress

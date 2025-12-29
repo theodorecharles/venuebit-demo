@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { refreshDatafile } from '../services/optimizelyService';
+import { broadcastDatafileUpdate } from '../services/websocketService';
 
 const router = Router();
 
@@ -10,6 +11,8 @@ router.post('/datafileUpdated', async (_req: Request, res: Response) => {
   const success = await refreshDatafile();
 
   if (success) {
+    // Broadcast to all connected WebSocket clients
+    broadcastDatafileUpdate();
     res.json({ success: true, message: 'Datafile refreshed successfully' });
   } else {
     res.status(500).json({ success: false, message: 'Failed to refresh datafile' });
