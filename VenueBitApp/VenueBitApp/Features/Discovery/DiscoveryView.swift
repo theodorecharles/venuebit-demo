@@ -48,6 +48,12 @@ struct DiscoveryView: View {
         .task {
             await viewModel.loadEvents(userId: userIdentityManager.userId)
         }
+        .onReceive(NotificationCenter.default.publisher(for: .datafileDidUpdate)) { _ in
+            Task {
+                print("[DiscoveryView] Datafile updated - reloading homescreen config")
+                await viewModel.loadEvents(userId: userIdentityManager.userId)
+            }
+        }
     }
 
     @ViewBuilder

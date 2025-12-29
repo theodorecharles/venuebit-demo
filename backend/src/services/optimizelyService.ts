@@ -1,9 +1,13 @@
 import optimizely, { Client } from '@optimizely/optimizely-sdk';
 import { HomescreenConfiguration, DEFAULT_HOMESCREEN_CONFIG } from '../types/homescreen';
+import { broadcastDatafileUpdate } from './websocketService';
 
 let optimizelyClient: Client | null = null;
-
 let currentSdkKey: string | null = null;
+let lastDatafileRevision: string | null = null;
+let pollingInterval: NodeJS.Timeout | null = null;
+
+const POLLING_INTERVAL_MS = 1000; // Poll every 1 second
 
 export function initializeOptimizely(sdkKey: string): void {
   if (!sdkKey) {
@@ -17,13 +21,64 @@ export function initializeOptimizely(sdkKey: string): void {
     optimizelyClient = optimizely.createInstance({
       sdkKey,
       datafileOptions: {
-        autoUpdate: false  // Disabled - using webhook instead
+        autoUpdate: false  // We handle polling ourselves to detect changes
       }
     });
 
-    console.log('Optimizely SDK initialized successfully (webhook mode)');
+    console.log('Optimizely SDK initialized successfully');
+
+    // Start polling for datafile changes
+    startPolling();
   } catch (error) {
     console.error('Failed to initialize Optimizely SDK:', error);
+  }
+}
+
+function startPolling(): void {
+  if (pollingInterval) {
+    clearInterval(pollingInterval);
+  }
+
+  console.log(`[Optimizely] Starting datafile polling (every ${POLLING_INTERVAL_MS}ms)`);
+
+  pollingInterval = setInterval(async () => {
+    await checkForDatafileUpdate();
+  }, POLLING_INTERVAL_MS);
+}
+
+async function checkForDatafileUpdate(): Promise<void> {
+  if (!currentSdkKey) return;
+
+  try {
+    const datafileUrl = `https://cdn.optimizely.com/datafiles/${currentSdkKey}.json`;
+    const response = await fetch(datafileUrl);
+
+    if (!response.ok) return;
+
+    const datafile = await response.text();
+    const parsed = JSON.parse(datafile);
+    const newRevision = parsed.revision;
+
+    // Check if revision changed
+    if (lastDatafileRevision !== null && newRevision !== lastDatafileRevision) {
+      console.log(`[Optimizely] Datafile changed! Revision: ${lastDatafileRevision} -> ${newRevision}`);
+
+      // Update the client with new datafile
+      optimizelyClient = optimizely.createInstance({
+        sdkKey: currentSdkKey,
+        datafile,
+        datafileOptions: {
+          autoUpdate: false
+        }
+      });
+
+      // Broadcast to all connected WebSocket clients
+      broadcastDatafileUpdate();
+    }
+
+    lastDatafileRevision = newRevision;
+  } catch (error) {
+    // Silently ignore polling errors to avoid log spam
   }
 }
 

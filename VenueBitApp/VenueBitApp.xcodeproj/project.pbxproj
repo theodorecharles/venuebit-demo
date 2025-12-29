@@ -47,6 +47,7 @@
 		A10000010000000000000038 /* HomescreenConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000038 /* HomescreenConfig.swift */; };
 		A10000010000000000000039 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000039 /* ThemeManager.swift */; };
 		A10000010000000000000040 /* ServerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000040 /* ServerConfig.swift */; };
+		A10000010000000000000041 /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000041 /* WebSocketService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,6 +92,7 @@
 		A20000010000000000000038 /* HomescreenConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomescreenConfig.swift; sourceTree = "<group>"; };
 		A20000010000000000000039 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		A20000010000000000000040 /* ServerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfig.swift; sourceTree = "<group>"; };
+		A20000010000000000000041 /* WebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,6 +200,7 @@
 			children = (
 				A20000010000000000000012 /* APIClient.swift */,
 				A20000010000000000000040 /* ServerConfig.swift */,
+				A20000010000000000000041 /* WebSocketService.swift */,
 				A40000010000000000000010 /* Models */,
 			);
 			path = Networking;
@@ -433,6 +436,7 @@
 				A10000010000000000000031 /* CheckoutWebView.swift in Sources */,
 				A10000010000000000000032 /* SeatSelectionWebView.swift in Sources */,
 				A10000010000000000000034 /* VenueBitLogo.swift in Sources */,
+				A10000010000000000000041 /* WebSocketService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
