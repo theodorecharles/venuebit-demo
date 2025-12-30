@@ -271,24 +271,6 @@ To enable real-time datafile updates:
 5. **Generate New User ID** - Tap the button in Settings to get a new user and potentially different variations
 6. **Check consistency** - Same user ID = same variation everywhere
 
-## Troubleshooting
-
-### Images not loading on physical device
-
-Ensure your `Info.plist` includes `NSAllowsArbitraryLoads` set to `YES` under `NSAppTransportSecurity`, or configure proper ATS exceptions for your domain.
-
-### API requests failing
-
-- Check that the server address is correct in iOS Settings
-- Verify nginx is routing `/api/*` to the backend
-- Check Docker container logs: `docker-compose logs -f`
-
-### Datafile not updating
-
-- Verify the webhook URL is correct and accessible
-- Check backend logs for webhook receipt: `Received Optimizely datafile webhook`
-- Test manually: `curl -X POST https://your-server.com/api/datafileUpdated`
-
 ## License
 
-Demo project for Optimizely Feature Experimentation.
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
