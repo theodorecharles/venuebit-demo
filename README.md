@@ -46,13 +46,50 @@ The same user ID receives identical feature flag decisions across all platforms.
 
 ### Datafile Updates
 
-The backend uses a **webhook-based approach** for datafile updates instead of polling:
+The backend supports two methods for receiving Optimizely datafile updates, controlled by the `POLLING_INTERVAL` environment variable:
 
-1. Configure an Optimizely webhook to POST to `/api/datafileUpdated`
+#### Webhook Mode (Recommended for Production)
+
+Set `POLLING_INTERVAL=` (empty) or `POLLING_INTERVAL=-1`:
+
+1. Configure an Optimizely webhook to POST to `https://your-server.com/api/datafileUpdated`
 2. When changes are published in Optimizely, the webhook notifies the backend
 3. The backend fetches the latest datafile from Optimizely's CDN and reinitializes the SDK
+4. All connected iOS clients are notified via WebSocket to refresh their feature flags
 
-This reduces unnecessary network traffic while ensuring near-instant propagation of flag changes.
+This is the most efficient approach—no polling overhead, near-instant propagation.
+
+#### Polling Mode (Useful for Local Development)
+
+Set `POLLING_INTERVAL=1000` (or any positive number in milliseconds):
+
+1. The backend polls Optimizely's CDN at the specified interval
+2. When a datafile revision change is detected, the SDK is reinitialized
+3. All connected iOS clients are notified via WebSocket to refresh their feature flags
+4. Webhook requests are ignored when polling is enabled
+
+Use this for local development when webhooks aren't reachable.
+
+### Real-Time Updates to iOS App
+
+The iOS app receives feature flag updates in real-time via WebSocket:
+
+```
+┌─────────────────┐         ┌─────────────────┐         ┌─────────────────┐
+│   Optimizely    │  ──►    │  Backend :4001  │  ──►    │   iOS App       │
+│   (Webhook or   │         │  (Detects       │         │  (WebSocket     │
+│    CDN Poll)    │         │   change)       │         │   listener)     │
+└─────────────────┘         └─────────────────┘         └─────────────────┘
+                                    │
+                                    ▼
+                            WebSocket broadcast
+                            { type: "datafile_updated" }
+```
+
+1. **Backend receives update** - Either via webhook POST or by detecting a revision change during polling
+2. **WebSocket broadcast** - Backend sends `datafile_updated` message to all connected clients
+3. **iOS refreshes** - The app's `WebSocketService` receives the message and posts a `datafileDidUpdate` notification
+4. **UI updates** - Views listening for `datafileDidUpdate` re-fetch their feature decisions from the backend API
 
 ## Project Structure
 
@@ -108,6 +145,13 @@ Create a feature flag in your Optimizely project:
 cp .env.example .env
 # Edit .env and add your OPTIMIZELY_SDK_KEY
 ```
+
+Environment variables:
+
+| Variable | Description |
+|----------|-------------|
+| `OPTIMIZELY_SDK_KEY` | Your Optimizely Feature Experimentation SDK key |
+| `POLLING_INTERVAL` | Datafile update mode: empty/-1 for webhook, positive number for polling (ms) |
 
 ### 3. Start Backend & Web App
 
