@@ -23,6 +23,7 @@ services:
       - "4001:4001"
     environment:
       - OPTIMIZELY_SDK_KEY=${OPTIMIZELY_SDK_KEY}
+      - POLLING_INTERVAL=${POLLING_INTERVAL}
       - PORT=4001
     networks:
       - venuebit

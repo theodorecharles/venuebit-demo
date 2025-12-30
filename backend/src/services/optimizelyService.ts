@@ -1,13 +1,16 @@
 import optimizely, { Client } from '@optimizely/optimizely-sdk';
 import { HomescreenConfiguration, DEFAULT_HOMESCREEN_CONFIG } from '../types/homescreen';
 import { broadcastDatafileUpdate } from './websocketService';
+import { config } from '../config';
 
 let optimizelyClient: Client | null = null;
 let currentSdkKey: string | null = null;
 let lastDatafileRevision: string | null = null;
-let pollingInterval: NodeJS.Timeout | null = null;
+let pollingIntervalTimer: ReturnType<typeof setInterval> | null = null;
 
-const POLLING_INTERVAL_MS = 1000; // Poll every 1 second
+export function isPollingEnabled(): boolean {
+  return config.pollingInterval !== null && config.pollingInterval > 0;
+}
 
 export function initializeOptimizely(sdkKey: string): void {
   if (!sdkKey) {
@@ -21,29 +24,34 @@ export function initializeOptimizely(sdkKey: string): void {
     optimizelyClient = optimizely.createInstance({
       sdkKey,
       datafileOptions: {
-        autoUpdate: false  // We handle polling ourselves to detect changes
+        autoUpdate: false  // We handle updates via polling or webhook
       }
     });
 
     console.log('Optimizely SDK initialized successfully');
 
-    // Start polling for datafile changes
-    startPolling();
+    // Start polling if enabled
+    if (isPollingEnabled()) {
+      startPolling();
+    } else {
+      console.log('[Optimizely] Polling disabled - using webhook for updates');
+    }
   } catch (error) {
     console.error('Failed to initialize Optimizely SDK:', error);
   }
 }
 
 function startPolling(): void {
-  if (pollingInterval) {
-    clearInterval(pollingInterval);
+  if (pollingIntervalTimer) {
+    clearInterval(pollingIntervalTimer);
   }
 
-  console.log(`[Optimizely] Starting datafile polling (every ${POLLING_INTERVAL_MS}ms)`);
+  const intervalMs = config.pollingInterval!;
+  console.log(`[Optimizely] Starting datafile polling (every ${intervalMs}ms)`);
 
-  pollingInterval = setInterval(async () => {
+  pollingIntervalTimer = setInterval(async () => {
     await checkForDatafileUpdate();
-  }, POLLING_INTERVAL_MS);
+  }, intervalMs);
 }
 
 async function checkForDatafileUpdate(): Promise<void> {
