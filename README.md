@@ -129,15 +129,46 @@ venuebit-demo/
 
 ### 1. Configure Optimizely
 
-Create a feature flag in your Optimizely project:
+Create the following feature flags in your Optimizely project:
 
-- **Feature Key**: `ticket_experience`
-- **Variations**: `control` (50%), `enhanced` (50%)
+#### App Theme (`app_theme`)
+
+Controls the app's color theme in real-time.
+
+- **Feature Key**: `app_theme`
+- **Variations**: `off`, `black`, `dark`, `beige`, `light`
+- **Variables**: None (the variation key itself determines the theme)
+
+| Variation | Description |
+|-----------|-------------|
+| `off` | Default system theme |
+| `black` | Dark theme with pure black background |
+| `dark` | Dark theme with dark gray background |
+| `beige` | Light theme with warm beige tones |
+| `light` | Light theme with white background |
+
+#### Homescreen Configuration (`venuebit_homescreen`)
+
+Controls the layout and modules displayed on the homescreen.
+
+- **Feature Key**: `venuebit_homescreen`
+- **Variations**: `off`, `on` (or custom variation names)
 - **Variables**:
-  - `show_seat_preview` (boolean): false / true
-  - `show_recommendations` (boolean): false / true
-  - `checkout_layout` (string): "standard" / "streamlined"
-  - `show_urgency_banner` (boolean): false / true
+  - `homescreen_configuration` (JSON): Array of module configurations
+
+Example `homescreen_configuration` value:
+
+```json
+{
+  "modules": [
+    { "module": "hero_carousel", "title": "Featured Events" },
+    { "module": "horizontal_list", "title": "Trending Now", "category": "concerts" },
+    { "module": "grid", "title": "Sports", "category": "sports" }
+  ]
+}
+```
+
+Available module types: `hero_carousel`, `horizontal_list`, `grid`, `featured_banner`
 
 ### 2. Set Environment Variables
 
@@ -165,8 +196,9 @@ docker-compose up
 ### 4. Run iOS App
 
 1. Open `VenueBitApp/` folder in Xcode (it uses Swift Package Manager)
-2. Update the SDK key in `OptimizelyManager.swift`
-3. Select a simulator and run (Cmd+R)
+2. Select a simulator and run (Cmd+R)
+
+The iOS app fetches feature decisions from the backend API, so no SDK key configuration is needed in the app itself.
 
 ## Remote Deployment
 
@@ -174,8 +206,8 @@ The app supports connecting to a remote server instead of localhost:
 
 ### iOS App Configuration
 
-1. Go to iOS **Settings** app → scroll to **VenueBit**
-2. Enter your server address (e.g., `venuebit.example.com`)
+1. Open the VenueBit app and go to the **Settings** tab
+2. Scroll to the bottom and enter your server address (e.g., `venuebit.example.com`)
 3. The app will use HTTPS and omit port numbers for remote servers
 
 ### Server Requirements
@@ -232,13 +264,12 @@ To enable real-time datafile updates:
 
 ## Demo Script
 
-1. **Show the app** - Browse events, demonstrate the UI
-2. **Check the Debug Panel** - Show current user ID and variation
-3. **Navigate to seat selection** - Point out variation-specific features
-4. **Generate New User ID** - Tap the button to get a new user
-5. **Show variation change** - May see different UI (enhanced vs control)
-6. **Complete a purchase** - Show the full flow works
-7. **Check consistency** - Same user ID = same variation everywhere
+1. **Show the app** - Browse events on the homescreen, demonstrate the UI
+2. **Change theme in Optimizely** - Update the `app_theme` flag to a different variation (e.g., `dark` or `beige`)
+3. **Watch the app update** - The theme changes in real-time via WebSocket
+4. **Modify homescreen layout** - Change the `venuebit_homescreen` configuration to show different modules
+5. **Generate New User ID** - Tap the button in Settings to get a new user and potentially different variations
+6. **Check consistency** - Same user ID = same variation everywhere
 
 ## Troubleshooting
 
