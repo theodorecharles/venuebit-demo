@@ -159,16 +159,46 @@ Controls the layout and modules displayed on the homescreen.
 Example `homescreen_configuration` value:
 
 ```json
-{
-  "modules": [
-    { "module": "hero_carousel", "title": "Featured Events" },
-    { "module": "horizontal_list", "title": "Trending Now", "category": "concerts" },
-    { "module": "grid", "title": "Sports", "category": "sports" }
-  ]
-}
+{"modules":[
+  {
+    "module": "hero_carousel",
+    "config": {
+      "categories": ["concerts", "sports", "theater", "comedy"],
+      "length": 10
+    }
+  },
+  {
+    "module": "categories",
+    "config": {
+      "categories": ["concerts", "sports", "theater", "comedy"]
+    }
+  },
+  {
+    "module": "trending_now",
+    "config": {
+      "categories": ["concerts", "sports", "theater", "comedy"],
+      "length": 10
+    }
+  },
+  {
+    "module": "this_weekend",
+    "config": {
+      "categories": ["concerts", "sports", "theater", "comedy"],
+      "length": 10
+    }
+  },
+  {
+    "module": "all_events",
+    "config": {
+      "sortBy": "date_asc",
+      "categories": ["concerts", "sports", "theater", "comedy"],
+      "length": 10
+    }
+  }
+]}
 ```
 
-Available module types: `hero_carousel`, `horizontal_list`, `grid`, `featured_banner`
+Available module types: `hero_carousel`, `categories`, `trending_now`, `this_weekend`, `all_events`
 
 ### 2. Set Environment Variables
 
