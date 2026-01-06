@@ -123,11 +123,53 @@ venuebit-demo/
 
 ### Prerequisites
 
+- Node.js 18+
 - Docker & Docker Compose
 - Xcode 15+ (for iOS app)
 - Optimizely Feature Experimentation account
 
-### 1. Configure Optimizely
+### 1. Clone and Install
+
+```bash
+git clone https://github.com/theodorecharles/venuebit-demo.git
+cd venuebit-demo
+npm install
+```
+
+### 2. Configure Your SDK Key
+
+```bash
+npm run config
+```
+
+This will prompt you for your Optimizely SDK key and create a `.env` file with 1-second polling for real-time updates.
+
+### 3. Start the Demo
+
+```bash
+npm run start
+```
+
+- Web App: http://localhost:4000
+- Backend API: http://localhost:4001
+
+### 4. Run iOS App (Optional)
+
+1. Open `VenueBitApp/` folder in Xcode
+2. Select a simulator and run (Cmd+R)
+
+### Other Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run stop` | Stop all containers |
+| `npm run logs` | View container logs |
+| `npm run rebuild` | Rebuild containers from scratch |
+| `npm run clean` | Remove containers and images |
+
+---
+
+## Optimizely Setup
 
 Create the following feature flags in your Optimizely project:
 
@@ -200,35 +242,7 @@ Example `homescreen_configuration` value:
 
 Available module types: `hero_carousel`, `categories`, `trending_now`, `this_weekend`, `all_events`
 
-### 2. Set Environment Variables
-
-```bash
-cp .env.example .env
-# Edit .env and add your OPTIMIZELY_SDK_KEY
-```
-
-Environment variables:
-
-| Variable | Description |
-|----------|-------------|
-| `OPTIMIZELY_SDK_KEY` | Your Optimizely Feature Experimentation SDK key |
-| `POLLING_INTERVAL` | Datafile update mode: empty/-1 for webhook, positive number for polling (ms) |
-
-### 3. Start Backend & Web App
-
-```bash
-docker-compose up
-```
-
-- Web App: http://localhost:4000
-- Backend API: http://localhost:4001
-
-### 4. Run iOS App
-
-1. Open `VenueBitApp/` folder in Xcode (it uses Swift Package Manager)
-2. Select a simulator and run (Cmd+R)
-
-The iOS app fetches feature decisions from the backend API, so no SDK key configuration is needed in the app itself.
+---
 
 ## Remote Deployment
 

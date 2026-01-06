@@ -1,0 +1,29 @@
+{
+  "name": "venuebit-demo",
+  "version": "1.0.0",
+  "description": "VenueBit Demo - Feature flag experimentation platform for ticket sales",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix webapp && npm install --prefix backend",
+    "postinstall": "npm run install:all",
+    "config": "node scripts/config.js",
+    "start": "./scripts/start.sh",
+    "start:docker": "docker-compose up -d --build",
+    "stop": "docker-compose down",
+    "logs": "docker-compose logs -f",
+    "logs:webapp": "docker-compose logs -f webapp",
+    "logs:backend": "docker-compose logs -f backend",
+    "rebuild": "docker-compose build --no-cache && docker-compose up -d",
+    "clean": "docker-compose down -v --rmi local"
+  },
+  "keywords": [
+    "optimizely",
+    "feature-flags",
+    "demo",
+    "tickets",
+    "react",
+    "typescript"
+  ],
+  "author": "",
+  "license": "GPL-3.0"
+}
