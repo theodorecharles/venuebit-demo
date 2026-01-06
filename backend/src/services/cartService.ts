@@ -45,15 +45,8 @@ export function addItemToCart(
     return { success: false, error: 'Some seats not found' };
   }
 
-  const unavailableSeats = selectedSeats.filter(s => s.status !== 'available');
-  if (unavailableSeats.length > 0) {
-    return { success: false, error: 'Some seats are not available' };
-  }
-
-  const reserved = reserveSeats(eventId, seatIds);
-  if (!reserved) {
-    return { success: false, error: 'Failed to reserve seats' };
-  }
+  // Always allow seats to be added (no availability check)
+  reserveSeats(eventId, seatIds);
 
   const subtotal = selectedSeats.reduce((sum, seat) => sum + seat.price, 0);
 

@@ -128,7 +128,6 @@ export async function refreshDatafile(): Promise<boolean> {
 export interface FeatureDecisions {
   ticket_experience: boolean;
   variation_key: string;
-  show_seat_preview: boolean;
   show_recommendations: boolean;
   checkout_layout: string;
   show_urgency_banner: boolean;
@@ -138,7 +137,6 @@ export function getFeatureDecisions(userId: string): FeatureDecisions {
   const defaults: FeatureDecisions = {
     ticket_experience: true,
     variation_key: 'off',
-    show_seat_preview: true,
     show_recommendations: true,
     checkout_layout: 'standard',
     show_urgency_banner: false
@@ -160,7 +158,6 @@ export function getFeatureDecisions(userId: string): FeatureDecisions {
     const decisions: FeatureDecisions = {
       ticket_experience: enabled,
       variation_key: ticketExperience.variationKey || 'off',
-      show_seat_preview: ticketExperience.variables['show_seat_preview'] as boolean ?? defaults.show_seat_preview,
       show_recommendations: ticketExperience.variables['show_recommendations'] as boolean ?? defaults.show_recommendations,
       checkout_layout: ticketExperience.variables['checkout_layout'] as string ?? defaults.checkout_layout,
       show_urgency_banner: ticketExperience.variables['show_urgency_banner'] as boolean ?? defaults.show_urgency_banner

@@ -169,11 +169,9 @@ Color.indigo400   // Primary light
 - Simple confirmation
 
 ### Enhanced Variation
-- Urgency banners (limited seats)
-- Seat preview on hover
+- Urgency banners
 - Similar seat recommendations
-- Streamlined checkout
-- Urgency messaging
+- Countdown timer on checkout
 
 ## API Integration
 

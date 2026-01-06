@@ -11,6 +11,7 @@ import { OrderSummary } from '../components/checkout/OrderSummary';
 import { PriceBreakdown } from '../components/checkout/PriceBreakdown';
 import { PaymentForm, PaymentFormData } from '../components/checkout/PaymentForm';
 import { Loading } from '../components/common/Loading';
+import { CountdownTimerBanner } from '../components/checkout/CountdownTimerBanner';
 
 export const CheckoutPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -133,29 +134,8 @@ export const CheckoutPage: React.FC = () => {
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-8">Checkout</h1>
 
-        {/* Enhanced variation: Urgency message */}
-        {isEnhanced && (
-          <div className="bg-warning/20 border-2 border-warning rounded-lg p-4 mb-6">
-            <div className="flex items-center gap-3">
-              <svg
-                className="w-5 h-5 text-warning flex-shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <p className="text-sm font-semibold text-warning">
-                Hurry! Tickets are in high demand. Complete your purchase now to secure your seats.
-              </p>
-            </div>
-          </div>
-        )}
+        {/* Enhanced variation: Countdown timer banner */}
+        {isEnhanced && <CountdownTimerBanner />}
 
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">

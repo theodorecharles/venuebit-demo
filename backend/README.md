@@ -203,7 +203,6 @@ Seats are dynamically generated based on venue type:
 ### Feature Flag: `ticket_experience`
 
 Variables:
-- `show_seat_preview` (boolean)
 - `show_recommendations` (boolean)
 - `checkout_layout` (string: "standard" | "enhanced")
 - `show_urgency_banner` (boolean)

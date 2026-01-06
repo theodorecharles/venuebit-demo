@@ -12,7 +12,6 @@ import { formatDateTime } from '../utils/formatters';
 import { DebugBanner } from '../components/debug/DebugBanner';
 import { SeatMap } from '../components/seats/SeatMap';
 import { SelectedSeats } from '../components/seats/SelectedSeats';
-import { SeatPreview } from '../components/seats/SeatPreview';
 import { SimilarSeats } from '../components/seats/SimilarSeats';
 import { UrgencyBanner } from '../components/seats/UrgencyBanner';
 import { Button } from '../components/common/Button';
@@ -169,10 +168,6 @@ export const SeatSelectionPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Enhanced variation: Seat Preview */}
-        {isEnhanced && hoveredSeat && hoveredSeat.status === 'available' && (
-          <SeatPreview seat={hoveredSeat} />
-        )}
       </div>
 
       {/* Sticky Add to Cart Footer */}

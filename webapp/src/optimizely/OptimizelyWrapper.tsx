@@ -2,6 +2,7 @@ import React from 'react';
 import { OptimizelyProvider } from '@optimizely/react-sdk';
 import { optimizelyClient } from './client';
 import { useUserStore } from '../store/userStore';
+import { FeatureFlagProvider } from '../context/FeatureFlagContext';
 
 interface OptimizelyWrapperProps {
   children: React.ReactNode;
@@ -21,7 +22,9 @@ export const OptimizelyWrapper: React.FC<OptimizelyWrapperProps> = ({ children }
       }}
       timeout={500}
     >
-      {children}
+      <FeatureFlagProvider>
+        {children}
+      </FeatureFlagProvider>
     </OptimizelyProvider>
   );
 };

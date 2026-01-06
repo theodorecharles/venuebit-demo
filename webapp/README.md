@@ -7,7 +7,7 @@ A complete React + TypeScript + Vite + Tailwind web application for the VenueBit
 - **Seat Selection**: Interactive seat map with section and individual seat selection
 - **A/B Testing**: Optimizely-powered feature flags with two variations:
   - **Control**: Standard ticket purchasing experience
-  - **Enhanced**: Premium experience with urgency banners, seat previews, and recommendations
+  - **Enhanced**: Premium experience with urgency banners and recommendations
 - **Checkout**: Complete payment flow with mock payment processing
 - **Order Confirmation**: Success page with native app integration
 - **Debug Tools**: User ID management and variation visibility
@@ -91,11 +91,9 @@ src/
 - Standard confirmation
 
 ### Enhanced Variation
-- **Urgency Banner**: "Only X seats left at this price!"
-- **Seat Preview**: Hover over seats to see simulated view
+- **Urgency Banner**: "Popular event - seats are selling fast"
 - **Similar Seats**: AI-powered seat recommendations
-- **Streamlined Checkout**: Collapsible form sections
-- **Urgency Messaging**: Time-sensitive purchase prompts
+- **Countdown Timer**: Time-limited checkout urgency messaging
 
 ## Pages
 

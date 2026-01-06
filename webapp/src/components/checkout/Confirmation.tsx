@@ -7,34 +7,37 @@ import { Button } from '../common/Button';
 interface ConfirmationProps {
   order: Order;
   onClose: () => void;
+  hideHeader?: boolean;
 }
 
-export const Confirmation: React.FC<ConfirmationProps> = ({ order, onClose }) => {
+export const Confirmation: React.FC<ConfirmationProps> = ({ order, onClose, hideHeader = false }) => {
   // Get first item for event details, flatten all seats
   const firstItem = order.items?.[0];
   const allSeats = order.items?.flatMap((item) => item.seats) || [];
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-success/20 rounded-full mb-4">
-          <svg
-            className="w-12 h-12 text-success"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
+      {!hideHeader && (
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-success/20 rounded-full mb-4">
+            <svg
+              className="w-12 h-12 text-success"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+          <h1 className="text-4xl font-bold mb-2">You're going to see {firstItem?.eventTitle || 'the show'}!</h1>
+          <p className="text-text-secondary text-lg">Your tickets have been confirmed</p>
         </div>
-        <h1 className="text-4xl font-bold mb-2">You're going to see {firstItem?.eventTitle || 'the show'}!</h1>
-        <p className="text-text-secondary text-lg">Your tickets have been confirmed</p>
-      </div>
+      )}
 
       <Card className="mb-6">
         <div className="border-b border-border pb-4 mb-4">

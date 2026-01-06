@@ -86,7 +86,6 @@ class OptimizelyManager: ObservableObject {
                 currentDecision = TicketExperienceDecision(
                     enabled: ticketExperience.enabled,
                     variationKey: ticketExperience.variationKey ?? "control",
-                    showSeatPreview: (variables["show_seat_preview"]?.value as? Bool) ?? false,
                     showRecommendations: (variables["show_recommendations"]?.value as? Bool) ?? false,
                     checkoutLayout: (variables["checkout_layout"]?.value as? String) ?? "standard",
                     showUrgencyBanner: (variables["show_urgency_banner"]?.value as? Bool) ?? false
@@ -146,7 +145,6 @@ struct FeatureDecisionInfo {
 struct TicketExperienceDecision {
     let enabled: Bool
     let variationKey: String
-    let showSeatPreview: Bool
     let showRecommendations: Bool
     let checkoutLayout: String
     let showUrgencyBanner: Bool
@@ -158,7 +156,6 @@ struct TicketExperienceDecision {
     static let defaultDecision = TicketExperienceDecision(
         enabled: false,
         variationKey: "control",
-        showSeatPreview: false,
         showRecommendations: false,
         checkoutLayout: "standard",
         showUrgencyBanner: false

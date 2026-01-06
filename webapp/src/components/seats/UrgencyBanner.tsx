@@ -40,9 +40,6 @@ export const UrgencyBanner: React.FC<UrgencyBannerProps> = ({ availableSeats }) 
           </div>
           <div className="flex-1">
             <p className="font-bold text-warning">
-              Only {seatsLeft} seats left at this price!
-            </p>
-            <p className="text-sm text-text-secondary">
               Popular event - seats are selling fast
             </p>
           </div>

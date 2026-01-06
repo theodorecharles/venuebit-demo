@@ -5,8 +5,10 @@ import { Order } from '../types/order';
 import { useUserId } from '../hooks/useUserId';
 import { useTracking } from '../hooks/useTracking';
 import { useNativeBridge } from '../hooks/useNativeBridge';
+import { useFeatureFlag } from '../hooks/useFeatureFlag';
 import { DebugBanner } from '../components/debug/DebugBanner';
 import { Confirmation } from '../components/checkout/Confirmation';
+import { RecommendedEvents } from '../components/checkout/RecommendedEvents';
 import { Loading } from '../components/common/Loading';
 
 export const ConfirmationPage: React.FC = () => {
@@ -14,6 +16,7 @@ export const ConfirmationPage: React.FC = () => {
   useUserId(); // Initialize userId from URL params
   const { trackPageView } = useTracking();
   const { handlePurchaseComplete, handleCloseWebView, handleScrollToTop } = useNativeBridge();
+  const { showRecommendations } = useFeatureFlag();
 
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
@@ -88,12 +91,46 @@ export const ConfirmationPage: React.FC = () => {
     );
   }
 
+  const firstItem = order.items?.[0];
+
   return (
     <div>
       <DebugBanner />
 
       <div className="container mx-auto px-4 py-8">
-        <Confirmation order={order} onClose={handleClose} />
+        {/* Header section */}
+        <div className="max-w-2xl mx-auto text-center mb-8">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-success/20 rounded-full mb-4">
+            <svg
+              className="w-12 h-12 text-success"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+          <h1 className="text-4xl font-bold mb-2">You're going to see {firstItem?.eventTitle || 'the show'}!</h1>
+          <p className="text-text-secondary text-lg">Your tickets have been confirmed</p>
+        </div>
+
+        {/* Recommendations - right after header */}
+        {showRecommendations && firstItem && (
+          <div className="max-w-2xl mx-auto">
+            <RecommendedEvents
+              purchasedEventId={firstItem.eventId}
+              artistName={firstItem.eventTitle}
+            />
+          </div>
+        )}
+
+        {/* Order details */}
+        <Confirmation order={order} onClose={handleClose} hideHeader />
       </div>
     </div>
   );

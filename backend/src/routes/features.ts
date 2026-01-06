@@ -28,7 +28,6 @@ router.get('/:userId', (req: Request, res: Response) => {
             enabled: ticketDecisions.ticket_experience,
             variationKey: ticketDecisions.variation_key,
             variables: {
-              show_seat_preview: ticketDecisions.show_seat_preview,
               show_recommendations: ticketDecisions.show_recommendations,
               checkout_layout: ticketDecisions.checkout_layout,
               show_urgency_banner: ticketDecisions.show_urgency_banner

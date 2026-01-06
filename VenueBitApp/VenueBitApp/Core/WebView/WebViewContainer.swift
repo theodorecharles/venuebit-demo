@@ -29,6 +29,11 @@ struct WebViewContainer: UIViewRepresentable {
         webView.backgroundColor = backgroundColor
         webView.scrollView.backgroundColor = backgroundColor
 
+        // Enable Web Inspector for debugging in Safari
+        if #available(iOS 16.4, *) {
+            webView.isInspectable = true
+        }
+
         bridge.webView = webView
         context.coordinator.onURLChange = onURLChange
 
