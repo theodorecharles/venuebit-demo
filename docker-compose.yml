@@ -9,7 +9,8 @@ services:
       - "4000:4000"
     environment:
       - VITE_OPTIMIZELY_SDK_KEY=${OPTIMIZELY_SDK_KEY}
-      - VITE_API_URL=http://localhost:4001
+      # Don't set VITE_API_URL - let client.ts determine it dynamically based on hostname
+      # This allows Android emulator (10.0.2.2) to work correctly
     depends_on:
       - backend
     networks:

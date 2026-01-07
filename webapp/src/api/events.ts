@@ -17,7 +17,9 @@ const transformEvent = (data: any): Event => ({
 export const eventsApi = {
   // Get event details
   getEvent: async (eventId: string): Promise<Event> => {
+    console.log('[eventsApi] Fetching event with ID:', eventId);
     const response = await apiClient.get(`/events/${eventId}`);
+    console.log('[eventsApi] Event response:', response.data);
     return transformEvent(response.data.data);
   },
 

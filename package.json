@@ -7,7 +7,7 @@
     "install:all": "npm install --prefix webapp && npm install --prefix backend",
     "postinstall": "npm run install:all",
     "config": "node scripts/config.js",
-    "start": "./scripts/start.sh",
+    "start": "docker-compose up -d --build",
     "start:docker": "docker-compose up -d --build",
     "stop": "docker-compose down",
     "logs": "docker-compose logs -f",

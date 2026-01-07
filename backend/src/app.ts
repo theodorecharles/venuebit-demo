@@ -7,9 +7,10 @@ export function createApp(): Express {
   const app = express();
 
   app.use(cors({
-    origin: '*',
+    origin: true, // Reflect the request origin
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    credentials: true
   }));
 
   // Serve static files from public folder

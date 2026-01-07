@@ -30,6 +30,7 @@ export const SeatSelectionPage: React.FC = () => {
   const [hoveredSeat, setHoveredSeat] = useState<Seat | null>(null);
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     if (eventId) {
@@ -43,10 +44,15 @@ export const SeatSelectionPage: React.FC = () => {
 
     try {
       setLoading(true);
+      setLoadError(null);
+      console.log('[SeatSelectionPage] Loading event:', eventId);
       const data = await eventsApi.getEvent(eventId);
+      console.log('[SeatSelectionPage] Event loaded:', data);
       setEvent(data);
-    } catch (error) {
-      console.error('Error loading event:', error);
+    } catch (error: any) {
+      const errorMsg = error?.message || error?.toString() || 'Unknown error';
+      console.error('[SeatSelectionPage] Error loading event:', errorMsg, error);
+      setLoadError(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -120,6 +126,12 @@ export const SeatSelectionPage: React.FC = () => {
         <div className="container mx-auto px-4 py-8 text-center">
           <h1 className="text-2xl font-bold mb-4">Event not found</h1>
           <p className="text-text-secondary">The requested event could not be found.</p>
+          {loadError && (
+            <div className="mt-4 p-4 bg-red-500/20 rounded-lg">
+              <p className="text-red-400 text-sm font-mono">Error: {loadError}</p>
+              <p className="text-text-secondary text-xs mt-2">Event ID: {eventId}</p>
+            </div>
+          )}
         </div>
       </div>
     );

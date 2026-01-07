@@ -12,12 +12,17 @@ const getImageUrl = (url: string | undefined): string | undefined => {
   if (url.includes('localhost:4000')) {
     return url.replace('localhost:4000', 'localhost:4001');
   }
-  // If it's a relative path, make it absolute to the API
+  // If it's a relative path, make it absolute to the API server
+  // This is needed when webapp runs on different port than backend
   if (url.startsWith('/images/')) {
     const host = window.location.hostname;
-    if (host === 'localhost' || host === '127.0.0.1') {
-      return `http://localhost:4001${url}`;
+    const port = window.location.port;
+    // Only need to redirect to API port when running locally on webapp port
+    // (localhost/127.0.0.1/10.0.2.2 on port 4000 means we're on the webapp, not backend)
+    if ((host === 'localhost' || host === '127.0.0.1' || host === '10.0.2.2') && port === '4000') {
+      return `http://${host}:4001${url}`;
     }
+    // For production or when already on backend port, use relative URL
     return url;
   }
   return url;
