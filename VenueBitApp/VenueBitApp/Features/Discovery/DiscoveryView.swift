@@ -43,6 +43,25 @@ struct DiscoveryView: View {
                 ToolbarItem(placement: .principal) {
                     VenueBitLogo(size: 28)
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        Task {
+                            await viewModel.generateNewUserIdAndReload()
+                        }
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [
+                                        Color(red: 129/255, green: 140/255, blue: 248/255),
+                                        Color(red: 244/255, green: 114/255, blue: 182/255)
+                                    ],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                    }
+                }
             }
         }
         .task {

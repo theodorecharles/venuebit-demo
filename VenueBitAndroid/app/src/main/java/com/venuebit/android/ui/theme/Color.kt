@@ -23,6 +23,9 @@ object VenueBitColors {
     val Indigo400 = Color(0xFF818CF8)
     val Indigo300 = Color(0xFFA5B4FC)
 
+    // Pink palette (for logo gradient)
+    val Pink400 = Color(0xFFF472B6)
+
     // Semantic colors
     val Green500 = Color(0xFF22C55E)
     val Orange500 = Color(0xFFF97316)

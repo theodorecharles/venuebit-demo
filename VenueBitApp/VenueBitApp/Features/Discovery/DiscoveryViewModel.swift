@@ -109,4 +109,18 @@ class DiscoveryViewModel: ObservableObject {
             errorMessage = error.localizedDescription
         }
     }
+
+    /// Generate a new user ID and reload data to demonstrate A/B test bucketing
+    /// This performs the operation atomically to avoid multiple re-renders
+    func generateNewUserIdAndReload() async {
+        // Generate new user ID without notifying other listeners
+        // This prevents OptimizelyManager from triggering additional re-renders
+        let userIdentityManager = UserIdentityManager.shared
+        userIdentityManager.generateNewUserId(notifyListeners: false)
+        let newUserId = userIdentityManager.userId
+        print("[DiscoveryViewModel] Generated new user ID: \(newUserId)")
+
+        // Now reload with the new user ID - this single reload updates everything we need
+        await loadEvents(userId: newUserId)
+    }
 }

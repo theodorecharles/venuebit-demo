@@ -2,18 +2,22 @@ package com.venuebit.android.ui.screens.discovery
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -34,6 +38,7 @@ import com.venuebit.android.data.models.HomescreenModuleType
 import com.venuebit.android.ui.components.ErrorView
 import com.venuebit.android.ui.components.LoadingView
 import com.venuebit.android.ui.components.VenueBitLogo
+import com.venuebit.android.ui.theme.VenueBitColors
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -85,7 +90,12 @@ fun DiscoveryScreen(
                     viewModel = viewModel,
                     onEventClick = onEventClick,
                     onCategoryClick = onCategoryClick,
-                    onSeeAllClick = onSeeAllClick
+                    onSeeAllClick = onSeeAllClick,
+                    onRefreshUserId = {
+                        scope.launch {
+                            viewModel.generateNewUserIdAndReload()
+                        }
+                    }
                 )
             }
         }
@@ -107,21 +117,38 @@ private fun DiscoveryContent(
     viewModel: DiscoveryViewModel,
     onEventClick: (Event) -> Unit,
     onCategoryClick: (EventCategory) -> Unit,
-    onSeeAllClick: (String, List<Event>) -> Unit
+    onSeeAllClick: (String, List<Event>) -> Unit,
+    onRefreshUserId: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(bottom = 100.dp) // Space for FAB/bottom nav
     ) {
-        // Header with VenueBit logo
+        // Header with centered VenueBit logo and refresh button
         item {
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
-                VenueBitLogo(fontSize = 28.sp)
+                // Centered logo
+                VenueBitLogo(
+                    fontSize = 28.sp,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+                // Refresh button on the right
+                IconButton(
+                    onClick = onRefreshUserId,
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .size(40.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = "Generate new user ID",
+                        tint = VenueBitColors.Indigo400
+                    )
+                }
             }
         }
 

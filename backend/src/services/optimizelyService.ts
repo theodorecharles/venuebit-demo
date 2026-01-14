@@ -2,6 +2,7 @@ import optimizely, { Client } from '@optimizely/optimizely-sdk';
 import { HomescreenConfiguration, DEFAULT_HOMESCREEN_CONFIG } from '../types/homescreen';
 import { broadcastDatafileUpdate } from './websocketService';
 import { config } from '../config';
+import { buildUserAttributes } from './userAttributesService';
 
 let optimizelyClient: Client | null = null;
 let currentSdkKey: string | null = null;
@@ -133,7 +134,7 @@ export interface FeatureDecisions {
   show_urgency_banner: boolean;
 }
 
-export function getFeatureDecisions(userId: string): FeatureDecisions {
+export function getFeatureDecisions(userId: string, operatingSystem?: string): FeatureDecisions {
   const defaults: FeatureDecisions = {
     ticket_experience: true,
     variation_key: 'off',
@@ -147,10 +148,13 @@ export function getFeatureDecisions(userId: string): FeatureDecisions {
   }
 
   try {
-    const user = optimizelyClient.createUserContext(userId);
+    const attributes = buildUserAttributes(userId, operatingSystem);
+    const user = optimizelyClient.createUserContext(userId, attributes);
     if (!user) {
       return defaults;
     }
+
+    console.log(`[Optimizely] Feature decisions for user ${userId} with attributes:`, attributes);
 
     const ticketExperience = user.decide('ticket_experience');
     const enabled = ticketExperience.enabled;
@@ -205,7 +209,7 @@ export interface HomescreenDecision {
   modules: HomescreenConfiguration;
 }
 
-export function getHomescreenDecision(userId: string): HomescreenDecision {
+export function getHomescreenDecision(userId: string, operatingSystem?: string): HomescreenDecision {
   const defaultDecision: HomescreenDecision = {
     enabled: false,
     variationKey: 'off',
@@ -217,10 +221,13 @@ export function getHomescreenDecision(userId: string): HomescreenDecision {
   }
 
   try {
-    const user = optimizelyClient.createUserContext(userId);
+    const attributes = buildUserAttributes(userId, operatingSystem);
+    const user = optimizelyClient.createUserContext(userId, attributes);
     if (!user) {
       return defaultDecision;
     }
+
+    console.log(`[Optimizely] Homescreen decision for user ${userId} with attributes:`, attributes);
 
     const decision = user.decide('venuebit_homescreen');
 
@@ -274,7 +281,7 @@ export interface AppThemeDecision {
   theme: AppTheme;
 }
 
-export function getAppThemeDecision(userId: string): AppThemeDecision {
+export function getAppThemeDecision(userId: string, operatingSystem?: string): AppThemeDecision {
   const defaultDecision: AppThemeDecision = {
     enabled: false,
     variationKey: 'off',
@@ -286,10 +293,13 @@ export function getAppThemeDecision(userId: string): AppThemeDecision {
   }
 
   try {
-    const user = optimizelyClient.createUserContext(userId);
+    const attributes = buildUserAttributes(userId, operatingSystem);
+    const user = optimizelyClient.createUserContext(userId, attributes);
     if (!user) {
       return defaultDecision;
     }
+
+    console.log(`[Optimizely] App theme decision for user ${userId} with attributes:`, attributes);
 
     const decision = user.decide('app_theme');
 
@@ -319,13 +329,14 @@ export function getAppThemeDecision(userId: string): AppThemeDecision {
   }
 }
 
-export function getHomescreenConfiguration(userId: string): HomescreenConfiguration {
+export function getHomescreenConfiguration(userId: string, operatingSystem?: string): HomescreenConfiguration {
   if (!optimizelyClient) {
     return DEFAULT_HOMESCREEN_CONFIG;
   }
 
   try {
-    const user = optimizelyClient.createUserContext(userId);
+    const attributes = buildUserAttributes(userId, operatingSystem);
+    const user = optimizelyClient.createUserContext(userId, attributes);
     if (!user) {
       return DEFAULT_HOMESCREEN_CONFIG;
     }

@@ -22,10 +22,11 @@ fun VenueBitLogo(
     modifier: Modifier = Modifier,
     fontSize: TextUnit = 28.sp
 ) {
+    // Gradient from indigo-400 to pink-400, matching iOS
     val gradientBrush = Brush.horizontalGradient(
         colors = listOf(
             VenueBitColors.Indigo400,
-            VenueBitColors.Indigo500
+            VenueBitColors.Pink400
         )
     )
 

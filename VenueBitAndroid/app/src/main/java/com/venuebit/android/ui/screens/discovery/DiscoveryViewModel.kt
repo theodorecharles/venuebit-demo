@@ -174,6 +174,17 @@ class DiscoveryViewModel @Inject constructor(
         return allEvents.filter { it.category == category }
     }
 
+    /**
+     * Generate a new user ID and reload data to demonstrate A/B test bucketing
+     */
+    suspend fun generateNewUserIdAndReload() {
+        val newUserId = userIdentityManager.generateAndSaveNewUserId()
+        Log.d(TAG, "Generated new user ID: $newUserId")
+        // Force reload flag reset so loadData() proceeds
+        isLoading = false
+        loadData()
+    }
+
     private fun sortEvents(events: List<Event>, sortBy: EventSortBy): List<Event> {
         return when (sortBy) {
             EventSortBy.DATE_ASC -> events.sortedBy { it.date }

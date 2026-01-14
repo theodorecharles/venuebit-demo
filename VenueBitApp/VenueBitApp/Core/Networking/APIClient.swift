@@ -155,8 +155,9 @@ class APIClient {
 
     func getFeatures(userId: String) async throws -> FeaturesResponse {
         let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
-        let url = URL(string: "\(apiBaseURL)/features/\(userId)")!
-        let (data, _) = try await session.data(from: url)
+        var components = URLComponents(string: "\(apiBaseURL)/features/\(userId)")!
+        components.queryItems = [URLQueryItem(name: "operating_system", value: "ios")]
+        let (data, _) = try await session.data(from: components.url!)
         let response = try JSONDecoder().decode(FeaturesDataResponse.self, from: data)
         return response.data
     }
@@ -165,8 +166,9 @@ class APIClient {
 
     func getHomescreenConfig(userId: String) async throws -> HomescreenConfigResponse {
         let apiBaseURL = await MainActor.run { ServerConfig.shared.apiBaseURL }
-        let url = URL(string: "\(apiBaseURL)/homescreen/\(userId)")!
-        let (data, _) = try await session.data(from: url)
+        var components = URLComponents(string: "\(apiBaseURL)/homescreen/\(userId)")!
+        components.queryItems = [URLQueryItem(name: "operating_system", value: "ios")]
+        let (data, _) = try await session.data(from: components.url!)
         let response = try JSONDecoder().decode(HomescreenConfigResponse.self, from: data)
         return response
     }

@@ -34,6 +34,7 @@ interface EventsApi {
 
     @GET("api/homescreen/{userId}")
     suspend fun getHomescreenConfig(
-        @Path("userId") userId: String
+        @Path("userId") userId: String,
+        @Query("operating_system") operatingSystem: String = "android"
     ): ApiResponse<List<HomescreenModule>>
 }

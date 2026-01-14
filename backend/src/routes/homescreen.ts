@@ -6,6 +6,9 @@ const router = Router();
 router.get('/:userId', (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
+    const { operating_system } = req.query;
+
+    console.log(`[Homescreen] Request for user ${userId}, operating_system=${operating_system}`);
 
     if (!userId) {
       return res.status(400).json({
@@ -14,7 +17,8 @@ router.get('/:userId', (req: Request, res: Response) => {
       });
     }
 
-    const decision = getHomescreenDecision(userId);
+    const os = typeof operating_system === 'string' ? operating_system : undefined;
+    const decision = getHomescreenDecision(userId, os);
 
     return res.json({
       success: true,

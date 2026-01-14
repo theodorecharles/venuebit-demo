@@ -6,6 +6,7 @@ const router = Router();
 router.get('/:userId', (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
+    const { operating_system } = req.query;
 
     if (!userId) {
       return res.status(400).json({
@@ -14,9 +15,10 @@ router.get('/:userId', (req: Request, res: Response) => {
       });
     }
 
-    const ticketDecisions = getFeatureDecisions(userId);
-    const homescreenDecision = getHomescreenDecision(userId);
-    const appThemeDecision = getAppThemeDecision(userId);
+    const os = typeof operating_system === 'string' ? operating_system : undefined;
+    const ticketDecisions = getFeatureDecisions(userId, os);
+    const homescreenDecision = getHomescreenDecision(userId, os);
+    const appThemeDecision = getAppThemeDecision(userId, os);
 
     // Return structured format for iOS app with all features
     return res.json({

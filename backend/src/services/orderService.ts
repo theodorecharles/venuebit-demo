@@ -3,6 +3,8 @@ import { generateOrderId } from '../utils/generateId';
 import { calculatePricing } from '../utils/pricing';
 import { getCart, clearCart, getCartTotal } from './cartService';
 import { markSeatsAsSold } from '../data/seats';
+import { getEventById } from '../data/events';
+import { recordUserPurchase } from './userAttributesService';
 
 const orders = new Map<string, Order>();
 const userOrders = new Map<string, string[]>();
@@ -58,6 +60,12 @@ export function createOrder(params: CreateOrderParams): { success: boolean; orde
   cart.items.forEach(item => {
     const seatIds = item.seats.map(s => s.id);
     markSeatsAsSold(item.eventId, seatIds);
+
+    // Record the purchase category for user attributes
+    const event = getEventById(item.eventId);
+    if (event) {
+      recordUserPurchase(params.userId, event.category);
+    }
   });
 
   orders.set(order.id, order);
