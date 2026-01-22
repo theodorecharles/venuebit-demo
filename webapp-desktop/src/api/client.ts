@@ -15,11 +15,12 @@ const getApiBaseUrl = () => {
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return `http://${hostname}:4001/api`;
   }
-  // Otherwise, use relative /api path (nginx will proxy it)
-  return '/api';
+  // Otherwise, use /desktop/api path (nginx will proxy it)
+  return '/desktop/api';
 };
 
 // Get base URL for images (without /api suffix)
+// Images are served from the backend, not the desktop app
 export const getImageBaseUrl = () => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL;
@@ -28,6 +29,7 @@ export const getImageBaseUrl = () => {
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return `http://${hostname}:4001`;
   }
+  // In production, images are served from root (proxied to backend)
   return '';
 };
 

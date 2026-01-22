@@ -13,7 +13,7 @@ import { SettingsPage } from './pages/SettingsPage';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/desktop">
       <ThemeProvider>
         <FeatureFlagProvider>
           <Routes>

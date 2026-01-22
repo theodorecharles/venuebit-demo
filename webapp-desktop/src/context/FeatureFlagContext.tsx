@@ -137,6 +137,13 @@ export const FeatureFlagProvider: React.FC<{ children: React.ReactNode }> = ({ c
     refresh: fetchFeatures,
   };
 
+  // Hide page until theme is loaded
+  if (state.isLoading) {
+    return (
+      <div className="min-h-screen bg-theme-background" />
+    );
+  }
+
   return (
     <FeatureFlagContext.Provider value={value}>
       {children}

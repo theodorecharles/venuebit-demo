@@ -24,7 +24,7 @@ export const Seat: React.FC<SeatProps> = ({
   } else if (isSelected) {
     stateClasses = 'bg-primary text-white shadow-lg scale-110';
   } else {
-    stateClasses = 'bg-theme-surface-secondary hover:bg-primary/50 text-text-secondary hover:text-text-primary cursor-pointer';
+    stateClasses = 'bg-green-500 hover:bg-green-400 text-white cursor-pointer';
   }
 
   return (
