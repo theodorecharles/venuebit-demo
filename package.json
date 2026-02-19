@@ -4,11 +4,11 @@
   "description": "VenueBit Demo - Feature flag experimentation platform for ticket sales",
   "private": true,
   "scripts": {
-    "install:all": "npm install --prefix webapp && npm install --prefix webapp-desktop",
+    "install:all": "npm install --prefix webapp-desktop",
     "postinstall": "npm run install:all",
     "config": "node scripts/config.js",
     "dev": "vercel dev",
-    "build": "cd webapp && npm run build && cd ../webapp-desktop && npm run build && mkdir -p ../webapp/dist/desktop && cp -r dist/* ../webapp/dist/desktop/"
+    "build": "cd webapp-desktop && npm run build && cp -r ../public/images dist/images"
   },
   "keywords": [
     "optimizely",
