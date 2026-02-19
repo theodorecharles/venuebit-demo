@@ -9,22 +9,27 @@ interface TicketListProps {
 export const TicketList: React.FC<TicketListProps> = ({ items }) => {
   return (
     <div className="space-y-2">
-      {items.map((item, index) => (
-        <div
-          key={index}
-          className="flex justify-between items-center p-3 bg-surface-light rounded"
-        >
-          <div>
-            <div className="font-semibold text-text-primary">
-              {item.section_name}
+      {items.map((item) => (
+        <div key={item.id}>
+          <div className="font-semibold text-text-primary mb-1">{item.eventTitle}</div>
+          {item.seats.map((seat, idx) => (
+            <div
+              key={idx}
+              className="flex justify-between items-center p-3 bg-surface-light rounded mb-1"
+            >
+              <div>
+                <div className="font-semibold text-text-primary">
+                  {seat.section}
+                </div>
+                <div className="text-sm text-text-secondary">
+                  Row {seat.row}, Seat {seat.seatNumber}
+                </div>
+              </div>
+              <div className="font-semibold text-primary">
+                {formatPrice(seat.price)}
+              </div>
             </div>
-            <div className="text-sm text-text-secondary">
-              Row {item.row}, Seat {item.seat_number}
-            </div>
-          </div>
-          <div className="font-semibold text-primary">
-            {formatPrice(item.price)}
-          </div>
+          ))}
         </div>
       ))}
     </div>

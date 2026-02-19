@@ -16,7 +16,7 @@ interface RecommendedEventsProps {
 
 export const RecommendedEvents: React.FC<RecommendedEventsProps> = ({
   purchasedEventId,
-  artistName,
+  artistName: _artistName,
 }) => {
   const navigate = useNavigate();
   const [recommendations, setRecommendations] = useState<Event[]>([]);

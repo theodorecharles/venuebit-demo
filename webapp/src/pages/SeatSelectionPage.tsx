@@ -27,7 +27,7 @@ export const SeatSelectionPage: React.FC = () => {
 
   const [event, setEvent] = useState<Event | null>(null);
   const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
-  const [hoveredSeat, setHoveredSeat] = useState<Seat | null>(null);
+  const [, setHoveredSeat] = useState<Seat | null>(null);
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);

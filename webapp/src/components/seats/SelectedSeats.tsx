@@ -35,10 +35,10 @@ export const SelectedSeats: React.FC<SelectedSeatsProps> = ({ seats, onRemove })
           >
             <div className="flex-1">
               <div className="font-semibold text-text-primary">
-                {seat.section_name}
+                {seat.section}
               </div>
               <div className="text-sm text-text-secondary">
-                Row {seat.row}, Seat {seat.seat_number}
+                Row {seat.row}, Seat {seat.seatNumber}
               </div>
               <div className="text-primary font-semibold mt-1">
                 {formatPrice(seat.price)}

@@ -14,7 +14,7 @@ export const useNativeBridge = () => {
     requestScrollToTop();
   }, []);
 
-  const sendCustomMessage = useCallback((action: string, data?: unknown) => {
+  const sendCustomMessage = useCallback((action: string, data?: Record<string, unknown>) => {
     sendToNative(action, data);
   }, []);
 

@@ -19,10 +19,10 @@ export const SimilarSeats: React.FC<SimilarSeatsProps> = ({ currentSeats, onSeat
       {
         seat: {
           id: 'sim-1',
-          seat_number: '15',
+          eventId: '',
+          seatNumber: 15,
           row: 'C',
-          section_id: 'section-2',
-          section_name: 'Orchestra Center',
+          section: 'Orchestra Center',
           price: avgPrice - 20,
           status: 'available' as const,
         },
@@ -32,10 +32,10 @@ export const SimilarSeats: React.FC<SimilarSeatsProps> = ({ currentSeats, onSeat
       {
         seat: {
           id: 'sim-2',
-          seat_number: '8',
+          eventId: '',
+          seatNumber: 8,
           row: 'B',
-          section_id: 'section-2',
-          section_name: 'Orchestra Center',
+          section: 'Orchestra Center',
           price: avgPrice + 15,
           status: 'available' as const,
         },
@@ -44,10 +44,10 @@ export const SimilarSeats: React.FC<SimilarSeatsProps> = ({ currentSeats, onSeat
       {
         seat: {
           id: 'sim-3',
-          seat_number: '12',
+          eventId: '',
+          seatNumber: 12,
           row: 'D',
-          section_id: 'section-3',
-          section_name: 'Mezzanine',
+          section: 'Mezzanine',
           price: avgPrice - 10,
           status: 'available' as const,
         },
@@ -90,10 +90,10 @@ export const SimilarSeats: React.FC<SimilarSeatsProps> = ({ currentSeats, onSeat
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">
                 <div className="font-semibold text-text-primary mb-1">
-                  {item.seat.section_name}
+                  {item.seat.section}
                 </div>
                 <div className="text-sm text-text-secondary mb-2">
-                  Row {item.seat.row}, Seat {item.seat.seat_number}
+                  Row {item.seat.row}, Seat {item.seat.seatNumber}
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-primary bg-primary/20 px-2 py-1 rounded">
