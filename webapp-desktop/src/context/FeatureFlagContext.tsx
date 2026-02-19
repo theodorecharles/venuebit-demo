@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useTheme } from './ThemeContext';
 import { useUserStore } from '../store/userStore';
-import { useWebSocket } from '../hooks/useWebSocket';
+import { useDatafilePolling } from '../hooks/useDatafilePolling';
 import { featuresApi } from '../api/features';
 import { AppTheme, TicketExperienceVariables } from '../types/features';
 import { HomescreenModule } from '../types/homescreen';
@@ -127,8 +127,8 @@ export const FeatureFlagProvider: React.FC<{ children: React.ReactNode }> = ({ c
     fetchFeatures();
   }, [fetchFeatures]);
 
-  // Listen for WebSocket datafile updates and trigger refresh
-  useWebSocket({
+  // Listen for datafile updates via polling and trigger refresh
+  useDatafilePolling({
     onDatafileUpdate: fetchFeatures,
   });
 

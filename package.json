@@ -4,17 +4,11 @@
   "description": "VenueBit Demo - Feature flag experimentation platform for ticket sales",
   "private": true,
   "scripts": {
-    "install:all": "npm install --prefix webapp && npm install --prefix backend",
+    "install:all": "npm install --prefix webapp && npm install --prefix webapp-desktop",
     "postinstall": "npm run install:all",
     "config": "node scripts/config.js",
-    "start": "docker-compose up -d --build",
-    "start:docker": "docker-compose up -d --build",
-    "stop": "docker-compose down",
-    "logs": "docker-compose logs -f",
-    "logs:webapp": "docker-compose logs -f webapp",
-    "logs:backend": "docker-compose logs -f backend",
-    "rebuild": "docker-compose build --no-cache && docker-compose up -d",
-    "clean": "docker-compose down -v --rmi local"
+    "dev": "vercel dev",
+    "build": "cd webapp && npm run build && cd ../webapp-desktop && npm run build && mkdir -p ../webapp/dist/desktop && cp -r dist/* ../webapp/dist/desktop/"
   },
   "keywords": [
     "optimizely",
@@ -25,5 +19,16 @@
     "typescript"
   ],
   "author": "",
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@optimizely/optimizely-sdk": "^5.3.4",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@vercel/node": "^3.0.0",
+    "vercel": "^37.0.0",
+    "typescript": "^5.3.3",
+    "@types/uuid": "^9.0.7",
+    "@types/node": "^20.11.5"
+  }
 }

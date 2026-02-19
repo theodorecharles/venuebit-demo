@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useDecision } from '@optimizely/react-sdk';
-import { useWebSocket } from '../hooks/useWebSocket';
+import { useDatafilePolling } from '../hooks/useDatafilePolling';
 import { useTheme, AppTheme } from '../theme/ThemeContext';
 import { FEATURE_FLAGS } from '../optimizely/features';
 import { refreshOptimizelyDatafile } from '../optimizely/client';
@@ -23,19 +23,19 @@ const FeatureFlagContext = createContext<FeatureFlagContextValue | null>(null);
 
 export const FeatureFlagProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [refreshKey, setRefreshKey] = useState(0);
-  const { lastMessage } = useWebSocket();
+  const { lastRevision } = useDatafilePolling();
 
-  // Listen for datafile updates from WebSocket
+  // Listen for datafile updates via polling
+  const lastRevisionRef = React.useRef<string | null>(null);
   useEffect(() => {
-    if (lastMessage?.type === 'datafile_updated') {
+    if (lastRevision && lastRevisionRef.current !== null && lastRevision !== lastRevisionRef.current) {
       console.log('[FeatureFlag] Datafile updated, refreshing Optimizely SDK...');
-      // Force the SDK to fetch the new datafile
       refreshOptimizelyDatafile().then(() => {
-        // Trigger re-render after datafile is updated
         setRefreshKey(prev => prev + 1);
       });
     }
-  }, [lastMessage]);
+    lastRevisionRef.current = lastRevision;
+  }, [lastRevision]);
 
   const refresh = useCallback(() => {
     setRefreshKey(prev => prev + 1);

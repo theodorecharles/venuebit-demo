@@ -5,26 +5,7 @@ import { Event } from '../../types/event';
 import { formatPrice } from '../../utils/formatters';
 import { Card } from '../common/Card';
 
-// Fix image URLs - backend is on port 4001, not 4000
 const getImageUrl = (url: string | undefined): string | undefined => {
-  if (!url) return undefined;
-  // Fix incorrect port if present
-  if (url.includes('localhost:4000')) {
-    return url.replace('localhost:4000', 'localhost:4001');
-  }
-  // If it's a relative path, make it absolute to the API server
-  // This is needed when webapp runs on different port than backend
-  if (url.startsWith('/images/')) {
-    const host = window.location.hostname;
-    const port = window.location.port;
-    // Only need to redirect to API port when running locally on webapp port
-    // (localhost/127.0.0.1/10.0.2.2 on port 4000 means we're on the webapp, not backend)
-    if ((host === 'localhost' || host === '127.0.0.1' || host === '10.0.2.2') && port === '4000') {
-      return `http://${host}:4001${url}`;
-    }
-    // For production or when already on backend port, use relative URL
-    return url;
-  }
   return url;
 };
 

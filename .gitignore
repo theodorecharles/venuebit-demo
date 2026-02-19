@@ -68,6 +68,9 @@ Pods/
 coverage/
 .nyc_output/
 
+# Vercel
+.vercel/
+
 # Misc
 *.pem
 .cache/

@@ -27,15 +27,13 @@ export default defineConfig({
     allowedHosts: true,
     proxy: {
       '/desktop/api': {
-        target: 'http://localhost:4001',
+        target: 'http://localhost:3000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/desktop\/api/, '/api'),
-        ws: true
+        rewrite: (path) => path.replace(/^\/desktop\/api/, '/api')
       },
       '/api': {
-        target: 'http://localhost:4001',
-        changeOrigin: true,
-        ws: true
+        target: 'http://localhost:3000',
+        changeOrigin: true
       }
     }
   },

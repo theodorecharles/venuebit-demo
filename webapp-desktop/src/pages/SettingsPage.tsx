@@ -3,7 +3,7 @@ import { useUserStore } from '../store/userStore';
 import { useAppStore } from '../store/appStore';
 import { useFeatureFlags } from '../context/FeatureFlagContext';
 import { useTracking } from '../hooks/useTracking';
-import { useWebSocket } from '../hooks/useWebSocket';
+import { useDatafilePolling } from '../hooks/useDatafilePolling';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import { APP_VERSION, APP_NAME } from '../utils/constants';
@@ -28,7 +28,7 @@ export const SettingsPage: React.FC = () => {
     refresh,
   } = useFeatureFlags();
 
-  const { isConnected } = useWebSocket();
+  const { isPolling } = useDatafilePolling();
 
   useEffect(() => {
     trackPageView('settings');
@@ -80,9 +80,9 @@ export const SettingsPage: React.FC = () => {
           <div className="space-y-4">
             {/* Connection status */}
             <div className="flex items-center gap-2 text-sm">
-              <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-success' : 'bg-error'}`} />
+              <div className={`w-2 h-2 rounded-full ${isPolling ? 'bg-success' : 'bg-error'}`} />
               <span className="text-text-secondary">
-                WebSocket: {isConnected ? 'Connected' : 'Disconnected'}
+                Polling: {isPolling ? 'Active' : 'Inactive'}
               </span>
             </div>
 
