@@ -1,7 +1,7 @@
 import { Order, OrderItem, PaymentInfo } from '../types/order';
+import { Cart } from '../types/cart';
 import { generateOrderId } from '../utils/generateId';
 import { calculatePricing } from '../utils/pricing';
-import { getCart, clearCart, getCartTotal } from './cartService';
 import { markSeatsAsSold } from '../data/seats';
 import { getEventById } from '../data/events';
 import { recordUserPurchase } from './userAttributesService';
@@ -9,25 +9,17 @@ import { recordUserPurchase } from './userAttributesService';
 const orders = new Map<string, Order>();
 const userOrders = new Map<string, string[]>();
 
-export interface CreateOrderParams {
-  cartId: string;
+export interface CreateOrderFromCartParams {
   userId: string;
+  cart: Cart;
   payment: PaymentInfo;
 }
 
-export function createOrder(params: CreateOrderParams): { success: boolean; order?: Order; error?: string } {
-  const cart = getCart(params.cartId);
-
-  if (!cart) {
-    return { success: false, error: 'Cart not found' };
-  }
+export function createOrderFromCart(params: CreateOrderFromCartParams): { success: boolean; order?: Order; error?: string } {
+  const { cart, userId, payment } = params;
 
   if (cart.items.length === 0) {
     return { success: false, error: 'Cart is empty' };
-  }
-
-  if (cart.userId !== params.userId) {
-    return { success: false, error: 'Cart does not belong to this user' };
   }
 
   const orderItems: OrderItem[] = cart.items.map(item => ({
@@ -41,18 +33,18 @@ export function createOrder(params: CreateOrderParams): { success: boolean; orde
     subtotal: item.subtotal
   }));
 
-  const subtotal = getCartTotal(cart);
+  const subtotal = cart.items.reduce((sum, item) => sum + item.subtotal, 0);
   const pricing = calculatePricing(subtotal);
 
   const order: Order = {
     id: generateOrderId(),
-    userId: params.userId,
+    userId,
     items: orderItems,
     subtotal: pricing.subtotal,
     serviceFee: pricing.serviceFee,
     processingFee: pricing.processingFee,
     total: pricing.total,
-    payment: params.payment,
+    payment,
     createdAt: new Date(),
     status: 'completed'
   };
@@ -63,18 +55,16 @@ export function createOrder(params: CreateOrderParams): { success: boolean; orde
 
     const event = getEventById(item.eventId);
     if (event) {
-      recordUserPurchase(params.userId, event.category);
+      recordUserPurchase(userId, event.category);
     }
   });
 
   orders.set(order.id, order);
 
-  if (!userOrders.has(params.userId)) {
-    userOrders.set(params.userId, []);
+  if (!userOrders.has(userId)) {
+    userOrders.set(userId, []);
   }
-  userOrders.get(params.userId)!.push(order.id);
-
-  clearCart(params.cartId);
+  userOrders.get(userId)!.push(order.id);
 
   return { success: true, order };
 }

@@ -35,6 +35,7 @@ export interface OrderSeat {
 export interface CheckoutRequest {
   cartId: string;
   userId: string;
+  cart: import('./cart').Cart;
   payment: {
     cardLast4: string;
     cardholderName?: string;

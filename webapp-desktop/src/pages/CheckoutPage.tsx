@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { cartApi } from '../api/cart';
+import { useNavigate } from 'react-router-dom';
 import { ordersApi } from '../api/orders';
 import { Cart } from '../types/cart';
 import { useUserStore } from '../store/userStore';
@@ -8,7 +7,6 @@ import { useCartStore } from '../store/cartStore';
 import { useAppStore } from '../store/appStore';
 import { useFeatureFlags } from '../context/FeatureFlagContext';
 import { useTracking } from '../hooks/useTracking';
-import { Loading } from '../components/common/Loading';
 import { ErrorState } from '../components/common/ErrorState';
 import { OrderSummary } from '../components/checkout/OrderSummary';
 import { PriceBreakdown } from '../components/checkout/PriceBreakdown';
@@ -16,50 +14,22 @@ import { PaymentForm, PaymentFormData } from '../components/checkout/PaymentForm
 import { CountdownBanner } from '../components/checkout/CountdownBanner';
 
 export const CheckoutPage: React.FC = () => {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const userId = useUserStore((state) => state.userId);
-  const { clearCart } = useCartStore();
+  const { cart, clearCart } = useCartStore();
   const addOrder = useAppStore((state) => state.addOrder);
   const { showUrgencyBanner } = useFeatureFlags();
   const { trackPageView, trackCheckout, trackPurchase } = useTracking();
 
-  const cartId = searchParams.get('cartId');
-
-  const [cart, setCart] = useState<Cart | null>(null);
-  const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (cartId) {
-      loadCart();
-      trackPageView('checkout', { cart_id: cartId });
-    } else {
-      setLoading(false);
-      setError('No cart ID provided');
+    if (cart) {
+      trackPageView('checkout', { cart_id: cart.id });
+      const subtotal = cart.items.reduce((sum, item) => sum + item.subtotal, 0);
+      trackCheckout(cart.id, subtotal);
     }
-  }, [cartId]);
-
-  const loadCart = async () => {
-    if (!cartId) return;
-
-    try {
-      setLoading(true);
-      setError(null);
-      const cartData = await cartApi.getCart(cartId);
-      setCart(cartData);
-
-      // Track checkout view
-      const subtotal = cartData.items.reduce((sum, item) => sum + item.subtotal, 0);
-      trackCheckout(cartId, subtotal);
-    } catch (err) {
-      console.error('Error loading cart:', err);
-      setError('Failed to load cart');
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [cart?.id]);
 
   const calculatePrices = (cart: Cart) => {
     const subtotal = cart.items.reduce((sum, item) => sum + item.subtotal, 0);
@@ -70,7 +40,7 @@ export const CheckoutPage: React.FC = () => {
   };
 
   const handlePaymentSubmit = async (paymentData: PaymentFormData) => {
-    if (!cartId || !userId || !cart) return;
+    if (!userId || !cart) return;
 
     try {
       setProcessing(true);
@@ -78,8 +48,9 @@ export const CheckoutPage: React.FC = () => {
       const cardLast4 = paymentData.cardNumber.replace(/\s/g, '').slice(-4);
 
       const order = await ordersApi.checkout({
-        cartId,
+        cartId: cart.id,
         userId,
+        cart,
         payment: {
           cardLast4,
           cardholderName: paymentData.cardholderName,
@@ -105,15 +76,11 @@ export const CheckoutPage: React.FC = () => {
     }
   };
 
-  if (loading) {
-    return <Loading message="Loading checkout..." fullPage />;
-  }
-
-  if (error || !cart) {
+  if (!cart) {
     return (
       <ErrorState
-        message={error || 'Cart not found'}
-        onRetry={cartId ? loadCart : undefined}
+        message="Cart not found. Please select seats again."
+        onRetry={() => navigate('/')}
       />
     );
   }

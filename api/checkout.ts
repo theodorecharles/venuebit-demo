@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { cors } from './_lib/utils/cors';
 import { ensureOptimizelyInitialized } from './_lib/initOptimizely';
-import { createOrder } from './_lib/services/orderService';
+import { createOrderFromCart } from './_lib/services/orderService';
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   if (cors(req, res)) return;
@@ -12,19 +12,19 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   ensureOptimizelyInitialized();
 
   try {
-    const { cartId, userId, payment } = req.body;
-
-    if (!cartId) {
-      return res.status(400).json({
-        success: false,
-        error: 'cartId is required'
-      });
-    }
+    const { userId, cart, payment } = req.body;
 
     if (!userId) {
       return res.status(400).json({
         success: false,
         error: 'userId is required'
+      });
+    }
+
+    if (!cart || !cart.items || cart.items.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'cart with items is required'
       });
     }
 
@@ -35,7 +35,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
-    const result = createOrder({ cartId, userId, payment });
+    const result = createOrderFromCart({ userId, cart, payment });
 
     if (!result.success) {
       return res.status(400).json({

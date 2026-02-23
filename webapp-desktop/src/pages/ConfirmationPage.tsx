@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ordersApi } from '../api/orders';
-import { Order } from '../types/order';
+import { useAppStore } from '../store/appStore';
 import { useTracking } from '../hooks/useTracking';
-import { Loading } from '../components/common/Loading';
 import { ErrorState } from '../components/common/ErrorState';
 import { Button } from '../components/common/Button';
 import { Card } from '../components/common/Card';
@@ -17,40 +15,18 @@ export const ConfirmationPage: React.FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const navigate = useNavigate();
   const { trackPageView } = useTracking();
+  const recentOrders = useAppStore((state) => state.recentOrders);
 
-  const [order, setOrder] = useState<Order | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const order = recentOrders.find((o) => o.id === orderId) || null;
 
   useEffect(() => {
     if (orderId) {
-      loadOrder();
       trackPageView('confirmation', { order_id: orderId });
     }
   }, [orderId]);
 
-  const loadOrder = async () => {
-    if (!orderId) return;
-
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await ordersApi.getOrder(orderId);
-      setOrder(data);
-    } catch (err) {
-      console.error('Error loading order:', err);
-      setError('Failed to load order');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return <Loading message="Loading order..." fullPage />;
-  }
-
-  if (error || !order) {
-    return <ErrorState message={error || 'Order not found'} onRetry={loadOrder} />;
+  if (!order) {
+    return <ErrorState message="Order not found" onRetry={() => navigate('/')} />;
   }
 
   const firstItem = order.items?.[0];

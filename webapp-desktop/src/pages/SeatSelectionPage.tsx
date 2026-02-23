@@ -69,7 +69,7 @@ export const SeatSelectionPage: React.FC = () => {
       trackAddToCart(eventId, selectedSeats.length, total);
 
       // Navigate to checkout
-      navigate(`/checkout?cartId=${updatedCart.id}`);
+      navigate('/checkout');
     } catch (err) {
       console.error('Error adding to cart:', err);
       alert('Failed to add seats to cart. Please try again.');
