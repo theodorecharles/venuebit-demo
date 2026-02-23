@@ -5,6 +5,12 @@ export interface CreateCartRequest {
   userId: string;
 }
 
+export interface CreateCartWithItemsRequest {
+  userId: string;
+  eventId: string;
+  seatIds: string[];
+}
+
 export interface AddToCartRequest {
   eventId: string;
   seatIds: string[];
@@ -13,6 +19,12 @@ export interface AddToCartRequest {
 export const cartApi = {
   // Create a new cart
   createCart: async (data: CreateCartRequest): Promise<Cart> => {
+    const response = await apiClient.post('/cart', data);
+    return response.data.data;
+  },
+
+  // Create cart and add items in one request (serverless-safe)
+  createCartWithItems: async (data: CreateCartWithItemsRequest): Promise<Cart> => {
     const response = await apiClient.post('/cart', data);
     return response.data.data;
   },

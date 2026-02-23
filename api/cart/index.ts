@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { cors } from '../_lib/utils/cors';
 import { ensureOptimizelyInitialized } from '../_lib/initOptimizely';
-import { createCart } from '../_lib/services/cartService';
+import { createCart, addItemToCart } from '../_lib/services/cartService';
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   if (cors(req, res)) return;
@@ -12,7 +12,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   ensureOptimizelyInitialized();
 
   try {
-    const { userId } = req.body;
+    const { userId, eventId, seatIds } = req.body;
 
     if (!userId) {
       return res.status(400).json({
@@ -22,6 +22,23 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const cart = createCart(userId);
+
+    // If eventId and seatIds provided, add items in the same request
+    if (eventId && seatIds && Array.isArray(seatIds) && seatIds.length > 0) {
+      const result = addItemToCart(cart.id, eventId, seatIds);
+
+      if (!result.success) {
+        return res.status(400).json({
+          success: false,
+          error: result.error
+        });
+      }
+
+      return res.status(201).json({
+        success: true,
+        data: result.cart
+      });
+    }
 
     return res.status(201).json({
       success: true,

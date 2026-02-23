@@ -55,11 +55,9 @@ export const SeatSelectionPage: React.FC = () => {
     try {
       setAddingToCart(true);
 
-      // Create cart
-      const cart = await cartApi.createCart({ userId });
-
-      // Add seats to cart
-      const updatedCart = await cartApi.addToCart(cart.id, {
+      // Create cart with items in one request
+      const updatedCart = await cartApi.createCartWithItems({
+        userId,
         eventId,
         seatIds: selectedSeats.map((s) => s.id),
       });
