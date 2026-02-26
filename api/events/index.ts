@@ -4,13 +4,13 @@ import { ensureOptimizelyInitialized } from '../_lib/initOptimizely';
 import { getEvents } from '../_lib/services/eventService';
 import { EventCategory } from '../_lib/types/event';
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (cors(req, res)) return;
   if (req.method !== 'GET') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  ensureOptimizelyInitialized();
+  await ensureOptimizelyInitialized();
 
   try {
     const category = req.query.category as EventCategory | undefined;

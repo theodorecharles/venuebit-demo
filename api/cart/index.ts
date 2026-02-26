@@ -3,13 +3,13 @@ import { cors } from '../_lib/utils/cors';
 import { ensureOptimizelyInitialized } from '../_lib/initOptimizely';
 import { createCart, addItemToCart } from '../_lib/services/cartService';
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (cors(req, res)) return;
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  ensureOptimizelyInitialized();
+  await ensureOptimizelyInitialized();
 
   try {
     const { userId, eventId, seatIds } = req.body;

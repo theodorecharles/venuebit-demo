@@ -7,6 +7,7 @@ let optimizelyClient: Client | null = null;
 let currentSdkKey: string | null = null;
 let lastDatafileRevision: string | null = null;
 let pollingIntervalTimer: ReturnType<typeof setInterval> | null = null;
+let clientReadyPromise: Promise<{ success: boolean; reason?: string }> | null = null;
 
 export function isPollingEnabled(): boolean {
   return config.pollingInterval !== null && config.pollingInterval > 0;
@@ -29,7 +30,8 @@ export function initializeOptimizely(sdkKey: string): void {
       }
     });
 
-    console.log('Optimizely SDK initialized successfully');
+    clientReadyPromise = optimizelyClient.onReady({ timeout: 3000 });
+    console.log('Optimizely SDK initialized, waiting for datafile...');
 
     if (isPollingEnabled()) {
       startPolling();
@@ -201,6 +203,10 @@ export function trackEvent(params: TrackEventParams): void {
 
 export function getOptimizelyClient(): Client | null {
   return optimizelyClient;
+}
+
+export function getClientReadyPromise() {
+  return clientReadyPromise;
 }
 
 export interface HomescreenDecision {
