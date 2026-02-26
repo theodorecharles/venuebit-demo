@@ -24,7 +24,8 @@ export function initializeOptimizely(sdkKey: string): void {
     optimizelyClient = optimizely.createInstance({
       sdkKey,
       datafileOptions: {
-        autoUpdate: false
+        autoUpdate: true,
+        updateInterval: 10_000, // 10 seconds for responsive demo
       }
     });
 
@@ -33,7 +34,7 @@ export function initializeOptimizely(sdkKey: string): void {
     if (isPollingEnabled()) {
       startPolling();
     } else {
-      console.log('[Optimizely] Polling disabled - using webhook for updates');
+      console.log('[Optimizely] Using SDK auto-update for datafile changes');
     }
   } catch (error) {
     console.error('Failed to initialize Optimizely SDK:', error);
@@ -73,7 +74,8 @@ async function checkForDatafileUpdate(): Promise<void> {
         sdkKey: currentSdkKey,
         datafile,
         datafileOptions: {
-          autoUpdate: false
+          autoUpdate: true,
+          updateInterval: 10_000,
         }
       });
     }
@@ -111,7 +113,8 @@ export async function refreshDatafile(): Promise<boolean> {
       sdkKey: currentSdkKey,
       datafile,
       datafileOptions: {
-        autoUpdate: false
+        autoUpdate: true,
+        updateInterval: 10_000,
       }
     });
 

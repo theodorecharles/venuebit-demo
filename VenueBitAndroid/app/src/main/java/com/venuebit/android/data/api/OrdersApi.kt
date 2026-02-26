@@ -11,7 +11,7 @@ interface OrdersApi {
         @Path("id") id: String
     ): ApiResponse<Order>
 
-    @GET("api/orders/users/{userId}")
+    @GET("api/users/{userId}/orders")
     suspend fun getUserOrders(
         @Path("userId") userId: String
     ): ApiResponse<List<Order>>

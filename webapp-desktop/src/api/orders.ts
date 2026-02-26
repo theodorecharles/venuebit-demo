@@ -16,7 +16,7 @@ export const ordersApi = {
 
   // Get all orders for a user
   getUserOrders: async (userId: string): Promise<Order[]> => {
-    const response = await apiClient.get(`/orders/users/${userId}`);
+    const response = await apiClient.get(`/users/${userId}/orders`);
     return response.data.data;
   },
 };
