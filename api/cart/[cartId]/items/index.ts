@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import type { VercelRequest, VercelResponse } from '../../../_lib/types/vercel';
 import { cors } from '../../../_lib/utils/cors';
 import { ensureOptimizelyInitialized } from '../../../_lib/initOptimizely';
 import { addItemToCart } from '../../../_lib/services/cartService';

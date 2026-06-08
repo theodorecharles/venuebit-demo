@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import type { VercelRequest, VercelResponse } from './_lib/types/vercel';
 import { cors } from './_lib/utils/cors';
 
 export default function handler(req: VercelRequest, res: VercelResponse) {

@@ -22,13 +22,13 @@
   "license": "GPL-3.0",
   "dependencies": {
     "@optimizely/optimizely-sdk": "^5.3.4",
-    "uuid": "^9.0.1"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
-    "@vercel/node": "^3.0.0",
-    "vercel": "^37.0.0",
     "typescript": "^5.3.3",
-    "@types/uuid": "^9.0.7",
     "@types/node": "^20.11.5"
+  },
+  "overrides": {
+    "uuid": "^14.0.0"
   }
 }
